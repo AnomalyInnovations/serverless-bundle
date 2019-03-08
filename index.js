@@ -3,7 +3,7 @@
 const path = require("path");
 const ServerlessWebpack = require("serverless-webpack");
 
-const config = require("./config.js");
+const config = require("./config");
 
 function getWebpackConfigPath(servicePath) {
   return path.relative(servicePath, __dirname) + "/webpack.config.js";
@@ -31,25 +31,20 @@ function getConfig(custom, servicePath) {
 
 class ServerlessPlugin extends ServerlessWebpack {
   constructor(serverless, options) {
-
     super(serverless, options);
 
     this.serverless = serverless;
     this.options = options;
 
-    this.hooks['before:webpack:validate:validate'] = (function() {
+    this.hooks["before:webpack:validate:validate"] = function() {
       const service = this.serverless.service;
       const servicePath = this.serverless.config.servicePath;
 
       service.custom = getConfig(service.custom, servicePath);
 
       config.servicePath = servicePath;
-      config.options = Object.assign(
-        config.options,
-        service.custom.bundle
-      );
-    }).bind(this);
-
+      config.options = Object.assign(config.options, service.custom.bundle);
+    }.bind(this);
   }
 }
 

@@ -2,20 +2,35 @@ const path = require("path");
 const slsw = require("serverless-webpack");
 const TerserPlugin = require("terser-webpack-plugin");
 
-const config = require("./config.js");
+const config = require("./config");
+const eslintConfig = require("./eslintrc.json");
+
+const servicePath = config.servicePath;
 
 const ENABLE_MINIMIZE = true;
-const SERVICE_PATH = config.servicePath;
+const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 
 function resolveEntriesPath() {
   const entries = slsw.lib.entries;
 
   for (let key in entries) {
-    entries[key] = path.join(SERVICE_PATH, entries[key]);
+    entries[key] = path.join(servicePath, entries[key]);
   }
 
   return entries;
+}
+
+function eslintLoader() {
+  return {
+    enforce: "pre",
+    test: /\.js$/,
+    exclude: /node_modules/,
+    loader: "eslint-loader",
+    options: {
+      baseConfig: eslintConfig
+    }
+  };
 }
 
 function babelLoader() {
@@ -28,7 +43,7 @@ function babelLoader() {
   return {
     test: /\.js$/,
     loader: "babel-loader",
-    include: SERVICE_PATH,
+    include: servicePath,
     exclude: /node_modules/,
     options: {
       plugins: plugins.map(require.resolve),
@@ -44,6 +59,18 @@ function babelLoader() {
       ]
     }
   };
+}
+
+function loaders() {
+  const loaders = [];
+
+  if (ENABLE_LINTING) {
+    loaders.push(eslintLoader());
+  }
+
+  loaders.push(babelLoader());
+
+  return loaders;
 }
 
 module.exports = {
@@ -77,8 +104,8 @@ module.exports = {
     // before looking inside the project's node_modules.
     modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
   },
-  // Run babel on all .js files and skip those in node_modules
+  // Add linting and babel loaders
   module: {
-    rules: [babelLoader()]
+    rules: loaders()
   }
 };
