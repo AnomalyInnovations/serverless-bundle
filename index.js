@@ -1,36 +1,55 @@
 "use strict";
 
+const path = require("path");
 const ServerlessWebpack = require("serverless-webpack");
 
 const config = require("./config.js");
 
-function getWebpackConfigPath() {
-  const devPath = ".serverless_plugins";
-  const isDev =
-    __dirname.lastIndexOf(devPath) === __dirname.length - devPath.length;
+function getWebpackConfigPath(servicePath) {
+  return path.relative(servicePath, __dirname) + "/webpack.config.js";
+}
 
-  return isDev
-    ? "./.serverless_plugins/webpack.config.js"
-    : "./node_modules/serverless-bundle/webpack.config.js";
+function getConfig(custom, servicePath) {
+  if (custom) {
+    if (custom.webpack) {
+      throw "serverless-webpack config detected in serverless.yml. serverless-bundle is not compatible with serverless-webpack.";
+    }
+
+    custom.webpack = {
+      webpackConfig: getWebpackConfigPath(servicePath)
+    };
+
+    return custom;
+  }
+
+  return {
+    webpack: {
+      webpackConfig: webpackConfigPath
+    }
+  };
 }
 
 class ServerlessPlugin extends ServerlessWebpack {
   constructor(serverless, options) {
-    serverless.service.custom = serverless.service.custom || {};
-    serverless.service.custom.webpack = {
-      webpackConfig: getWebpackConfigPath()
-    };
-
-    config.servicePath = serverless.config.servicePath;
-    config.options = Object.assign(
-      config.options,
-      serverless.service.custom.bundle
-    );
 
     super(serverless, options);
 
     this.serverless = serverless;
     this.options = options;
+
+    this.hooks['before:webpack:validate:validate'] = (function() {
+      const service = this.serverless.service;
+      const servicePath = this.serverless.config.servicePath;
+
+      service.custom = getConfig(service.custom, servicePath);
+
+      config.servicePath = servicePath;
+      config.options = Object.assign(
+        config.options,
+        service.custom.bundle
+      );
+    }).bind(this);
+
   }
 }
 
