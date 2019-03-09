@@ -10,13 +10,15 @@ function getWebpackConfigPath(servicePath) {
 }
 
 function getConfig(custom, servicePath) {
+  const webpackConfigPath = getWebpackConfigPath(servicePath);
+
   if (custom) {
     if (custom.webpack) {
       throw "serverless-webpack config detected in serverless.yml. serverless-bundle is not compatible with serverless-webpack.";
     }
 
     custom.webpack = {
-      webpackConfig: getWebpackConfigPath(servicePath)
+      webpackConfig: webpackConfigPath
     };
 
     return custom;
