@@ -1,0 +1,18 @@
+service: my-service
+
+custom:
+  bundle:
+    linting: false
+
+plugins:
+  localPath: '../../'
+  modules:
+    - index
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  hello:
+    handler: handler.hello

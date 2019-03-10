@@ -4,7 +4,7 @@
   "description": "An extension of serverless-webpack that bundles your Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -28,5 +28,7 @@
     "terser-webpack-plugin": "^1.2.3",
     "webpack": "^4.16.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jest": "^24.3.1"
+  }
 }
