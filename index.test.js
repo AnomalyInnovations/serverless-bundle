@@ -38,6 +38,11 @@ test("disable eslint", () => {
   expect(results).toBeDefined();
 });
 
+test("with eslintignore", () => {
+  const results = runSlsCommand("tests/with-eslintignore");
+  expect(results).toBeDefined();
+});
+
 function runSlsCommand(cwd) {
   cwd = path.resolve(__dirname, cwd);
   const { stdout, error } = spawnSync(
