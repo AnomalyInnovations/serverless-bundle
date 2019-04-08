@@ -1,19 +1,21 @@
 const path = require("path");
+const webpack = require('webpack');
 const slsw = require("serverless-webpack");
 const TerserPlugin = require("terser-webpack-plugin");
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const config = require("./config");
 const eslintConfig = require("./eslintrc.json");
 
 const servicePath = config.servicePath;
 
-const ENABLE_MINIMIZE = true;
+const ENABLE_LOGS = config.options.logs;
+const ENABLE_CACHING = config.options.caching;
 const ENABLE_LINTING = config.options.linting;
+const ENABLE_MINIMIZE = config.options.minimize;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 
-function resolveEntriesPath() {
-  const entries = slsw.lib.entries;
-
+function resolveEntriesPath(entries) {
   for (let key in entries) {
     entries[key] = path.join(servicePath, entries[key]);
   }
@@ -23,11 +25,9 @@ function resolveEntriesPath() {
 
 function eslintLoader() {
   return {
-    enforce: "pre",
-    test: /\.js$/,
-    exclude: /node_modules/,
     loader: "eslint-loader",
     options: {
+      cache: ENABLE_CACHING,
       baseConfig: eslintConfig
     }
   };
@@ -41,11 +41,12 @@ function babelLoader() {
   }
 
   return {
-    test: /\.js$/,
     loader: "babel-loader",
-    include: servicePath,
-    exclude: /node_modules/,
     options: {
+      // Enable caching
+      cacheDirectory: ENABLE_CACHING,
+      // Disable compresisng cache files to speed up caching
+      cacheCompression: false,
       plugins: plugins.map(require.resolve),
       presets: [
         [
@@ -64,20 +65,44 @@ function babelLoader() {
 function loaders() {
   const loaders = [];
 
+  loaders.push(babelLoader());
+
   if (ENABLE_LINTING) {
     loaders.push(eslintLoader());
   }
 
-  loaders.push(babelLoader());
-
   return loaders;
 }
 
+function plugins() {
+ const plugins = [];
+
+  if (ENABLE_CACHING) {
+    plugins.push(new HardSourceWebpackPlugin({
+      info: {
+        mode: ENABLE_LOGS ? "test" : "none",
+        level: ENABLE_LOGS ? "debug" : "error"
+      }
+    }));
+  }
+
+  // Ignore all locale files of moment.js
+  plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
+
+  return plugins;
+}
+
 module.exports = {
-  entry: resolveEntriesPath(),
+  entry: resolveEntriesPath(slsw.lib.entries),
   target: "node",
   context: __dirname,
-  devtool: ENABLE_SOURCE_MAPS ? "source-map" : false,
+  // Disable verbose logs
+  stats: ENABLE_LOGS ? "normal" : "errors-only",
+  devtool: ENABLE_SOURCE_MAPS
+    ? slsw.lib.webpack.isLocal
+      ? "cheap-module-eval-source-map"
+      : "source-map"
+    : false,
   // Exclude "aws-sdk" since it's a built-in package
   externals: ["aws-sdk"],
   mode: slsw.lib.webpack.isLocal ? "development" : "production",
@@ -85,6 +110,8 @@ module.exports = {
     ? {
         minimizer: [
           new TerserPlugin({
+            parallel: true,
+            cache: ENABLE_CACHING,
             sourceMap: ENABLE_SOURCE_MAPS,
             terserOptions: {
               mangle: !ENABLE_SOURCE_MAPS
@@ -100,12 +127,28 @@ module.exports = {
     hints: false
   },
   resolve: {
+    // Performance
+    symlinks: false,
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
     modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
   },
   // Add linting and babel loaders
   module: {
-    rules: loaders()
-  }
+    rules: [{
+      test: /\.js$/,
+      include: servicePath,
+      exclude: /node_modules/,
+      use: loaders()
+    }]
+  },
+  // PERFORMANCE ONLY FOR DEVELOPMENT
+  optimization: slsw.lib.webpack.isLocal
+    ? {
+        removeAvailableModules: false,
+        removeEmptyChunks: false,
+        splitChunks: false,
+      }
+    : {},
+  plugins: plugins()
 };

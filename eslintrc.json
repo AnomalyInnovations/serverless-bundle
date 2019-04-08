@@ -9,6 +9,7 @@
   },
   "extends": "strongloop",
   "rules": {
+    "eol-last": "off",
     "brace-style": "off",
     "comma-dangle": "off",
     "comma-spacing": "off",

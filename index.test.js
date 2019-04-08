@@ -2,20 +2,24 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 
 const timeout = 10000;
+const errorString = 'Error ------------------------------------------';
+
+beforeEach(clearNpmCache);
+afterAll(clearNpmCache);
 
 test("base case", () => {
   const results = runSlsCommand("tests/base");
-  expect(results).toBeDefined();
+  expect(results).not.toContain(errorString);
 });
 
 test("nested lambda", () => {
   const results = runSlsCommand("tests/nested-lambda");
-  expect(results).toBeDefined();
+  expect(results).not.toContain(errorString);
 });
 
 test("nested service", () => {
   const results = runSlsCommand("tests/nested-service/services/main");
-  expect(results).toBeDefined();
+  expect(results).not.toContain(errorString);
 });
 
 test("babel transform", () => {
@@ -25,22 +29,22 @@ test("babel transform", () => {
 
 test("failed eslint", () => {
   const results = runSlsCommand("tests/failed-eslint");
-  expect(results).toContain('Error ------------------------------------------');
+  expect(results).toContain(errorString);
 });
 
 test("override eslint", () => {
   const results = runSlsCommand("tests/override-eslint");
-  expect(results).toBeDefined();
+  expect(results).not.toContain(errorString);
 });
 
 test("disable eslint", () => {
   const results = runSlsCommand("tests/disable-eslint");
-  expect(results).toBeDefined();
+  expect(results).not.toContain(errorString);
 });
 
 test("with eslintignore", () => {
   const results = runSlsCommand("tests/with-eslintignore");
-  expect(results).toBeDefined();
+  expect(results).not.toContain(errorString);
 });
 
 function runSlsCommand(cwd) {
@@ -59,4 +63,18 @@ function runSlsCommand(cwd) {
   console.log(results);
 
   return results;
+}
+
+function clearNpmCache() {
+  const { stdout, error } = spawnSync(
+    "rm",
+    ["-rf", "node_modules/.cache/"],
+    { __dirname, timeout }
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  return;
 }

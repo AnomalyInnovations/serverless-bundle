@@ -63,3 +63,4 @@ typings/
 # Serverless build output
 .serverless
 .webpack
+.cache-loader
