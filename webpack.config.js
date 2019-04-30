@@ -1,19 +1,21 @@
 const path = require("path");
-const webpack = require('webpack');
+const webpack = require("webpack");
 const slsw = require("serverless-webpack");
 const TerserPlugin = require("terser-webpack-plugin");
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const config = require("./config");
 const eslintConfig = require("./eslintrc.json");
 
+const isLocal = slsw.lib.webpack.isLocal;
+
 const servicePath = config.servicePath;
 
 const ENABLE_LOGS = config.options.logs;
-const ENABLE_CACHING = config.options.caching;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_MINIMIZE = config.options.minimize;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
+const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
 function resolveEntriesPath(entries) {
   for (let key in entries) {
@@ -75,15 +77,17 @@ function loaders() {
 }
 
 function plugins() {
- const plugins = [];
+  const plugins = [];
 
   if (ENABLE_CACHING) {
-    plugins.push(new HardSourceWebpackPlugin({
-      info: {
-        mode: ENABLE_LOGS ? "test" : "none",
-        level: ENABLE_LOGS ? "debug" : "error"
-      }
-    }));
+    plugins.push(
+      new HardSourceWebpackPlugin({
+        info: {
+          mode: ENABLE_LOGS ? "test" : "none",
+          level: ENABLE_LOGS ? "debug" : "error"
+        }
+      })
+    );
   }
 
   // Ignore all locale files of moment.js
@@ -99,13 +103,13 @@ module.exports = {
   // Disable verbose logs
   stats: ENABLE_LOGS ? "normal" : "errors-only",
   devtool: ENABLE_SOURCE_MAPS
-    ? slsw.lib.webpack.isLocal
+    ? isLocal
       ? "cheap-module-eval-source-map"
       : "source-map"
     : false,
   // Exclude "aws-sdk" since it's a built-in package
   externals: ["aws-sdk"],
-  mode: slsw.lib.webpack.isLocal ? "development" : "production",
+  mode: isLocal ? "development" : "production",
   optimization: ENABLE_MINIMIZE
     ? {
         minimizer: [
@@ -135,19 +139,21 @@ module.exports = {
   },
   // Add linting and babel loaders
   module: {
-    rules: [{
-      test: /\.js$/,
-      include: servicePath,
-      exclude: /node_modules/,
-      use: loaders()
-    }]
+    rules: [
+      {
+        test: /\.js$/,
+        include: servicePath,
+        exclude: /node_modules/,
+        use: loaders()
+      }
+    ]
   },
   // PERFORMANCE ONLY FOR DEVELOPMENT
-  optimization: slsw.lib.webpack.isLocal
+  optimization: isLocal
     ? {
         removeAvailableModules: false,
         removeEmptyChunks: false,
-        splitChunks: false,
+        splitChunks: false
       }
     : {},
   plugins: plugins()

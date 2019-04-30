@@ -27,7 +27,7 @@ test("babel transform", () => {
   expect(results).toContain("Babel output: 42");
 });
 
-test("failed eslint", () => {
+test("check eslint", () => {
   const results = runSlsCommand("tests/failed-eslint");
   expect(results).toContain(errorString);
 });
@@ -42,8 +42,13 @@ test("disable eslint", () => {
   expect(results).not.toContain(errorString);
 });
 
-test("with eslintignore", () => {
+test("test eslintignore", () => {
   const results = runSlsCommand("tests/with-eslintignore");
+  expect(results).not.toContain(errorString);
+});
+
+test("ignore warmup plugin", () => {
+  const results = runSlsCommand("tests/with-warmup");
   expect(results).not.toContain(errorString);
 });
 
