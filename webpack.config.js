@@ -1,7 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
 const slsw = require("serverless-webpack");
-const TerserPlugin = require("terser-webpack-plugin");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const config = require("./config");
@@ -13,7 +12,6 @@ const servicePath = config.servicePath;
 
 const ENABLE_LOGS = config.options.logs;
 const ENABLE_LINTING = config.options.linting;
-const ENABLE_MINIMIZE = config.options.minimize;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
@@ -110,22 +108,7 @@ module.exports = {
   // Exclude "aws-sdk" since it's a built-in package
   externals: ["aws-sdk"],
   mode: isLocal ? "development" : "production",
-  optimization: ENABLE_MINIMIZE
-    ? {
-        minimizer: [
-          new TerserPlugin({
-            parallel: true,
-            cache: ENABLE_CACHING,
-            sourceMap: ENABLE_SOURCE_MAPS,
-            terserOptions: {
-              mangle: !ENABLE_SOURCE_MAPS
-            }
-          })
-        ]
-      }
-    : {
-        minimize: false
-      },
+  optimization: { minimize: false },
   performance: {
     // Turn off size warnings for entry points
     hints: false

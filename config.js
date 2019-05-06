@@ -6,7 +6,6 @@ module.exports = {
     logs: false,
     caching: true,
     linting: true,
-    minimize: true,
     sourcemaps: true
   }
 };

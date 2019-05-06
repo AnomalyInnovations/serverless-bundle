@@ -11,4 +11,4 @@ provider:
 
 functions:
   hello:
-    handler: handler.hello
+    handler: _warmup/index.hello
