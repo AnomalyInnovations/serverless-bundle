@@ -108,7 +108,6 @@ module.exports = {
   // Exclude "aws-sdk" since it's a built-in package
   externals: ["aws-sdk"],
   mode: isLocal ? "development" : "production",
-  optimization: { minimize: false },
   performance: {
     // Turn off size warnings for entry points
     hints: false
@@ -138,6 +137,8 @@ module.exports = {
         removeEmptyChunks: false,
         splitChunks: false
       }
-    : {},
+    // Don't minimize in production
+    // Large builds can run out of memory
+    : { minimize: false },
   plugins: plugins()
 };
