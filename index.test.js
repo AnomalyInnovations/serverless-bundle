@@ -28,7 +28,7 @@ test("babel transform", () => {
 });
 
 test("check eslint", () => {
-  const results = runSlsCommand("tests/failed-eslint");
+  const results = runSlsCommand("tests/failed-eslint/service");
   expect(results).toContain(errorString);
 });
 

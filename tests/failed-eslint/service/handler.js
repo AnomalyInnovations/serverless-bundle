@@ -1,6 +1,7 @@
-import path from 'path';
+import include from '../include';
 
 export const hello = async (event, context) => {
+  include();
   return {
     statusCode: 200,
     body: JSON.stringify({

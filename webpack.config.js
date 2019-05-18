@@ -93,7 +93,6 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        include: servicePath,
         exclude: /node_modules/,
         use: loaders()
       }
