@@ -33,39 +33,8 @@ function eslintLoader() {
   };
 }
 
-function babelLoader() {
-  const plugins = ["@babel/plugin-transform-runtime"];
-
-  if (ENABLE_SOURCE_MAPS) {
-    plugins.push("babel-plugin-source-map-support");
-  }
-
-  return {
-    loader: "babel-loader",
-    options: {
-      // Enable caching
-      cacheDirectory: ENABLE_CACHING,
-      // Disable compresisng cache files to speed up caching
-      cacheCompression: false,
-      plugins: plugins.map(require.resolve),
-      presets: [
-        [
-          require.resolve("@babel/preset-env"),
-          {
-            targets: {
-              node: "8.10"
-            }
-          }
-        ]
-      ]
-    }
-  };
-}
-
 function loaders() {
   const loaders = [];
-
-  loaders.push(babelLoader());
 
   if (ENABLE_LINTING) {
     loaders.push(eslintLoader());
@@ -119,7 +88,7 @@ module.exports = {
     // before looking inside the project's node_modules.
     modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
   },
-  // Add linting and babel loaders
+  // Add loaders
   module: {
     rules: [
       {
