@@ -22,11 +22,6 @@ test("nested service", () => {
   expect(results).not.toContain(errorString);
 });
 
-test("babel transform", () => {
-  const results = runSlsCommand("tests/babel-transform");
-  expect(results).toContain("Babel output: 42");
-});
-
 test("check eslint", () => {
   const results = runSlsCommand("tests/failed-eslint/service");
   expect(results).toContain(errorString);
