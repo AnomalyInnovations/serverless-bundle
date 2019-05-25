@@ -3,10 +3,10 @@
 const path = require("path");
 const ServerlessWebpack = require("serverless-webpack");
 
-const config = require("./config");
+const config = require("./src/config");
 
 function getWebpackConfigPath(servicePath) {
-  return path.relative(servicePath, __dirname) + "/webpack.config.js";
+  return path.relative(servicePath, __dirname) + "/src/webpack.config.js";
 }
 
 function getConfig(custom, servicePath) {

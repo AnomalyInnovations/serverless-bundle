@@ -23,21 +23,35 @@ function resolveEntriesPath(entries) {
   return entries;
 }
 
-function eslintLoader() {
-  return {
-    loader: "eslint-loader",
-    options: {
-      cache: ENABLE_CACHING,
-      baseConfig: eslintConfig
-    }
-  };
-}
-
 function loaders() {
-  const loaders = [];
+  const loaders = {
+    rules: []
+  };
 
   if (ENABLE_LINTING) {
-    loaders.push(eslintLoader());
+    loaders.rules.push({
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: "eslint-loader",
+        options: {
+          cache: ENABLE_CACHING,
+          baseConfig: eslintConfig
+        }
+      }
+    });
+  }
+
+  if (ENABLE_SOURCE_MAPS) {
+    // Add sourcemap register import to the file
+    loaders.rules.push({
+      test: /\.js$/,
+      include: servicePath,
+      exclude: /node_modules/,
+      use: {
+        loader: path.resolve(__dirname, "sourcemap-register-loader.js")
+      }
+    });
   }
 
   return loaders;
@@ -69,11 +83,7 @@ module.exports = {
   context: __dirname,
   // Disable verbose logs
   stats: ENABLE_LOGS ? "normal" : "errors-only",
-  devtool: ENABLE_SOURCE_MAPS
-    ? isLocal
-      ? "cheap-module-eval-source-map"
-      : "source-map"
-    : false,
+  devtool: ENABLE_SOURCE_MAPS ? "source-map" : false,
   // Exclude "aws-sdk" since it's a built-in package
   externals: ["aws-sdk"],
   mode: isLocal ? "development" : "production",
@@ -89,15 +99,7 @@ module.exports = {
     modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
   },
   // Add loaders
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: loaders()
-      }
-    ]
-  },
+  module: loaders(),
   // PERFORMANCE ONLY FOR DEVELOPMENT
   optimization: isLocal
     ? {
@@ -105,8 +107,8 @@ module.exports = {
         removeEmptyChunks: false,
         splitChunks: false
       }
-    // Don't minimize in production
-    // Large builds can run out of memory
-    : { minimize: false },
+    : // Don't minimize in production
+      // Large builds can run out of memory
+      { minimize: false },
   plugins: plugins()
 };
