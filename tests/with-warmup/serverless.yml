@@ -10,5 +10,7 @@ provider:
   runtime: nodejs8.10
 
 functions:
+  default:
+    handler: handler.hello
   hello:
     handler: _warmup/index.hello

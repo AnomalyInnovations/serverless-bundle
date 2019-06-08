@@ -5,12 +5,13 @@ const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const config = require("./config");
 const eslintConfig = require("./eslintrc.json");
+const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
 
 const isLocal = slsw.lib.webpack.isLocal;
 
 const servicePath = config.servicePath;
 
-const ENABLE_LOGS = config.options.logs;
+const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
@@ -23,35 +24,58 @@ function resolveEntriesPath(entries) {
   return entries;
 }
 
+function babelLoader() {
+  const plugins = ["@babel/plugin-transform-runtime"];
+
+  if (ENABLE_SOURCE_MAPS) {
+    plugins.push("babel-plugin-source-map-support");
+  }
+
+  return {
+    loader: "babel-loader",
+    options: {
+      // Enable caching
+      cacheDirectory: ENABLE_CACHING,
+      // Disable compresisng cache files to speed up caching
+      cacheCompression: false,
+      plugins: plugins.map(require.resolve),
+      presets: [
+        [
+          require.resolve("@babel/preset-env"),
+          {
+            targets: {
+              node: "8.10"
+            }
+          }
+        ]
+      ]
+    }
+  };
+}
+
+function eslintLoader() {
+  return {
+    loader: "eslint-loader",
+    options: {
+      cache: ENABLE_CACHING,
+      baseConfig: eslintConfig
+    }
+  };
+}
+
 function loaders() {
   const loaders = {
-    rules: []
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [babelLoader()]
+      }
+    ]
   };
 
   if (ENABLE_LINTING) {
-    loaders.rules.push({
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: {
-        loader: "eslint-loader",
-        options: {
-          cache: ENABLE_CACHING,
-          baseConfig: eslintConfig
-        }
-      }
-    });
-  }
-
-  if (ENABLE_SOURCE_MAPS) {
-    // Add sourcemap register import to the file
-    loaders.rules.push({
-      test: /\.js$/,
-      include: servicePath,
-      exclude: /node_modules/,
-      use: {
-        loader: path.resolve(__dirname, "sourcemap-register-loader.js")
-      }
-    });
+    loaders.rules[0].use.push(eslintLoader());
   }
 
   return loaders;
@@ -64,8 +88,8 @@ function plugins() {
     plugins.push(
       new HardSourceWebpackPlugin({
         info: {
-          mode: ENABLE_LOGS ? "test" : "none",
-          level: ENABLE_LOGS ? "debug" : "error"
+          mode: ENABLE_STATS ? "test" : "none",
+          level: ENABLE_STATS ? "debug" : "error"
         }
       })
     );
@@ -77,12 +101,12 @@ function plugins() {
   return plugins;
 }
 
-module.exports = {
+module.exports = ignoreWarmupPlugin({
   entry: resolveEntriesPath(slsw.lib.entries),
   target: "node",
   context: __dirname,
   // Disable verbose logs
-  stats: ENABLE_LOGS ? "normal" : "errors-only",
+  stats: ENABLE_STATS ? "normal" : "errors-only",
   devtool: ENABLE_SOURCE_MAPS ? "source-map" : false,
   // Exclude "aws-sdk" since it's a built-in package
   externals: ["aws-sdk"],
@@ -111,4 +135,4 @@ module.exports = {
       // Large builds can run out of memory
       { minimize: false },
   plugins: plugins()
-};
+});

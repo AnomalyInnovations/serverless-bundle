@@ -3,7 +3,7 @@
 module.exports = {
   servicePath: "",
   options: {
-    logs: false,
+    stats: false,
     caching: true,
     linting: true,
     sourcemaps: true

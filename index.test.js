@@ -4,6 +4,9 @@ const { spawnSync } = require("child_process");
 const timeout = 10000;
 const errorString = 'Error ------------------------------------------';
 
+const packageCmd = ["package"];
+const invokeCmd = ["invoke", "local", "-f", "hello"];
+
 beforeEach(clearNpmCache);
 afterAll(clearNpmCache);
 
@@ -43,15 +46,15 @@ test("test eslintignore", () => {
 });
 
 test("ignore warmup plugin", () => {
-  const results = runSlsCommand("tests/with-warmup");
+  const results = runSlsCommand("tests/with-warmup", packageCmd);
   expect(results).not.toContain(errorString);
 });
 
-function runSlsCommand(cwd) {
+function runSlsCommand(cwd, cmd) {
   cwd = path.resolve(__dirname, cwd);
   const { stdout, error } = spawnSync(
     "serverless",
-    ["invoke", "local", "-f", "hello"],
+    cmd || invokeCmd,
     { cwd, timeout }
   );
 
