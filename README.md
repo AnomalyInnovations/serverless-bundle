@@ -71,5 +71,3 @@ custom:
 ---
 
 This plugin is maintained by [Anomaly Innovations](https://anoma.ly).
-
-
