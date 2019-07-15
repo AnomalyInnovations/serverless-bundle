@@ -7,6 +7,27 @@ An extension of the [serverless-webpack](https://www.github.com/serverless-heave
 - Caching for faster builds
 - Source map support for proper error messages
 
+And all this works without having to install Webpack, Babel, ESLint, etc. or manage any of their configs. Simply add serverless-bundle to your app and you are done!
+
+```
+-    "eslint"
+-    "webpack"
+-    "@babel/core"
+-    "babel-eslint"
+-    "babel-loader"
+-    "eslint-loader"
+-    "@babel/runtime"
+-    "@babel/preset-env"
+-    "serverless-webpack"
+-    "source-map-support"
+-    "webpack-node-externals"
+-    "eslint-config-strongloop"
+-    "@babel/plugin-transform-runtime"
+-    "babel-plugin-source-map-support"
+
++    "serverless-bundle": "^1.1.12",
+```
+
 ---
 
 ### Getting Started
