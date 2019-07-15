@@ -9,7 +9,7 @@ An extension of the [serverless-webpack](https://www.github.com/serverless-heave
 
 And all this works without having to install Webpack, Babel, ESLint, etc. or manage any of their configs. Simply add serverless-bundle to your app and you are done!
 
-```
+``` diff
 -    "eslint"
 -    "webpack"
 -    "@babel/core"
