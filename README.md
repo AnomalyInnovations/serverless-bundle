@@ -3,8 +3,9 @@
 An extension of the [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) plugin. This plugin bundles your Node.js Lambda functions with sensible defaults so you **don't have to maintain your own Webpack configs**.
 
 - Linting via [ESLint](https://eslint.org)
-- Use ES6 `import/export`
 - Caching for faster builds
+- Use ES6 `import/export`
+- Supports running unit tests with [Jest](https://jestjs.io/en/)
 - Source map support for proper error messages
 
 And all this works without having to install Webpack, Babel, ESLint, etc. or manage any of their configs. Simply add serverless-bundle to your app and you are done!
@@ -43,6 +44,14 @@ Then add it to your `serverless.yml`.
 ``` yaml
 plugins:
   - serverless-bundle
+```
+
+To run your tests using the same Babel config used in the plugin add the following to your `package.json`:
+
+``` json
+"scripts": {
+  "test": "serverless-bundle test"
+}
 ```
 
 ### Usage
