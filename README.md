@@ -5,7 +5,7 @@ An extension of the [serverless-webpack](https://www.github.com/serverless-heave
 - Linting via [ESLint](https://eslint.org)
 - Caching for faster builds
 - Use ES6 `import/export`
-- Supports transpiling unit tests with [Jest](https://jestjs.io/en/)
+- Supports transpiling unit tests with [babel-jest](https://github.com/babel/babel-jest)
 - Source map support for proper error messages
 
 And all this works without having to install Webpack, Babel, ESLint, etc. or manage any of their configs. Simply add serverless-bundle to your app and you are done!
