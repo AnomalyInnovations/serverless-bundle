@@ -11,42 +11,42 @@ beforeEach(clearNpmCache);
 afterAll(clearNpmCache);
 
 test("base case", () => {
-  const results = runSlsCommand("tests/base");
+  const results = runSlsCommand("base");
   expect(results).not.toContain(errorString);
 });
 
 test("nested lambda", () => {
-  const results = runSlsCommand("tests/nested-lambda");
+  const results = runSlsCommand("nested-lambda");
   expect(results).not.toContain(errorString);
 });
 
 test("nested service", () => {
-  const results = runSlsCommand("tests/nested-service/services/main");
+  const results = runSlsCommand("nested-service/services/main");
   expect(results).not.toContain(errorString);
 });
 
 test("check eslint", () => {
-  const results = runSlsCommand("tests/failed-eslint/service");
+  const results = runSlsCommand("failed-eslint/service");
   expect(results).toContain(errorString);
 });
 
 test("override eslint", () => {
-  const results = runSlsCommand("tests/override-eslint");
+  const results = runSlsCommand("override-eslint");
   expect(results).not.toContain(errorString);
 });
 
 test("disable eslint", () => {
-  const results = runSlsCommand("tests/disable-eslint");
+  const results = runSlsCommand("disable-eslint");
   expect(results).not.toContain(errorString);
 });
 
 test("test eslintignore", () => {
-  const results = runSlsCommand("tests/with-eslintignore");
+  const results = runSlsCommand("with-eslintignore");
   expect(results).not.toContain(errorString);
 });
 
 test("ignore warmup plugin", () => {
-  const results = runSlsCommand("tests/with-warmup", packageCmd);
+  const results = runSlsCommand("with-warmup", packageCmd);
   expect(results).not.toContain(errorString);
 });
 

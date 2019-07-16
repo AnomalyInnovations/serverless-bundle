@@ -4,7 +4,7 @@
   "description": "An extension of the serverless-webpack plugin that bundles your Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
-    "test": "jest index.test.js"
+    "test": "jest tests/index.test.js"
   },
   "bin": {
     "serverless-bundle": "./bin/scripts.js"
