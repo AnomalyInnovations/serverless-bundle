@@ -77,6 +77,10 @@ custom:
 
   This plugin uses [eslint-config-strongloop](https://github.com/strongloop/eslint-config-strongloop). You can override this by placing your own `.eslintrc.json` with the rules you'd like to use. If you'd like to ignore specific files, you can use a `.eslintignore` file.
 
+### Thanks
+
+This plugin would not be possible without the amazing [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack) plugin and the ideas and code from [Create React App](https://www.github.com/facebook/create-react-app).
+
 ---
 
 This plugin is maintained by [Anomaly Innovations](https://anoma.ly).
