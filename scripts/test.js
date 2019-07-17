@@ -18,12 +18,18 @@ const jest = require('jest');
 const execSync = require('child_process').execSync;
 let argv = process.argv.slice(2);
 
+// Disable watchman
+argv.push('--no-watchman');
+
 const path = require('path');
 const relativePathResolve = relativePath => path.resolve(__dirname, '..', relativePath);
 
 argv.push(
   '--config',
   JSON.stringify({
+//    setupFiles: [
+//      require.resolve('core-js/stable'), require.resolve('regenerator-runtime/runtime')
+//    ],
     transform: {
       '^.+\\.(js|jsx|ts|tsx)$': relativePathResolve(
         'scripts/config/babelJestTransform.js'

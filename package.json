@@ -4,7 +4,7 @@
   "description": "An extension of the serverless-webpack plugin that bundles your Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
-    "test": "jest tests/index.test.js"
+    "test": "jest --no-watchman tests/index.test.js"
   },
   "bin": {
     "serverless-bundle": "./bin/scripts.js"
@@ -25,12 +25,14 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-source-map-support": "^2.1.1",
     "copy-webpack-plugin": "^5.0.3",
+    "core-js": "^3.1.4",
     "cross-spawn": "^6.0.5",
     "eslint": "^5.16.0",
     "eslint-config-strongloop": "^2.1.0",
     "eslint-loader": "^2.2.1",
     "hard-source-webpack-plugin": "^0.13.1",
     "jest": "^24.8.0",
+    "regenerator-runtime": "^0.13.2",
     "serverless-webpack": "^5.3.1",
     "source-map-support": "^0.4.18",
     "webpack": "^4.35.3"
