@@ -27,9 +27,9 @@ const relativePathResolve = relativePath => path.resolve(__dirname, '..', relati
 argv.push(
   '--config',
   JSON.stringify({
-//    setupFiles: [
-//      require.resolve('core-js/stable'), require.resolve('regenerator-runtime/runtime')
-//    ],
+    setupFiles: [
+      require.resolve('core-js/stable'), require.resolve('regenerator-runtime/runtime')
+    ],
     transform: {
       '^.+\\.(js|jsx|ts|tsx)$': relativePathResolve(
         'scripts/config/babelJestTransform.js'
