@@ -26,7 +26,7 @@ And all this works without having to install Webpack, Babel, ESLint, etc. or man
 -    "@babel/plugin-transform-runtime"
 -    "babel-plugin-source-map-support"
 
-+    "serverless-bundle": "^1.1.12",
++    "serverless-bundle": "^1.1.12"
 ```
 
 ---
