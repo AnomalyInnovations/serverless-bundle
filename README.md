@@ -65,10 +65,10 @@ You can configure the following through your `serverless.yml`.
 ``` yaml
 custom:
   bundle:
-    sourcemaps: true  # Disable source maps
-    caching: true     # Disable Webpack caching
+    sourcemaps: true  # Enable source maps
+    caching: true     # Enable Webpack caching
     stats: false      # Don't print out any Webpack output
-    linting: true     # Disable linting as a part of the build process
+    linting: true     # Enable linting as a part of the build process
 ```
 
 #### Advanced Options
