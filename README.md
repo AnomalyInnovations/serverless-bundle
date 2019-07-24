@@ -29,6 +29,8 @@ And all this works without having to install Webpack, Babel, ESLint, etc. or man
 +    "serverless-bundle": "^1.1.12"
 ```
 
+You can [read more about this over on Serverless Stack](https://serverless-stack.com/chapters/package-lambdas-with-serverless-bundle.html).
+
 ---
 
 ### Getting Started
