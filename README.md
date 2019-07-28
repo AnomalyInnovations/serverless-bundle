@@ -1,4 +1,4 @@
-# serverless-bundle [![Build Status](https://travis-ci.com/AnomalyInnovations/serverless-bundle.svg?branch=master)](https://travis-ci.com/AnomalyInnovations/serverless-bundle) ![npm](https://img.shields.io/npm/v/serverless-bundle.svg)
+# serverless-bundle [![Build Status](https://travis-ci.com/AnomalyInnovations/serverless-bundle.svg?branch=master)](https://travis-ci.com/AnomalyInnovations/serverless-bundle) [![npm](https://img.shields.io/npm/v/serverless-bundle.svg)](https://www.npmjs.com/package/serverless-bundle)
 
 An extension of the [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) plugin. This plugin bundles your Node.js Lambda functions with sensible defaults so you **don't have to maintain your own Webpack configs**.
 
@@ -26,8 +26,10 @@ And all this works without having to install Webpack, Babel, ESLint, etc. or man
 -    "@babel/plugin-transform-runtime"
 -    "babel-plugin-source-map-support"
 
-+    "serverless-bundle": "^1.1.12",
++    "serverless-bundle": "^1.1.12"
 ```
+
+You can [read more about this over on Serverless Stack](https://serverless-stack.com/chapters/package-lambdas-with-serverless-bundle.html).
 
 ---
 
@@ -65,17 +67,26 @@ You can configure the following through your `serverless.yml`.
 ``` yaml
 custom:
   bundle:
-    sourcemaps: true  # Disable source maps
-    caching: true     # Disable Webpack caching
+    sourcemaps: true  # Enable source maps
+    caching: true     # Enable Webpack caching
     stats: false      # Don't print out any Webpack output
-    linting: true     # Disable linting as a part of the build process
+    linting: true     # Enable linting as a part of the build process
 ```
 
 #### Advanced Options
 
 - ESLint
 
-  This plugin uses [eslint-config-strongloop](https://github.com/strongloop/eslint-config-strongloop). You can override this by placing your own `.eslintrc.json` with the rules you'd like to use. If you'd like to ignore specific files, you can use a `.eslintignore` file.
+  This plugin uses [eslint-config-strongloop](https://github.com/strongloop/eslint-config-strongloop). You can [override this](https://eslint.org/docs/user-guide/configuring) by placing your own `.eslintrc.json` with the rules you'd like to use. If you'd like to ignore specific files, you can use a `.eslintignore` file.
+  
+- Customizing Babel and Webpack configs
+
+  This plugin does not support customizing the Babel and Webpack configs, since [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) does a pretty good job with that. However, if you think the default config is missing some key features, feel free to open an issue about it.
+
+### Support
+
+- Open a [new issue](https://github.com/AnomalyInnovations/serverless-bundle/issues/new) if you've found a bug or have some suggestions.
+- Or submit a pull request!
 
 ### Running Locally
 
@@ -111,4 +122,4 @@ This plugin would not be possible without the amazing [serverless-webpack](https
 
 ---
 
-This plugin is maintained by [Anomaly Innovations](https://anoma.ly).
+This plugin is maintained by [Anomaly Innovations](https://anoma.ly); makers of [Seed](https://seed.run) and [Serverless Stack](https://serverless-stack.com).
