@@ -17,32 +17,29 @@ process.on('unhandledRejection', err => {
 const jest = require('jest');
 const execSync = require('child_process').execSync;
 let argv = process.argv.slice(2);
+let isTestMode = false;
+
+// Check if we are running the test for this script itself
+if (argv[0] === "--TEST_MODE") {
+  isTestMode = true;
+  argv = [argv[1]];
+}
 
 // Disable watchman
 argv.push('--no-watchman');
 
+const createJestConfig = require('./config/createJestConfig');
 const path = require('path');
-const relativePathResolve = relativePath => path.resolve(__dirname, '..', relativePath);
-
+const paths = require('./config/paths');
 argv.push(
   '--config',
-  JSON.stringify({
-    setupFiles: [
-      require.resolve('core-js/stable'), require.resolve('regenerator-runtime/runtime')
-    ],
-    transform: {
-      '^.+\\.(js|jsx|ts|tsx)$': relativePathResolve(
-        'scripts/config/babelJestTransform.js'
-      ),
-    },
-    transformIgnorePatterns: [
-      '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$',
-    ],
-    testMatch: [
-      '<rootDir>/**/__tests__/**/*.{js,jsx,ts,tsx}',
-      '<rootDir>/**/*.{spec,test}.{js,jsx,ts,tsx}',
-    ],
-  })
+  JSON.stringify(
+    createJestConfig(
+      relativePath => path.resolve(__dirname, '..', relativePath),
+      path.resolve(paths.appPath),
+      isTestMode
+    )
+  )
 );
 
 // This is a very dirty workaround for https://github.com/facebook/jest/issues/5913.

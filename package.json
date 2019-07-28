@@ -4,10 +4,14 @@
   "description": "An extension of the serverless-webpack plugin that bundles your Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --no-watchman tests/index.test.js"
+    "test": "jest --no-watchman tests/index.test.js",
+    "test-scripts": "./bin/scripts.js test --TEST_MODE tests/scripts/test.js"
   },
   "bin": {
     "serverless-bundle": "./bin/scripts.js"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [ "<rootDir>/tests/scripts/setupTests.js" ]
   },
   "repository": {
     "type": "git",
@@ -24,6 +28,7 @@
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-source-map-support": "^2.1.1",
+    "chalk": "^2.4.2",
     "copy-webpack-plugin": "^5.0.3",
     "core-js": "^3.1.4",
     "cross-spawn": "^6.0.5",

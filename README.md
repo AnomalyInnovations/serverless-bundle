@@ -77,6 +77,34 @@ custom:
 
   This plugin uses [eslint-config-strongloop](https://github.com/strongloop/eslint-config-strongloop). You can override this by placing your own `.eslintrc.json` with the rules you'd like to use. If you'd like to ignore specific files, you can use a `.eslintignore` file.
 
+### Running Locally
+
+To run this project locally, clone the repo and initialize the project.
+
+``` bash
+$ git clone https://github.com/AnomalyInnovations/serverless-bundle
+$ cd serverless-bundle
+$ npm install
+```
+
+Run the tests using.
+
+``` bash
+$ npm test
+```
+
+To test the `serverless-bundle test` command.
+
+``` bash
+$ npm run test-scripts
+```
+
+To install locally in another project.
+
+``` bash
+$ npm install /path/to/serverless-bundle
+```
+
 ### Thanks
 
 This plugin would not be possible without the amazing [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack) plugin and the ideas and code from [Create React App](https://www.github.com/facebook/create-react-app).
