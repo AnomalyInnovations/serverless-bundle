@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const slsw = require("serverless-webpack");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const config = require("./config");
 const eslintConfig = require("./eslintrc.json");
@@ -92,6 +93,18 @@ function plugins() {
           level: ENABLE_STATS ? "debug" : "error"
         }
       })
+    );
+  }
+
+  if (config.options.copyFiles) {
+    plugins.push(
+      new CopyWebpackPlugin(
+        config.options.copyFiles.map(data => ({
+          from: path.join(config.servicePath, data.from),
+          to: data.to,
+          context: config.servicePath
+        }))
+      )
     );
   }
 
