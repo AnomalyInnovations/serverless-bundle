@@ -82,6 +82,14 @@ custom:
 - Customizing Babel and Webpack configs
 
   This plugin does not support customizing the Babel and Webpack configs, since [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) does a pretty good job with that. However, if you think the default config is missing some key features, feel free to open an issue about it.
+  
+#### Updating Options
+
+This plugin enables Webpack caching to speed up builds. Meaning that you'll need to clear the cache when you make a config change. So if you add an `.eslintignore` file, or change any other option; you'll need to do the following to see your changes take effect.
+
+``` bash
+$ rm -rf node_modules/.cache
+```
 
 ### Support
 
