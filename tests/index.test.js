@@ -15,6 +15,11 @@ test("base case", () => {
   expect(results).not.toContain(errorString);
 });
 
+test("class properties", () => {
+  const results = runSlsCommand("base");
+  expect(results).not.toContain(errorString);
+});
+
 test("nested lambda", () => {
   const results = runSlsCommand("nested-lambda");
   expect(results).not.toContain(errorString);
