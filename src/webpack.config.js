@@ -13,6 +13,7 @@ const isLocal = slsw.lib.webpack.isLocal;
 const servicePath = config.servicePath;
 
 const ENABLE_STATS = config.options.stats;
+const COPY_FILES = config.options.copyFiles;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
@@ -99,14 +100,16 @@ function plugins() {
     );
   }
 
-  if (config.options.copyFiles) {
+  if (COPY_FILES) {
     plugins.push(
       new CopyWebpackPlugin(
-        config.options.copyFiles.map(data => ({
-          from: path.join(config.servicePath, data.from),
-          to: data.to,
-          context: config.servicePath
-        }))
+        COPY_FILES.map(function(data) {
+          return {
+            to: data.to,
+            context: servicePath,
+            from: path.join(servicePath, data.from)
+          };
+        })
       )
     );
   }
