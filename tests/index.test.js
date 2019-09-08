@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const { spawnSync } = require("child_process");
 
@@ -53,6 +54,14 @@ test("test eslintignore", () => {
 test("ignore warmup plugin", () => {
   const results = runSlsCommand("with-warmup", packageCmd);
   expect(results).not.toContain(errorString);
+});
+
+test("copy files", () => {
+  const results = runSlsCommand("copy-files");
+  expect(results).not.toContain(errorString);
+  expect(
+    fs.existsSync("tests/copy-files/.webpack/service/public/test.txt")
+  ).toBe(true);
 });
 
 function runSlsCommand(cwd, cmd) {

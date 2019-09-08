@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const slsw = require("serverless-webpack");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const config = require("./config");
 const eslintConfig = require("./eslintrc.json");
@@ -12,6 +13,7 @@ const isLocal = slsw.lib.webpack.isLocal;
 const servicePath = config.servicePath;
 
 const ENABLE_STATS = config.options.stats;
+const COPY_FILES = config.options.copyFiles;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
@@ -95,6 +97,20 @@ function plugins() {
           level: ENABLE_STATS ? "debug" : "error"
         }
       })
+    );
+  }
+
+  if (COPY_FILES) {
+    plugins.push(
+      new CopyWebpackPlugin(
+        COPY_FILES.map(function(data) {
+          return {
+            to: data.to,
+            context: servicePath,
+            from: path.join(servicePath, data.from)
+          };
+        })
+      )
     );
   }
 
