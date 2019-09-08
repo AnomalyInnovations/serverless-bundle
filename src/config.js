@@ -4,9 +4,9 @@ module.exports = {
   servicePath: "",
   options: {
     stats: false,
-    copyFiles: [],
     caching: true,
     linting: true,
+    copyFiles: null,
     sourcemaps: true
   }
 };

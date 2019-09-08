@@ -67,10 +67,13 @@ You can configure the following through your `serverless.yml`.
 ``` yaml
 custom:
   bundle:
-    sourcemaps: true  # Enable source maps
-    caching: true     # Enable Webpack caching
-    stats: false      # Don't print out any Webpack output
-    linting: true     # Enable linting as a part of the build process
+    sourcemaps: true      # Enable source maps
+    caching: true         # Enable Webpack caching
+    stats: false          # Don't print out any Webpack output
+    linting: true         # Enable linting as a part of the build process
+    copyFiles:            # Copy any additional files to the generated package
+      - from: 'public/*'    # Where the files are currently
+        to: './'            # Where in the package should they go
 ```
 
 #### Advanced Options
