@@ -6,6 +6,7 @@ module.exports = {
     stats: false,
     caching: true,
     linting: true,
-    sourcemaps: true
+    sourcemaps: true,
+    copyFiles: []
   }
 };
