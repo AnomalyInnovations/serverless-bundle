@@ -62,7 +62,6 @@ function eslintLoader() {
   return {
     loader: "eslint-loader",
     options: {
-      cache: ENABLE_CACHING,
       baseConfig: eslintConfig
     }
   };
@@ -128,7 +127,7 @@ module.exports = ignoreWarmupPlugin({
   stats: ENABLE_STATS ? "normal" : "errors-only",
   devtool: ENABLE_SOURCE_MAPS ? "source-map" : false,
   // Exclude "aws-sdk" since it's a built-in package
-  externals: ["aws-sdk"],
+  externals: ["aws-sdk", "knex", "sharp"],
   mode: isLocal ? "development" : "production",
   performance: {
     // Turn off size warnings for entry points

@@ -35,7 +35,6 @@
     "copy-webpack-plugin": "^5.0.3",
     "core-js": "^3.1.4",
     "cross-spawn": "^6.0.5",
-    "eslint": "^5.16.0",
     "eslint-config-strongloop": "^2.1.0",
     "eslint-loader": "^2.2.1",
     "hard-source-webpack-plugin": "^0.13.1",
@@ -45,5 +44,25 @@
     "source-map-support": "^0.4.18",
     "webpack": "^4.35.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "husky": "^3.0.8",
+    "lint-staged": "^9.4.2",
+    "prettier": "1.18.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
 }

@@ -3,7 +3,7 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 
 const timeout = 10000;
-const errorString = 'Error ------------------------------------------';
+const errorString = "Error ------------------------------------------";
 
 const packageCmd = ["package"];
 const invokeCmd = ["invoke", "local", "-f", "hello"];
@@ -18,6 +18,11 @@ test("base case", () => {
 
 test("class properties", () => {
   const results = runSlsCommand("base");
+  expect(results).not.toContain(errorString);
+});
+
+test("exclude externals", () => {
+  const results = runSlsCommand("externals");
   expect(results).not.toContain(errorString);
 });
 
@@ -64,30 +69,59 @@ test("copy files", () => {
   ).toBe(true);
 });
 
-function runSlsCommand(cwd, cmd) {
+function clearNodeModules(cwd) {
+  const { stdout, error } = spawnSync("rm", ["-rf", "node_modules/"], {
+    cwd,
+    timeout
+  });
+
+  if (error) {
+    throw error;
+  }
+}
+
+function doNpmInstall(cwd) {
   cwd = path.resolve(__dirname, cwd);
-  const { stdout, error } = spawnSync(
-    "serverless",
-    cmd || invokeCmd,
-    { cwd, timeout }
-  );
+  const hasPackageJson = fs.existsSync(cwd + "/package.json");
+
+  if (hasPackageJson) {
+    clearNodeModules(cwd);
+
+    const { stdout, error } = spawnSync("npm", ["install"], {
+      cwd,
+      timeout: 30000
+    });
+
+    if (error) {
+      throw error;
+    }
+  }
+}
+
+function runSlsCommand(cwd, cmd) {
+  doNpmInstall(cwd);
+
+  cwd = path.resolve(__dirname, cwd);
+  const { stdout, error } = spawnSync("serverless", cmd || invokeCmd, {
+    cwd,
+    timeout
+  });
 
   if (error) {
     throw error;
   }
 
-  const results = stdout.toString('utf8');
+  const results = stdout.toString("utf8");
   console.log(results);
 
   return results;
 }
 
 function clearNpmCache() {
-  const { stdout, error } = spawnSync(
-    "rm",
-    ["-rf", "node_modules/.cache/"],
-    { __dirname, timeout }
-  );
+  const { stdout, error } = spawnSync("rm", ["-rf", "node_modules/.cache/"], {
+    __dirname,
+    timeout
+  });
 
   if (error) {
     throw error;

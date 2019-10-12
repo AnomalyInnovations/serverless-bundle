@@ -1,0 +1,19 @@
+service: my-service
+
+plugins:
+  localPath: '../../'
+  modules:
+    - index
+
+custom:
+  bundle:
+    forceInclude:
+      - mysql
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  hello:
+    handler: handler.hello
