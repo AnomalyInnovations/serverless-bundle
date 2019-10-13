@@ -71,6 +71,8 @@ custom:
     caching: true         # Enable Webpack caching
     stats: false          # Don't print out any Webpack output
     linting: true         # Enable linting as a part of the build process
+    forceInclude:         # Optional list of NPM packages that need to be included
+      - mysql               # Only necessary if packages are included dynamically
     copyFiles:            # Copy any additional files to the generated package
       - from: 'public/*'    # Where the files are currently
         to: './'            # Where in the package should they go
@@ -85,14 +87,17 @@ custom:
 - Customizing Babel and Webpack configs
 
   This plugin does not support customizing the Babel and Webpack configs, since [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) does a pretty good job with that. However, if you think the default config is missing some key features, feel free to open an issue about it.
+
+- Package specific config
+
+  The [knex.js](http://knexjs.org) module is automatically excluded from the bundle since it's not compatible with Webpack. However, you need to force include the specific database provider package since these are dynamically included. Use the `forceInclude` option to pass in a list of packages that you want included. For example, to include `mysql` use the following:
   
-#### Updating Options
-
-This plugin enables Webpack caching to speed up builds. Meaning that you'll need to clear the cache when you make a config change. So if you add an `.eslintignore` file, or change any other option; you'll need to do the following to see your changes take effect.
-
-``` bash
-$ rm -rf node_modules/.cache
-```
+  ``` yml
+  custom:
+    bundle:
+      forceInclude
+        - mysql
+  ```
 
 ### Support
 
