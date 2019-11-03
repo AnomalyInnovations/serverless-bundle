@@ -67,15 +67,17 @@ You can configure the following through your `serverless.yml`.
 ```yaml
 custom:
   bundle:
-    sourcemaps: true # Enable source maps
-    caching: true # Enable Webpack caching
-    stats: false # Don't print out any Webpack output
-    linting: true # Enable linting as a part of the build process
-    copyFiles: # Copy any additional files to the generated package
-      - from: "public/*" # Where the files are currently
-        to: "./" # Where in the package should they go
-    packagerOptions: # Run a custom script in the package process
-      scripts: # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
+    sourcemaps: true      # Enable source maps
+    caching: true         # Enable Webpack caching
+    stats: false          # Don't print out any Webpack output
+    linting: true         # Enable linting as a part of the build process
+    forceInclude:         # Optional list of NPM packages that need to be included
+      - mysql               # Only necessary if packages are included dynamically
+    copyFiles:            # Copy any additional files to the generated package
+      - from: 'public/*'    # Where the files are currently
+        to: './'            # Where in the package should they go
+    packagerOptions:      # Run a custom script in the package process
+      scripts:              # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
         - echo hello > test
 ```
 
@@ -91,15 +93,32 @@ custom:
 
 - Packager scripts
 
-  The `packagerOptions.scripts` option allows [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack#custom-scripts) to run a custom script in the packaging process. This is useful for installing any platform specific binaries. For example, if you are using [sharp](http://sharp.pixelplumbing.com/en/stable/install/#aws-lambda), use the `rm -rf node_modules/sharp && npm install --arch=x64 --platform=linux --target=10.15.0 sharp` script to add the appropriate binary.
+  The `packagerOptions.scripts` option allows [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack#custom-scripts) to run a custom script in the packaging process. This is useful for installing any platform specific binaries. See below for the `sharp` package.
 
-#### Updating Options
+- Package specific config
 
-This plugin enables Webpack caching to speed up builds. Meaning that you'll need to clear the cache when you make a config change. So if you add an `.eslintignore` file, or change any other option; you'll need to do the following to see your changes take effect.
+  - Knex.js
 
-```bash
-$ rm -rf node_modules/.cache
-```
+    The [knex.js](http://knexjs.org) module is automatically excluded from the bundle since it's not compatible with Webpack. However, you need to force include the specific database provider package since these are dynamically included. Use the `forceInclude` option to pass in a list of packages that you want included. For example, to include `mysql` use the following:
+  
+    ``` yml
+    custom:
+      bundle:
+        forceInclude
+          - mysql
+    ```
+
+  - sharp
+
+    The [sharp](http://sharp.pixelplumbing.com/en/stable/install/#aws-lambda) package needs to include a specific binary before package. Use the `packagerOptions.scripts` for this.
+
+    ``` yml
+    custom:
+      bundle:
+        packagerOptions:
+          scripts:
+            - rm -rf node_modules/sharp && npm install --arch=x64 --platform=linux --target=10.15.0 sharp
+    ```
 
 ### Support
 
