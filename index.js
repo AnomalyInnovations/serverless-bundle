@@ -15,6 +15,7 @@ function applyCustomOptions(custom, config) {
   }
 
   custom.webpack = {
+    packagerOptions: config.options.packagerOptions,
     webpackConfig: getWebpackConfigPath(config.servicePath),
     includeModules: {
       forceExclude: ["aws-sdk"],
