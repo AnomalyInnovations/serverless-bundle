@@ -49,7 +49,7 @@ function babelLoader() {
           require.resolve("@babel/preset-env"),
           {
             targets: {
-              node: "10"
+              node: config.nodeVersion
             }
           }
         ]
