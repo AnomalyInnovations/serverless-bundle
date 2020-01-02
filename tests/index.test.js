@@ -26,6 +26,11 @@ test("exclude externals", () => {
   expect(results).not.toContain(errorString);
 });
 
+test("ignore packages", () => {
+  const results = runSlsCommand("ignore-packages");
+  expect(results).not.toContain(errorString);
+});
+
 test("nested lambda", () => {
   const results = runSlsCommand("nested-lambda");
   expect(results).not.toContain(errorString);

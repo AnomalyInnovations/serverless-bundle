@@ -9,6 +9,7 @@ module.exports = {
     copyFiles: null,
     sourcemaps: true,
     forceInclude: null,
+    ignorePackages: [],
     packagerOptions: {}
   }
 };

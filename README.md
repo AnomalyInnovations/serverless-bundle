@@ -33,7 +33,7 @@ You can [read more about this over on Serverless Stack](https://serverless-stack
 
 ---
 
-### Getting Started
+## Getting Started
 
 Install the `serverless-bundle` plugin using:
 
@@ -56,11 +56,11 @@ To run your tests using the same Babel config used in the plugin add the followi
 }
 ```
 
-### Usage
+## Usage
 
 Once installed and added to your `serverless.yml`, serverless-bundle will automatically package your functions using Webpack when you run the various serverless commands.
 
-### Options
+## Options
 
 You can configure the following through your `serverless.yml`.
 
@@ -73,6 +73,8 @@ custom:
     linting: true         # Enable linting as a part of the build process
     forceInclude:         # Optional list of NPM packages that need to be included
       - mysql               # Only necessary if packages are included dynamically
+    ignorePackages:       # Ignore building any of the following packages
+      - hiredis             # For ex, hiredis needs to be ignored if using redis
     copyFiles:            # Copy any additional files to the generated package
       - from: 'public/*'    # Where the files are currently
         to: './'            # Where in the package should they go
@@ -81,7 +83,7 @@ custom:
         - echo hello > test
 ```
 
-#### Advanced Options
+### Advanced Options
 
 - ESLint
 
@@ -95,37 +97,59 @@ custom:
 
   The `packagerOptions.scripts` option allows [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack#custom-scripts) to run a custom script in the packaging process. This is useful for installing any platform specific binaries. See below for the `sharp` package.
 
-- Package specific config
+### Package specific config
 
-  - Knex.js
+#### Knex.js
 
-    The [knex.js](http://knexjs.org) module is automatically excluded from the bundle since it's not compatible with Webpack. However, you need to force include the specific database provider package since these are dynamically included. Use the `forceInclude` option to pass in a list of packages that you want included. For example, to include `mysql` use the following:
-  
-    ``` yml
-    custom:
-      bundle:
-        forceInclude
-          - mysql
-    ```
+The [knex.js](http://knexjs.org) module is automatically excluded from the bundle since it's not compatible with Webpack. However, you need to force include the specific database provider package since these are dynamically included. Use the `forceInclude` option to pass in a list of packages that you want included. For example, to include `mysql` use the following:
 
-  - sharp
+``` yml
+custom:
+  bundle:
+    forceInclude
+      - mysql
+```
 
-    The [sharp](http://sharp.pixelplumbing.com/en/stable/install/#aws-lambda) package needs to include a specific binary before package. Use the `packagerOptions.scripts` for this.
+#### sharp
 
-    ``` yml
-    custom:
-      bundle:
-        packagerOptions:
-          scripts:
-            - rm -rf node_modules/sharp && npm install --arch=x64 --platform=linux --target=10.15.0 sharp
-    ```
+The [sharp](http://sharp.pixelplumbing.com/en/stable/install/#aws-lambda) package needs to include a specific binary before package. Use the `packagerOptions.scripts` for this.
 
-### Support
+``` yml
+custom:
+  bundle:
+    packagerOptions:
+      scripts:
+        - rm -rf node_modules/sharp && npm install --arch=x64 --platform=linux --target=10.15.0 sharp
+```
+
+#### pg
+
+The [pg](https://github.com/brianc/node-postgres/tree/master/packages/pg) package optionally includes `pg-native` that needs to be ignored from Webpack. Use the `ignorePackages` option to do this.
+
+```yml
+custom:
+  bundle:
+    ignorePackages:
+      - pg-native
+```
+
+#### redis
+
+The [redis](https://github.com/NodeRedis/node_redis) package optionally includes `hiredis` that needs to be ignored from Webpack. Use the `ignorePackages` option to do this.
+
+```yml
+custom:
+  bundle:
+    ignorePackages:
+      - hiredis
+```
+
+## Support
 
 - Open a [new issue](https://github.com/AnomalyInnovations/serverless-bundle/issues/new) if you've found a bug or have some suggestions.
 - Or submit a pull request!
 
-### Running Locally
+## Running Locally
 
 To run this project locally, clone the repo and initialize the project.
 
@@ -153,7 +177,7 @@ To install locally in another project.
 $ npm install /path/to/serverless-bundle
 ```
 
-### Thanks
+## Thanks
 
 This plugin would not be possible without the amazing [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack) plugin and the ideas and code from [Create React App](https://www.github.com/facebook/create-react-app).
 
