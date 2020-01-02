@@ -97,7 +97,9 @@ custom:
 
   The `packagerOptions.scripts` option allows [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack#custom-scripts) to run a custom script in the packaging process. This is useful for installing any platform specific binaries. See below for the `sharp` package.
 
-### Package specific config
+### Package Specific Config
+
+The packages below need some additional config to make them work.
 
 #### Knex.js
 
