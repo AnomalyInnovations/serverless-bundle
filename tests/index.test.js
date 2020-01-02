@@ -4,6 +4,7 @@ const { spawnSync } = require("child_process");
 
 const timeout = 10000;
 const errorString = "Error ------------------------------------------";
+const eslintErrorString = "no-unused-vars";
 
 const packageCmd = ["package"];
 const invokeCmd = ["invoke", "local", "-f", "hello"];
@@ -43,7 +44,7 @@ test("nested service", () => {
 
 test("check eslint", () => {
   const results = runSlsCommand("failed-eslint/service");
-  expect(results).toContain(errorString);
+  expect(results).toContain(eslintErrorString);
 });
 
 test("override eslint", () => {

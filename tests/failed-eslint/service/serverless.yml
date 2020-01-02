@@ -1,7 +1,7 @@
 service: my-service
 
 plugins:
-  localPath: '../../../'
+  - '../../../index'
   
 
 provider:
