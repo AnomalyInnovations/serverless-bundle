@@ -9,26 +9,24 @@ function getWebpackConfigPath(servicePath) {
   return path.relative(servicePath, __dirname) + "/src/webpack.config.js";
 }
 
-function getConfig(custom, servicePath) {
-  const webpackConfigPath = getWebpackConfigPath(servicePath);
-
-  if (custom) {
-    if (custom.webpack) {
-      throw "serverless-webpack config detected in serverless.yml. serverless-bundle is not compatible with serverless-webpack.";
-    }
-
-    custom.webpack = {
-      webpackConfig: webpackConfigPath
-    };
-
-    return custom;
+function applyCustomOptions(custom, config) {
+  if (custom.webpack) {
+    throw "serverless-webpack config detected in serverless.yml. serverless-bundle is not compatible with serverless-webpack.";
   }
 
-  return {
-    webpack: {
-      webpackConfig: webpackConfigPath
+  custom.webpack = {
+    packagerOptions: config.options.packagerOptions,
+    webpackConfig: getWebpackConfigPath(config.servicePath),
+    includeModules: {
+      forceExclude: ["aws-sdk"],
+      forceInclude: config.options.forceInclude
     }
   };
+}
+
+function applyConfigOptions(config, options, servicePath) {
+  config.servicePath = servicePath;
+  config.options = Object.assign(config.options, options);
 }
 
 class ServerlessPlugin extends ServerlessWebpack {
@@ -43,11 +41,11 @@ class ServerlessPlugin extends ServerlessWebpack {
       const servicePath = this.serverless.config.servicePath;
       const runtime = service.provider.runtime;
 
-      service.custom = getConfig(service.custom, servicePath);
+      service.custom = service.custom || {};
 
-      config.servicePath = servicePath;
       config.nodeVersion = Number.parseInt(runtime.replace('nodejs', ''), 10);
-      config.options = Object.assign(config.options, service.custom.bundle);
+      applyConfigOptions(config, service.custom.bundle, servicePath);
+      applyCustomOptions(service.custom, config);
     }.bind(this);
   }
 }

@@ -1,0 +1,17 @@
+service: my-service
+
+plugins:
+  - '../../index'
+
+custom:
+  bundle:
+    ignorePackages:
+      - hiredis
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  hello:
+    handler: handler.hello

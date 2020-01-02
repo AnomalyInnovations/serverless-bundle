@@ -7,6 +7,9 @@ module.exports = {
     caching: true,
     linting: true,
     copyFiles: null,
-    sourcemaps: true
+    sourcemaps: true,
+    forceInclude: null,
+    ignorePackages: [],
+    packagerOptions: {}
   }
 };
