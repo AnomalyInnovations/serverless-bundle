@@ -2,8 +2,7 @@ service: my-service
 
 plugins:
   localPath: '../../../'
-  modules:
-    - index
+  
 
 provider:
   name: aws

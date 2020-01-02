@@ -66,6 +66,11 @@ test("ignore warmup plugin", () => {
   expect(results).not.toContain(errorString);
 });
 
+test("node 12", () => {
+  const results = runSlsCommand("with-node12");
+  expect(results).not.toContain(errorString);
+});
+
 test("copy files", () => {
   const results = runSlsCommand("copy-files");
   expect(results).not.toContain(errorString);

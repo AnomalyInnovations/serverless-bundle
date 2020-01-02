@@ -3,15 +3,9 @@ service: my-service
 plugins:
   - '../../index'
 
-custom:
-  bundle:
-    copyFiles:
-      - to: './'
-        from: 'public/*'
-
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
 
 functions:
   hello:

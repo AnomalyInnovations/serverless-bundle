@@ -39,9 +39,11 @@ class ServerlessPlugin extends ServerlessWebpack {
     this.hooks["before:webpack:validate:validate"] = function() {
       const service = this.serverless.service;
       const servicePath = this.serverless.config.servicePath;
+      const runtime = service.provider.runtime;
 
       service.custom = service.custom || {};
 
+      config.nodeVersion = Number.parseInt(runtime.replace('nodejs', ''), 10);
       applyConfigOptions(config, service.custom.bundle, servicePath);
       applyCustomOptions(service.custom, config);
     }.bind(this);

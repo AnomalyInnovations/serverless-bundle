@@ -5,9 +5,7 @@ custom:
     linting: false
 
 plugins:
-  localPath: '../../'
-  modules:
-    - index
+  - '../../index'
 
 provider:
   name: aws
