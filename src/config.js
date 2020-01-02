@@ -2,6 +2,7 @@
 
 module.exports = {
   servicePath: "",
+  nodeVersion: null,
   options: {
     stats: false,
     caching: true,

@@ -11,6 +11,7 @@ const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
 const isLocal = slsw.lib.webpack.isLocal;
 
 const servicePath = config.servicePath;
+const nodeVersion = config.nodeVersion;
 const copyFiles = config.options.copyFiles;
 const ignorePackages = config.options.ignorePackages;
 
@@ -50,7 +51,7 @@ function babelLoader() {
           require.resolve("@babel/preset-env"),
           {
             targets: {
-              node: config.nodeVersion
+              node: nodeVersion
             }
           }
         ]

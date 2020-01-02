@@ -24,9 +24,10 @@ function applyCustomOptions(custom, config) {
   };
 }
 
-function applyConfigOptions(config, options, servicePath) {
+function applyConfigOptions(config, options, servicePath, runtime) {
   config.servicePath = servicePath;
   config.options = Object.assign(config.options, options);
+  config.nodeVersion = Number.parseInt(runtime.replace("nodejs", ""), 10);
 }
 
 class ServerlessPlugin extends ServerlessWebpack {
@@ -39,12 +40,15 @@ class ServerlessPlugin extends ServerlessWebpack {
     this.hooks["before:webpack:validate:validate"] = function() {
       const service = this.serverless.service;
       const servicePath = this.serverless.config.servicePath;
-      const runtime = service.provider.runtime;
 
       service.custom = service.custom || {};
 
-      config.nodeVersion = Number.parseInt(runtime.replace('nodejs', ''), 10);
-      applyConfigOptions(config, service.custom.bundle, servicePath);
+      applyConfigOptions(
+        config,
+        service.custom.bundle,
+        servicePath,
+        service.provider.runtime
+      );
       applyCustomOptions(service.custom, config);
     }.bind(this);
   }
