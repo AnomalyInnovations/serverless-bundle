@@ -1,6 +1,6 @@
 {
   "name": "serverless-bundle",
-  "version": "1.3.0-beta.2",
+  "version": "1.3.0-beta.3",
   "description": "An extension of the serverless-webpack plugin that bundles your Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
