@@ -87,7 +87,7 @@ module.exports = (resolve, rootDir, isTestMode) => {
   }
   // Include dotenv env variables
   require("dotenv").config({
-    path: isTestMode ? "./tests/scripts/.env" : "./.env"
+    path: isTestMode ? "./tests/scripts/test.env" : "./.env"
   });
   return config;
 };
