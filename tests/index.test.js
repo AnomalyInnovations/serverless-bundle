@@ -72,6 +72,11 @@ test("node 12", () => {
   expect(results).not.toContain(errorString);
 });
 
+test("invalid runtime", () => {
+  const results = runSlsCommand("invalid-runtime");
+  expect(results).not.toContain(errorString);
+});
+
 test("copy files", () => {
   const results = runSlsCommand("copy-files");
   expect(results).not.toContain(errorString);

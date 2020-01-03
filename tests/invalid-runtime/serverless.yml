@@ -1,0 +1,11 @@
+service: my-service
+
+plugins:
+  - '../../index'
+
+provider:
+  name: aws
+
+functions:
+  hello:
+    handler: handler.hello

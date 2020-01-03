@@ -27,7 +27,9 @@ function applyCustomOptions(custom, config) {
 function applyConfigOptions(config, options, servicePath, runtime) {
   config.servicePath = servicePath;
   config.options = Object.assign(config.options, options);
-  config.nodeVersion = Number.parseInt(runtime.replace("nodejs", ""), 10);
+  // Default to Node 10 if no runtime found
+  config.nodeVersion =
+    Number.parseInt((runtime || "").replace("nodejs", ""), 10) || 10;
 }
 
 class ServerlessPlugin extends ServerlessWebpack {
