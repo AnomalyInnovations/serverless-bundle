@@ -3,15 +3,19 @@ const webpack = require("webpack");
 const slsw = require("serverless-webpack");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const fs = require('fs')
 
 const config = require("./config");
 const eslintConfig = require("./eslintrc.json");
 const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const isLocal = slsw.lib.webpack.isLocal;
 
 const servicePath = config.servicePath;
+const tsConfigPath = path.resolve(servicePath, "./tsconfig.json")
 
+const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath)
 const ENABLE_STATS = config.options.stats;
 const COPY_FILES = config.options.copyFiles;
 const ENABLE_LINTING = config.options.linting;
@@ -68,6 +72,16 @@ function eslintLoader() {
   };
 }
 
+function tsLoader() {
+    return {
+      loader: "ts-loader",
+      options: {
+        transpileOnly: true,
+        experimentalWatchApi: true,
+      }
+    };
+  }
+
 function loaders() {
   const loaders = {
     rules: [
@@ -79,6 +93,20 @@ function loaders() {
     ]
   };
 
+  if (ENABLE_TYPESCRIPT) {
+    loaders.rules.push({
+        test: /\.ts$/,
+        use: [babelLoader(), tsLoader()],
+        exclude: [
+          [
+            path.resolve(servicePath, 'node_modules'),
+            path.resolve(servicePath, '.serverless'),
+            path.resolve(servicePath, '.webpack'),
+          ],
+        ]
+    })
+  }
+
   if (ENABLE_LINTING) {
     loaders.rules[0].use.push(eslintLoader());
   }
@@ -88,6 +116,18 @@ function loaders() {
 
 function plugins() {
   const plugins = [];
+
+  if (ENABLE_TYPESCRIPT) {
+    plugins.push(
+      new ForkTsCheckerWebpackPlugin({
+        tsconfig: path.resolve(servicePath, "./tsconfig.json"),
+        eslint: true,
+        eslintOptions: {
+          cache: true
+        }
+      })
+    )
+  }
 
   if (ENABLE_CACHING) {
     plugins.push(
@@ -137,6 +177,7 @@ module.exports = ignoreWarmupPlugin({
   resolve: {
     // Performance
     symlinks: false,
+    extensions: ['.wasm', '.mjs', '.js', '.json', '.ts'],
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
     modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
