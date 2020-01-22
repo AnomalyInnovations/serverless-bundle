@@ -22,6 +22,10 @@ function applyCustomOptions(custom, config) {
       forceInclude: config.options.forceInclude
     }
   };
+
+  if (custom.bundle && custom.bundle.packager) {
+    custom.webpack.packager = custom.bundle.packager;
+  }
 }
 
 function applyConfigOptions(config, options, servicePath, runtime) {

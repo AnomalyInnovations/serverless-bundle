@@ -78,6 +78,7 @@ custom:
     copyFiles:            # Copy any additional files to the generated package
       - from: 'public/*'    # Where the files are currently
         to: './'            # Where in the package should they go
+    packager: 'yarn'        # Use 'yarn' packager. The default is 'npm'
     packagerOptions:      # Run a custom script in the package process
       scripts:              # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
         - echo hello > test
