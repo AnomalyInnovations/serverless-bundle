@@ -9,12 +9,13 @@ function getWebpackConfigPath(servicePath) {
   return path.relative(servicePath, __dirname) + "/src/webpack.config.js";
 }
 
-function applyCustomOptions(custom, config) {
+function applyWebpackOptions(custom, config) {
   if (custom.webpack) {
     throw "serverless-webpack config detected in serverless.yml. serverless-bundle is not compatible with serverless-webpack.";
   }
 
   custom.webpack = {
+    packager: config.options.packager,
     packagerOptions: config.options.packagerOptions,
     webpackConfig: getWebpackConfigPath(config.servicePath),
     includeModules: {
@@ -22,15 +23,11 @@ function applyCustomOptions(custom, config) {
       forceInclude: config.options.forceInclude
     }
   };
-
-  if (custom.bundle && custom.bundle.packager) {
-    custom.webpack.packager = custom.bundle.packager;
-  }
 }
 
-function applyConfigOptions(config, options, servicePath, runtime) {
+function applyUserConfig(config, userConfig, servicePath, runtime) {
   config.servicePath = servicePath;
-  config.options = Object.assign(config.options, options);
+  config.options = Object.assign(config.options, userConfig);
   // Default to Node 10 if no runtime found
   config.nodeVersion =
     Number.parseInt((runtime || "").replace("nodejs", ""), 10) || 10;
@@ -49,13 +46,13 @@ class ServerlessPlugin extends ServerlessWebpack {
 
       service.custom = service.custom || {};
 
-      applyConfigOptions(
+      applyUserConfig(
         config,
         service.custom.bundle,
         servicePath,
         service.provider.runtime
       );
-      applyCustomOptions(service.custom, config);
+      applyWebpackOptions(service.custom, config);
     }.bind(this);
   }
 }

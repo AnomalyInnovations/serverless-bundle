@@ -67,20 +67,20 @@ You can configure the following through your `serverless.yml`.
 ```yaml
 custom:
   bundle:
-    sourcemaps: true      # Enable source maps
-    caching: true         # Enable Webpack caching
-    stats: false          # Don't print out any Webpack output
-    linting: true         # Enable linting as a part of the build process
-    forceInclude:         # Optional list of NPM packages that need to be included
-      - mysql               # Only necessary if packages are included dynamically
-    ignorePackages:       # Ignore building any of the following packages
-      - hiredis             # For ex, hiredis needs to be ignored if using redis
-    copyFiles:            # Copy any additional files to the generated package
-      - from: 'public/*'    # Where the files are currently
-        to: './'            # Where in the package should they go
-    packager: 'yarn'        # Use 'yarn' packager. The default is 'npm'
-    packagerOptions:      # Run a custom script in the package process
-      scripts:              # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
+    sourcemaps: true          # Enable source maps
+    caching: true             # Enable Webpack caching
+    stats: false              # Don't print out any Webpack output
+    linting: true             # Enable linting as a part of the build process
+    forceInclude:             # Optional list of NPM packages that need to be included
+      - mysql                   # Only necessary if packages are included dynamically
+    ignorePackages:           # Ignore building any of the following packages
+      - hiredis                 # For ex, hiredis needs to be ignored if using redis
+    copyFiles:                # Copy any additional files to the generated package
+      - from: 'public/*'        # Where the files are currently
+        to: './'                # Where in the package should they go
+    packager: npm             # Specify a packager, 'npm' or 'yarn'. Defaults to 'npm'.
+    packagerOptions:          # Run a custom script in the package process
+      scripts:                  # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
         - echo hello > test
 ```
 
