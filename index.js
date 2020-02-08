@@ -9,26 +9,28 @@ function getWebpackConfigPath(servicePath) {
   return path.relative(servicePath, __dirname) + "/src/webpack.config.js";
 }
 
-function getConfig(custom, servicePath) {
-  const webpackConfigPath = getWebpackConfigPath(servicePath);
-
-  if (custom) {
-    if (custom.webpack) {
-      throw "serverless-webpack config detected in serverless.yml. serverless-bundle is not compatible with serverless-webpack.";
-    }
-
-    custom.webpack = {
-      webpackConfig: webpackConfigPath
-    };
-
-    return custom;
+function applyWebpackOptions(custom, config) {
+  if (custom.webpack) {
+    throw "serverless-webpack config detected in serverless.yml. serverless-bundle is not compatible with serverless-webpack.";
   }
 
-  return {
-    webpack: {
-      webpackConfig: webpackConfigPath
+  custom.webpack = {
+    packager: config.options.packager,
+    packagerOptions: config.options.packagerOptions,
+    webpackConfig: getWebpackConfigPath(config.servicePath),
+    includeModules: {
+      forceExclude: ["aws-sdk"],
+      forceInclude: config.options.forceInclude
     }
   };
+}
+
+function applyUserConfig(config, userConfig, servicePath, runtime) {
+  config.servicePath = servicePath;
+  config.options = Object.assign(config.options, userConfig);
+  // Default to Node 10 if no runtime found
+  config.nodeVersion =
+    Number.parseInt((runtime || "").replace("nodejs", ""), 10) || 10;
 }
 
 class ServerlessPlugin extends ServerlessWebpack {
@@ -42,10 +44,15 @@ class ServerlessPlugin extends ServerlessWebpack {
       const service = this.serverless.service;
       const servicePath = this.serverless.config.servicePath;
 
-      service.custom = getConfig(service.custom, servicePath);
+      service.custom = service.custom || {};
 
-      config.servicePath = servicePath;
-      config.options = Object.assign(config.options, service.custom.bundle);
+      applyUserConfig(
+        config,
+        service.custom.bundle,
+        servicePath,
+        service.provider.runtime
+      );
+      applyWebpackOptions(service.custom, config);
     }.bind(this);
   }
 }

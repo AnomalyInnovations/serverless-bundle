@@ -1,13 +1,11 @@
 service: my-service
 
 plugins:
-  localPath: '../../'
-  modules:
-    - index
+  - '../../index'
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs10.x
 
 functions:
   default:
