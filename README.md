@@ -97,6 +97,10 @@ custom:
 - Packager scripts
 
   The `packagerOptions.scripts` option allows [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack#custom-scripts) to run a custom script in the packaging process. This is useful for installing any platform specific binaries. See below for the `sharp` package.
+  
+- Usage with WebStorm
+
+  Here is some info on how to get this plugin to support running tests in WebStorm — https://github.com/AnomalyInnovations/serverless-bundle/issues/5#issuecomment-582237396
 
 ### Package Specific Config
 
