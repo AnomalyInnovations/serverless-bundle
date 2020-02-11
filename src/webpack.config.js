@@ -90,6 +90,11 @@ function loaders() {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [babelLoader()]
+      },
+      { 
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        loader: 'graphql-tag/loader'
       }
     ]
   };
@@ -185,7 +190,7 @@ module.exports = ignoreWarmupPlugin({
   resolve: {
     // Performance
     symlinks: false,
-    extensions: [".wasm", ".mjs", ".js", ".json", ".ts"],
+    extensions: [".wasm", ".mjs", ".js", ".json", ".ts", ".graphql", ".gql"],
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
     modules: [path.resolve(__dirname, "node_modules"), "node_modules"]

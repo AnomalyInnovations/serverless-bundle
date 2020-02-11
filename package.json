@@ -40,6 +40,7 @@
     "eslint-config-strongloop": "^2.1.0",
     "eslint-loader": "^2.2.1",
     "fork-ts-checker-webpack-plugin": "^4.0.1",
+    "graphql-tag": "^2.10.3",
     "hard-source-webpack-plugin": "^0.13.1",
     "jest": "^25.1.0",
     "regenerator-runtime": "^0.13.2",
