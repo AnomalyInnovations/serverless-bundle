@@ -1,11 +1,12 @@
 service: my-service
 
-custom:
-  bundle:
-    linting: false
-
 plugins:
   - '../../index'
+
+custom:
+  bundle:
+    forceInclude:
+      - mysql
 
 provider:
   name: aws

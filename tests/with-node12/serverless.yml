@@ -1,15 +1,11 @@
 service: my-service
 
-custom:
-  bundle:
-    linting: false
-
 plugins:
   - '../../index'
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
 
 functions:
   hello:
