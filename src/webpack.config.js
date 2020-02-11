@@ -11,9 +11,11 @@ const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
 const isLocal = slsw.lib.webpack.isLocal;
 
 const servicePath = config.servicePath;
+const nodeVersion = config.nodeVersion;
+const copyFiles = config.options.copyFiles;
+const ignorePackages = config.options.ignorePackages;
 
 const ENABLE_STATS = config.options.stats;
-const COPY_FILES = config.options.copyFiles;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
@@ -49,7 +51,7 @@ function babelLoader() {
           require.resolve("@babel/preset-env"),
           {
             targets: {
-              node: "8.10"
+              node: nodeVersion
             }
           }
         ]
@@ -62,7 +64,6 @@ function eslintLoader() {
   return {
     loader: "eslint-loader",
     options: {
-      cache: ENABLE_CACHING,
       baseConfig: eslintConfig
     }
   };
@@ -71,6 +72,10 @@ function eslintLoader() {
 function loaders() {
   const loaders = {
     rules: [
+      {
+        test: /\.node$/,
+        use: 'node-loader'
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -100,10 +105,10 @@ function plugins() {
     );
   }
 
-  if (COPY_FILES) {
+  if (copyFiles) {
     plugins.push(
       new CopyWebpackPlugin(
-        COPY_FILES.map(function(data) {
+        copyFiles.map(function(data) {
           return {
             to: data.to,
             context: servicePath,
@@ -117,6 +122,13 @@ function plugins() {
   // Ignore all locale files of moment.js
   plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
 
+  // Ignore any packages specified in the `ignorePackages` option
+  for (let i = 0, l = ignorePackages.length; i < l; i++) {
+    plugins.push(
+      new webpack.IgnorePlugin(new RegExp("^" + ignorePackages[i] + "$"))
+    );
+  }
+
   return plugins;
 }
 
@@ -128,7 +140,7 @@ module.exports = ignoreWarmupPlugin({
   stats: ENABLE_STATS ? "normal" : "errors-only",
   devtool: ENABLE_SOURCE_MAPS ? "source-map" : false,
   // Exclude "aws-sdk" since it's a built-in package
-  externals: ["aws-sdk"],
+  externals: ["aws-sdk", "knex", "sharp"],
   mode: isLocal ? "development" : "production",
   performance: {
     // Turn off size warnings for entry points
@@ -139,22 +151,24 @@ module.exports = ignoreWarmupPlugin({
     symlinks: false,
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
-    modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
+    // modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
+    modules: ["node_modules"]
   },
   // Add loaders
   module: loaders(),
   // PERFORMANCE ONLY FOR DEVELOPMENT
   optimization: isLocal
     ? {
-        removeAvailableModules: false,
+        splitChunks: false,
         removeEmptyChunks: false,
-        splitChunks: false
+        removeAvailableModules: false
       }
     : // Don't minimize in production
       // Large builds can run out of memory
       { minimize: false },
   plugins: plugins(),
-  node: {
-    __dirname: false
-  }
+  // node: {
+  //   __dirname: false,
+  //   __filename: false,
+  // }
 });

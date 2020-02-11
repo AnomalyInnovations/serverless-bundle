@@ -4,13 +4,17 @@
  * the package.json. It should be included before a
  * test is run.
  */
-import asyncSum from './asyncSum';
+import asyncSum from "./asyncSum";
 
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-it('sums numbers', async () => {
+it("dotenv set", () => {
+  expect(process.env.TEST_VALUE).toEqual("123");
+});
+
+it("sums numbers", async () => {
   const results = await asyncSum(1, 2);
   expect(results).toEqual(3);
 });
