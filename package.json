@@ -13,6 +13,10 @@
   "jest": {
     "setupFilesAfterEnv": [
       "<rootDir>/tests/scripts/setupTests.js"
+    ],
+    "modulePathIgnorePatterns": [
+      "npm-cache",
+      ".npm"
     ]
   },
   "repository": {
@@ -41,6 +45,7 @@
     "eslint-loader": "^2.2.1",
     "hard-source-webpack-plugin": "^0.13.1",
     "jest": "^24.8.0",
+    "pkg-up": "^3.1.0",
     "regenerator-runtime": "^0.13.2",
     "serverless-webpack": "^5.3.1",
     "source-map-support": "^0.4.18",

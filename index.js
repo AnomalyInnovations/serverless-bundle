@@ -1,6 +1,7 @@
 "use strict";
 
 const path = require("path");
+const pkgUp = require("pkg-up");
 const ServerlessWebpack = require("serverless-webpack");
 
 const config = require("./src/config");
@@ -20,7 +21,11 @@ function applyWebpackOptions(custom, config) {
     webpackConfig: getWebpackConfigPath(config.servicePath),
     includeModules: {
       forceExclude: ["aws-sdk"],
-      forceInclude: config.options.forceInclude
+      forceInclude: config.options.forceInclude,
+      // Generate relative path for the package.json
+      // For cases where the services are nested and don't have their own package.json
+      // Traverse up the tree to find the path to the nearest package.json
+      packagePath: path.relative(config.servicePath, pkgUp.sync())
     }
   };
 }

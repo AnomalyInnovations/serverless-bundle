@@ -18,7 +18,7 @@ test("base case", () => {
 });
 
 test("class properties", () => {
-  const results = runSlsCommand("base");
+  const results = runSlsCommand("class-properties");
   expect(results).not.toContain(errorString);
 });
 
@@ -39,6 +39,14 @@ test("nested lambda", () => {
 
 test("nested service", () => {
   const results = runSlsCommand("nested-service/services/main");
+  expect(results).not.toContain(errorString);
+});
+
+test("nested services", () => {
+  const results = runSlsCommand(
+    "nested-services/services/service1",
+    packageCmd
+  );
   expect(results).not.toContain(errorString);
 });
 
