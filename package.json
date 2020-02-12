@@ -4,6 +4,7 @@
   "description": "An extension of the serverless-webpack plugin that bundles your Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
+    "jest-clear-cache": "jest --clearCache",
     "test": "jest --no-watchman tests/index.test.js",
     "test-scripts": "./bin/scripts.js test --TEST_MODE tests/scripts/test.js"
   },
@@ -13,10 +14,6 @@
   "jest": {
     "setupFilesAfterEnv": [
       "<rootDir>/tests/scripts/setupTests.js"
-    ],
-    "modulePathIgnorePatterns": [
-      "npm-cache",
-      ".npm"
     ]
   },
   "repository": {
