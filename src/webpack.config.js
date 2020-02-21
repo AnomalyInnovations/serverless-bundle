@@ -13,7 +13,8 @@ const isLocal = slsw.lib.webpack.isLocal;
 const servicePath = config.servicePath;
 const nodeVersion = config.nodeVersion;
 const copyFiles = config.options.copyFiles;
-const ignorePackages = config.options.ignorePackages;
+const ignorePackages = config.options.ignorePackages || [];
+const webpackDefinitions = config.options.webpackDefinitions || [];
 
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
@@ -122,6 +123,13 @@ function plugins() {
   for (let i = 0, l = ignorePackages.length; i < l; i++) {
     plugins.push(
       new webpack.IgnorePlugin(new RegExp("^" + ignorePackages[i] + "$"))
+    );
+  }
+
+  // Add required definitions specified in the `webpackDefinitions` option
+  for (let i = 0, l = webpackDefinitions.length; i < l; i++) {
+    plugins.push(
+      new webpack.DefinePlugin(webpackDefinitions[i])
     );
   }
 
