@@ -151,6 +151,44 @@ custom:
       - hiredis
 ```
 
+### Nested Services
+
+It's common in [Serverless monorepo](https://serverless-stack.com/chapters/organizing-serverless-projects.html) setups that the plugins are installed at the root level and referenced in the individual services. Take the following project setup:
+
+```
+package.json          // Here serverless-bundle is installed
+/service1 
+  |- package.json     // Can run npm test from here, referring to parent `package.json`
+  |- handler.js
+  |- handler.test.js
+  |- serverless.yml   // Uses serverless-bundle plugin
+/service2
+  |- package.json     // Can run npm test from here, referring to parent `package.json`
+  |- handler.js
+  |- handler.test.js
+  |- serverless.yml   // Uses serverless-bundle plugin
+```
+
+Running Serverless commands (`deploy`, `package`, etc.) from the services directories are supported out of the box. To get your tests to run correctly, you need to do the following.
+
+In the root `package.json` use the following `test` script:
+
+```json
+"scripts": {
+  "test": "serverless-bundle test"
+}
+```
+
+And in `service1/package.json` use this `test` script:
+
+``` json
+"scripts": {
+  "test": "npm --prefix ./../ test service1"
+},
+```
+
+This tells serverless-bundle (in the root) to only run the tests inside the `service1/` directory. As opposed to the entire project.
+
 ## Support
 
 - Open a [new issue](https://github.com/AnomalyInnovations/serverless-bundle/issues/new) if you've found a bug or have some suggestions.
