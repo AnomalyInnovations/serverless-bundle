@@ -12,6 +12,15 @@ module.exports = (resolve, rootDir, isTestMode) => {
   const config = {
     collectCoverageFrom: ["./**/*.{js,jsx,ts,tsx}"],
 
+    preset: "ts-jest",
+    globals: {
+      "ts-jest": {
+        babelConfig: {
+          presets: [require.resolve("@babel/preset-env")]
+        }
+      }
+    },
+
     setupFiles: [
       require.resolve("core-js/stable"),
       require.resolve("regenerator-runtime/runtime")
@@ -24,7 +33,7 @@ module.exports = (resolve, rootDir, isTestMode) => {
           "<rootDir>/**/*.{spec,test}.{js,jsx,ts,tsx}"
         ],
     transform: {
-      "^.+\\.(js|jsx|ts|tsx)$": resolve("scripts/config/babelJestTransform.js")
+      "^.+\\.(js|jsx)$": resolve("scripts/config/babelJestTransform.js")
     },
     transformIgnorePatterns: ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$"]
   };
