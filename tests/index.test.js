@@ -17,6 +17,11 @@ test("base case", () => {
   expect(results).not.toContain(errorString);
 });
 
+test("Load gql files", () => {
+  const results = runSlsCommand("load-gql-files");
+  expect(results).not.toContain(errorString);
+});
+
 test("class properties", () => {
   const results = runSlsCommand("base");
   expect(results).not.toContain(errorString);

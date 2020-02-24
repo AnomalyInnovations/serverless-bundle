@@ -1,0 +1,18 @@
+{
+  "name": "load-gql-files",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "start": "serverless offline start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-lambda": "^2.10.1"
+  },
+  "devDependencies": {
+    "serverless-offline": "^5.12.1"
+  }
+}

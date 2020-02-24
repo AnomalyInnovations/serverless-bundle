@@ -25,6 +25,7 @@ And all this works without having to install Webpack, Babel, ESLint, etc. or man
 -    "eslint-config-strongloop"
 -    "@babel/plugin-transform-runtime"
 -    "babel-plugin-source-map-support"
+-    "graphql-tag"
 
 +    "serverless-bundle"
 ```
