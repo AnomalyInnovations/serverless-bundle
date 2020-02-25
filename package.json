@@ -32,6 +32,7 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-source-map-support": "^2.1.1",
     "chalk": "^2.4.2",
+    "concat-text-webpack-plugin": "^0.1.4",
     "copy-webpack-plugin": "^5.0.3",
     "core-js": "^3.1.4",
     "cross-spawn": "^6.0.5",
