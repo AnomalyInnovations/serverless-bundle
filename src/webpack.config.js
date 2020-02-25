@@ -73,16 +73,27 @@ function loaders() {
   const loaders = {
     rules: [
       {
-        test: /\.node$/,
-        use: 'node-loader'
-      },
-      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [babelLoader()]
       }
     ]
   };
+
+  if(isLocal) {
+    loaders.rules.push({
+      test: /\.node$/,
+      use: 'node-loader'
+    });
+  } else {
+    loaders.rules.push({
+      test: /\.node$/,
+      loader: "native-ext-loader",
+      options: {
+        rewritePath: "./vendor"
+      },
+    })
+  }
 
   if (ENABLE_LINTING) {
     loaders.rules[0].use.push(eslintLoader());
@@ -151,8 +162,7 @@ module.exports = ignoreWarmupPlugin({
     symlinks: false,
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
-    // modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
-    modules: ["node_modules"]
+    modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
   },
   // Add loaders
   module: loaders(),
@@ -167,8 +177,8 @@ module.exports = ignoreWarmupPlugin({
       // Large builds can run out of memory
       { minimize: false },
   plugins: plugins(),
-  // node: {
-  //   __dirname: false,
-  //   __filename: false,
-  // }
+  node: {
+    __dirname: false,
+    __filename: false
+  }
 });
