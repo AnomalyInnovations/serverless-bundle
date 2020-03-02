@@ -39,7 +39,7 @@ module.exports = (resolve, rootDir, isTestMode) => {
     "extraGlobals",
     "globalSetup",
     "globalTeardown",
-    "reporter",
+    "reporters",
     "resetMocks",
     "resetModules",
     "setupFilesAfterEnv",
