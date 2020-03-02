@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const slsw = require("serverless-webpack");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const fs = require("fs");
 
 const config = require("./config");
@@ -15,6 +16,7 @@ const isLocal = slsw.lib.webpack.isLocal;
 const servicePath = config.servicePath;
 const nodeVersion = config.nodeVersion;
 const copyFiles = config.options.copyFiles;
+const concatText = config.options.concatText;
 const ignorePackages = config.options.ignorePackages;
 const tsConfigPath = path.resolve(servicePath, "./tsconfig.json");
 
@@ -91,10 +93,10 @@ function loaders() {
         exclude: /node_modules/,
         use: [babelLoader()]
       },
-      { 
+      {
         test: /\.(graphql|gql)$/,
         exclude: /node_modules/,
-        loader: 'graphql-tag/loader'
+        loader: "graphql-tag/loader"
       }
     ]
   };
@@ -158,6 +160,18 @@ function plugins() {
         })
       )
     );
+  }
+
+  if (concatText) {
+    const concatTextConfig = {};
+
+    concatText.map(function(data) {
+      concatTextConfig.files = data.files || null;
+      concatTextConfig.name = data.name || null;
+      concatTextConfig.outputPath = data.outputPath || null;
+    });
+
+    plugins.push(new ConcatTextPlugin(concatTextConfig));
   }
 
   // Ignore all locale files of moment.js

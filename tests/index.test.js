@@ -90,6 +90,14 @@ test("copy files", () => {
   ).toBe(true);
 });
 
+test("concat text", () => {
+  const results = runSlsCommand("concat-text");
+  expect(results).not.toContain(errorString);
+  expect(
+    fs.existsSync("tests/concat-text/.webpack/service/static/test-concat.txt")
+  ).toBe(true);
+});
+
 function clearNodeModules(cwd) {
   const { stdout, error } = spawnSync("rm", ["-rf", "node_modules/"], {
     cwd,
