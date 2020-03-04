@@ -132,6 +132,11 @@ module.exports = ignoreWarmupPlugin({
   entry: resolveEntriesPath(slsw.lib.entries),
   target: "node",
   context: __dirname,
+  // allows path resolution using __dirname or __filename in lambda runtime
+  node: {
+    __filename: true,
+    __dirname: true
+  },
   // Disable verbose logs
   stats: ENABLE_STATS ? "normal" : "errors-only",
   devtool: ENABLE_SOURCE_MAPS ? "source-map" : false,
