@@ -151,6 +151,34 @@ custom:
       - hiredis
 ```
 
+#### Sequelize
+
+To use the [Sequelize](https://github.com/sequelize/sequelize) package along with [pg](https://github.com/brianc/node-postgres/tree/master/packages/pg), you'll need to ignore it from Webpack and using the `dialectModule` option. [Read more](https://github.com/AnomalyInnovations/serverless-bundle/issues/45#issuecomment-594237314) here.
+
+In your `serverless.yml`:
+
+```yml
+custom:
+  bundle:
+    ignorePackages:
+      - pg-native
+```
+
+And in your Lambda code:
+
+``` js
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT,
+    dialectModule: pg
+  }
+);
+```
+
 ### Nested Services
 
 It's common in [Serverless monorepo](https://serverless-stack.com/chapters/organizing-serverless-projects.html) setups that the plugins are installed at the root level and referenced in the individual services. Take the following project setup:
