@@ -127,15 +127,18 @@ function plugins() {
   const plugins = [];
 
   if (ENABLE_TYPESCRIPT) {
-    plugins.push(
-      new ForkTsCheckerWebpackPlugin({
-        tsconfig: path.resolve(servicePath, "./tsconfig.json"),
-        eslint: true,
-        eslintOptions: {
-          baseConfig: tsEslintConfig
-        }
-      })
-    );
+    const forkTsCheckerWebpackOptions = {
+      tsconfig: path.resolve(servicePath, "./tsconfig.json")
+    };
+
+    if (ENABLE_LINTING) {
+      forkTsCheckerWebpackOptions.eslint = true;
+      forkTsCheckerWebpackOptions.eslintOptions = {
+        baseConfig: tsEslintConfig
+      };
+    }
+
+    plugins.push(new ForkTsCheckerWebpackPlugin(forkTsCheckerWebpackOptions));
   }
 
   if (ENABLE_CACHING) {
