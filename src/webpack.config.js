@@ -7,7 +7,8 @@ const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const fs = require("fs");
 
 const config = require("./config");
-const eslintConfig = require("./eslintrc.json");
+const jsEslintConfig = require("./js.eslintrc.json");
+const tsEslintConfig = require("./ts.eslintrc.json");
 const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
@@ -70,7 +71,7 @@ function eslintLoader() {
   return {
     loader: "eslint-loader",
     options: {
-      baseConfig: eslintConfig
+      baseConfig: jsEslintConfig
     }
   };
 }
@@ -131,7 +132,7 @@ function plugins() {
         tsconfig: path.resolve(servicePath, "./tsconfig.json"),
         eslint: true,
         eslintOptions: {
-          cache: true
+          baseConfig: tsEslintConfig
         }
       })
     );
