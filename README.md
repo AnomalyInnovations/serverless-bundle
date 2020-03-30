@@ -102,13 +102,13 @@ custom:
 
   Here is some info on how to get this plugin to support running tests in WebStorm — https://github.com/AnomalyInnovations/serverless-bundle/issues/5#issuecomment-582237396
 
-- Jest
+- Alternative Jest Result Processor
 
-  Setup: Install jest-mocha-reporter`
+  For CI services (like Atlassian Bamboo CI) that do not work with Jest test results, start by installing [jest-mocha-reporter](https://www.npmjs.com/package/jest-mocha-reporter).
   
-  To test the testResultsProcessor option, add `"testResultsProcessor": "jest-mocha-reporter" to the jest-section in package.json. You should see the default command line output when running npm run test-scripts, but you should also get a test-report.json.
+  To set the `testResultsProcessor` option, add `"testResultsProcessor": "jest-mocha-reporter"` to the Jest section in your `package.json`. You should see the default command line output when running `npm run test`, but you should also get a `test-report.json`.
   
-  To test the reporters option, add `"reporters": ["jest-mocha-reporter"]` instead. This should result in the same file as above but without the command line output.
+  To test the `reporters` option, add `"reporters": ["jest-mocha-reporter"]` instead. This should result in the same file as above but without the command line output.
 
 ### Package Specific Config
 
