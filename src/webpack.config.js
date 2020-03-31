@@ -7,7 +7,7 @@ const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const fs = require("fs");
 
 const config = require("./config");
-const jsEslintConfig = require("./js.eslintrc.json");
+const jsEslintConfig = require("./eslintrc.json");
 const tsEslintConfig = require("./ts.eslintrc.json");
 const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
