@@ -1,9 +1,10 @@
-'use strict';
+"use strict";
 
-const babelJest = require('babel-jest');
+const babelJest = require("babel-jest");
 
 module.exports = babelJest.createTransformer({
-  presets: [require.resolve('@babel/preset-env')],
+  presets: ["@babel/preset-env"],
+  plugins: ["@babel/plugin-proposal-class-properties"],
   babelrc: false,
-  configFile: false,
+  configFile: false
 });
