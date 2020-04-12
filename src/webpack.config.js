@@ -7,7 +7,8 @@ const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const fs = require("fs");
 
 const config = require("./config");
-const eslintConfig = require("./eslintrc.json");
+const jsEslintConfig = require("./eslintrc.json");
+const tsEslintConfig = require("./ts.eslintrc.json");
 const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
@@ -70,7 +71,7 @@ function eslintLoader() {
   return {
     loader: "eslint-loader",
     options: {
-      baseConfig: eslintConfig
+      baseConfig: jsEslintConfig
     }
   };
 }
@@ -126,15 +127,18 @@ function plugins() {
   const plugins = [];
 
   if (ENABLE_TYPESCRIPT) {
-    plugins.push(
-      new ForkTsCheckerWebpackPlugin({
-        tsconfig: path.resolve(servicePath, "./tsconfig.json"),
-        eslint: true,
-        eslintOptions: {
-          cache: true
-        }
-      })
-    );
+    const forkTsCheckerWebpackOptions = {
+      tsconfig: path.resolve(servicePath, "./tsconfig.json")
+    };
+
+    if (ENABLE_LINTING) {
+      forkTsCheckerWebpackOptions.eslint = true;
+      forkTsCheckerWebpackOptions.eslintOptions = {
+        baseConfig: tsEslintConfig
+      };
+    }
+
+    plugins.push(new ForkTsCheckerWebpackPlugin(forkTsCheckerWebpackOptions));
   }
 
   if (ENABLE_CACHING) {
