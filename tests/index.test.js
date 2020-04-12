@@ -93,6 +93,11 @@ test("copy files", () => {
   ).toBe(true);
 });
 
+test("fixpackages formidable@1.x", () => {
+  const results = runSlsCommand("fixpackages-formidable");
+  expect(results).not.toContain(errorString);
+});
+
 function clearNodeModules(cwd) {
   const { stdout, error } = spawnSync("rm", ["-rf", "node_modules/"], {
     cwd,

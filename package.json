@@ -42,6 +42,7 @@
     "eslint-loader": "^2.2.1",
     "hard-source-webpack-plugin": "^0.13.1",
     "jest": "^24.8.0",
+    "npm-programmatic": "0.0.12",
     "pkg-up": "^3.1.0",
     "regenerator-runtime": "^0.13.2",
     "serverless-webpack": "^5.3.1",

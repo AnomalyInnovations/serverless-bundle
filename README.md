@@ -75,6 +75,8 @@ custom:
       - mysql                   # Only necessary if packages are included dynamically
     ignorePackages:           # Ignore building any of the following packages
       - hiredis                 # For ex, hiredis needs to be ignored if using redis
+    fixPackages:           # Include fixes for specific packages
+      - "formidable@1.x"        # For ex, formidable@1.x doesn't work by default with Webpack
     copyFiles:                # Copy any additional files to the generated package
       - from: 'public/*'        # Where the files are currently
         to: './'                # Where in the package should they go
@@ -93,6 +95,10 @@ custom:
 - Customizing Babel and Webpack configs
 
   This plugin does not support customizing the Babel and Webpack configs, since [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) does a pretty good job with that. However, if you think the default config is missing some key features, feel free to open an issue about it.
+
+- Supporting specific packages
+
+  Certain packages like (`formidable@1.x`) do not work with Webpack without customizing the config. To support these packages, we use the `fixPackages` option. This allows us to customize the Webpack config without having folks learn about the internals of Webpack, or maintaining their own complicated configs. If a specific package doesn't work without customizing the Webpack config, add to the `fixPackages` option and submit a PR.
 
 - Packager scripts
 
@@ -186,6 +192,19 @@ const sequelize = new Sequelize(
   }
 );
 ```
+
+#### Formidable 1.x
+
+[Formidable 1.x](https://github.com/node-formidable/formidable/issues/337#issuecomment-579610313) doesn't work with Webpack by default. We have a fix that we apply to the Webpack config for it to work. To apply the fix use the following:
+
+``` yml
+custom:
+  bundle:
+    fixPackages:
+      - "formidable@1.x"
+```
+
+If enabled, Webpack adds the following definition to work with Formidable — `{ "global.GENTLY": false }`.
 
 ### Nested Services
 

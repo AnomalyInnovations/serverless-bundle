@@ -14,11 +14,22 @@ const servicePath = config.servicePath;
 const nodeVersion = config.nodeVersion;
 const copyFiles = config.options.copyFiles;
 const ignorePackages = config.options.ignorePackages;
+const fixPackages = convertListToObject(config.options.fixPackages);
 
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
+
+function convertListToObject(list) {
+  var object = {};
+
+  for (var i = 0, l = list.length; i < l; i++) {
+    object[list[i]] = true;
+  }
+
+  return object;
+}
 
 function resolveEntriesPath(entries) {
   for (let key in entries) {
@@ -123,6 +134,10 @@ function plugins() {
     plugins.push(
       new webpack.IgnorePlugin(new RegExp("^" + ignorePackages[i] + "$"))
     );
+  }
+
+  if (fixPackages["formidable@1.x"]) {
+    plugins.push(new webpack.DefinePlugin({ "global.GENTLY": false }));
   }
 
   return plugins;
