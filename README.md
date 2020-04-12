@@ -75,7 +75,7 @@ custom:
       - mysql                   # Only necessary if packages are included dynamically
     ignorePackages:           # Ignore building any of the following packages
       - hiredis                 # For ex, hiredis needs to be ignored if using redis
-    fixPackages:           # Include fixes for specific packages
+    fixPackages:              # Include fixes for specific packages
       - "formidable@1.x"        # For ex, formidable@1.x doesn't work by default with Webpack
     copyFiles:                # Copy any additional files to the generated package
       - from: 'public/*'        # Where the files are currently
