@@ -23,7 +23,7 @@ test("Load gql files", () => {
 });
 
 test("class properties", () => {
-  const results = runSlsCommand("base");
+  const results = runSlsCommand("class-properties");
   expect(results).not.toContain(errorString);
 });
 
@@ -44,6 +44,14 @@ test("nested lambda", () => {
 
 test("nested service", () => {
   const results = runSlsCommand("nested-service/services/main");
+  expect(results).not.toContain(errorString);
+});
+
+test("nested services", () => {
+  const results = runSlsCommand(
+    "nested-services/services/service1",
+    packageCmd
+  );
   expect(results).not.toContain(errorString);
 });
 
@@ -96,6 +104,11 @@ test("concat text", () => {
   expect(
     fs.existsSync("tests/concat-text/.webpack/service/static/test-concat.txt")
   ).toBe(true);
+});
+
+test("fixpackages formidable@1.x", () => {
+  const results = runSlsCommand("fixpackages-formidable");
+  expect(results).not.toContain(errorString);
 });
 
 function clearNodeModules(cwd) {

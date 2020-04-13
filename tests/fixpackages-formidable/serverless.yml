@@ -1,0 +1,17 @@
+service: my-service
+
+plugins:
+  - '../../index'
+
+custom:
+  bundle:
+    fixPackages:
+      - "formidable@1.x"
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+functions:
+  hello:
+    handler: handler.hello

@@ -20,12 +20,23 @@ const copyFiles = config.options.copyFiles;
 const concatText = config.options.concatText;
 const ignorePackages = config.options.ignorePackages;
 const tsConfigPath = path.resolve(servicePath, "./tsconfig.json");
+const fixPackages = convertListToObject(config.options.fixPackages);
 
 const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
+
+function convertListToObject(list) {
+  var object = {};
+
+  for (var i = 0, l = list.length; i < l; i++) {
+    object[list[i]] = true;
+  }
+
+  return object;
+}
 
 function resolveEntriesPath(entries) {
   for (let key in entries) {
@@ -188,6 +199,10 @@ function plugins() {
     );
   }
 
+  if (fixPackages["formidable@1.x"]) {
+    plugins.push(new webpack.DefinePlugin({ "global.GENTLY": false }));
+  }
+
   return plugins;
 }
 
@@ -225,5 +240,8 @@ module.exports = ignoreWarmupPlugin({
     : // Don't minimize in production
       // Large builds can run out of memory
       { minimize: false },
-  plugins: plugins()
+  plugins: plugins(),
+  node: {
+    __dirname: false
+  }
 });

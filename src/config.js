@@ -7,6 +7,7 @@ module.exports = {
     stats: false,
     caching: true,
     linting: true,
+    fixPackages: [],
     packager: "npm",
     copyFiles: null,
     concatText: null,
