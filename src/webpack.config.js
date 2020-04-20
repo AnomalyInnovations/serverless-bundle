@@ -17,6 +17,8 @@ const ignorePackages = config.options.ignorePackages;
 const fixPackages = convertListToObject(config.options.fixPackages);
 
 const ENABLE_STATS = config.options.stats;
+const ENABLE_CSS_IMPORT = config.options.cssImport;
+const ENABLE_FILE_LOADER = config.options.fileLoader;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
@@ -93,6 +95,26 @@ function loaders() {
 
   if (ENABLE_LINTING) {
     loaders.rules[0].use.push(eslintLoader());
+  }
+
+  if (ENABLE_CSS_IMPORT) {
+    loaders.rules.push({
+      test: /\.s[ac]ss$/i,
+      use: [
+        "isomorphic-style-loader",
+        {
+          loader: "css-loader",
+          options: {
+            importLoaders: 1
+          }
+        },
+        "sass-loader"
+      ]
+    });
+  }
+
+  if (ENABLE_FILE_LOADER) {
+    loaders.rules.push({ test: /\.gif|\.svg$/, loader: "ignore-loader" });
   }
 
   return loaders;
