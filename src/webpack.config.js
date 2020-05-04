@@ -17,8 +17,6 @@ const ignorePackages = config.options.ignorePackages;
 const fixPackages = convertListToObject(config.options.fixPackages);
 
 const ENABLE_STATS = config.options.stats;
-const ENABLE_CSS_IMPORT = config.options.cssImport;
-const ENABLE_FILE_LOADER = config.options.fileLoader;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
@@ -44,7 +42,7 @@ function resolveEntriesPath(entries) {
 function babelLoader() {
   const plugins = [
     "@babel/plugin-transform-runtime",
-    "@babel/plugin-proposal-class-properties"
+    "@babel/plugin-proposal-class-properties",
   ];
 
   if (ENABLE_SOURCE_MAPS) {
@@ -64,12 +62,12 @@ function babelLoader() {
           require.resolve("@babel/preset-env"),
           {
             targets: {
-              node: nodeVersion
-            }
-          }
-        ]
-      ]
-    }
+              node: nodeVersion,
+            },
+          },
+        ],
+      ],
+    },
   };
 }
 
@@ -77,8 +75,8 @@ function eslintLoader() {
   return {
     loader: "eslint-loader",
     options: {
-      baseConfig: eslintConfig
-    }
+      baseConfig: eslintConfig,
+    },
   };
 }
 
@@ -88,33 +86,27 @@ function loaders() {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: [babelLoader()]
-      }
-    ]
+        use: [babelLoader()],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          "isomorphic-style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+            },
+          },
+          "sass-loader",
+        ],
+      },
+      { test: /\.gif|\.svg|\.png|\.jpg|\.jpeg$/, loader: "ignore-loader" },
+    ],
   };
 
   if (ENABLE_LINTING) {
     loaders.rules[0].use.push(eslintLoader());
-  }
-
-  if (ENABLE_CSS_IMPORT) {
-    loaders.rules.push({
-      test: /\.s[ac]ss$/i,
-      use: [
-        "isomorphic-style-loader",
-        {
-          loader: "css-loader",
-          options: {
-            importLoaders: 1
-          }
-        },
-        "sass-loader"
-      ]
-    });
-  }
-
-  if (ENABLE_FILE_LOADER) {
-    loaders.rules.push({ test: /\.gif|\.svg$/, loader: "ignore-loader" });
   }
 
   return loaders;
@@ -128,8 +120,8 @@ function plugins() {
       new HardSourceWebpackPlugin({
         info: {
           mode: ENABLE_STATS ? "test" : "none",
-          level: ENABLE_STATS ? "debug" : "error"
-        }
+          level: ENABLE_STATS ? "debug" : "error",
+        },
       })
     );
   }
@@ -137,11 +129,11 @@ function plugins() {
   if (copyFiles) {
     plugins.push(
       new CopyWebpackPlugin(
-        copyFiles.map(function(data) {
+        copyFiles.map(function (data) {
           return {
             to: data.to,
             context: servicePath,
-            from: path.join(servicePath, data.from)
+            from: path.join(servicePath, data.from),
           };
         })
       )
@@ -177,14 +169,14 @@ module.exports = ignoreWarmupPlugin({
   mode: isLocal ? "development" : "production",
   performance: {
     // Turn off size warnings for entry points
-    hints: false
+    hints: false,
   },
   resolve: {
     // Performance
     symlinks: false,
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
-    modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
+    modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
   },
   // Add loaders
   module: loaders(),
@@ -193,13 +185,13 @@ module.exports = ignoreWarmupPlugin({
     ? {
         splitChunks: false,
         removeEmptyChunks: false,
-        removeAvailableModules: false
+        removeAvailableModules: false,
       }
     : // Don't minimize in production
       // Large builds can run out of memory
       { minimize: false },
   plugins: plugins(),
   node: {
-    __dirname: false
-  }
+    __dirname: false,
+  },
 });
