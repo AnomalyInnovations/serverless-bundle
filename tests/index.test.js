@@ -98,6 +98,11 @@ test("fixpackages formidable@1.x", () => {
   expect(results).not.toContain(errorString);
 });
 
+test("isomorphic loaders", () => {
+  const results = runSlsCommand("isomorphic-loaders");
+  expect(results).not.toContain(errorString);
+});
+
 function clearNodeModules(cwd) {
   const { stdout, error } = spawnSync("rm", ["-rf", "node_modules/"], {
     cwd,

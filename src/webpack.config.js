@@ -42,7 +42,7 @@ function resolveEntriesPath(entries) {
 function babelLoader() {
   const plugins = [
     "@babel/plugin-transform-runtime",
-    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-class-properties"
   ];
 
   if (ENABLE_SOURCE_MAPS) {
@@ -62,12 +62,12 @@ function babelLoader() {
           require.resolve("@babel/preset-env"),
           {
             targets: {
-              node: nodeVersion,
-            },
-          },
-        ],
-      ],
-    },
+              node: nodeVersion
+            }
+          }
+        ]
+      ]
+    }
   };
 }
 
@@ -75,8 +75,8 @@ function eslintLoader() {
   return {
     loader: "eslint-loader",
     options: {
-      baseConfig: eslintConfig,
-    },
+      baseConfig: eslintConfig
+    }
   };
 }
 
@@ -86,7 +86,19 @@ function loaders() {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: [babelLoader()],
+        use: [babelLoader()]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          "isomorphic-style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          }
+        ]
       },
       {
         test: /\.s[ac]ss$/i,
@@ -95,14 +107,14 @@ function loaders() {
           {
             loader: "css-loader",
             options: {
-              importLoaders: 1,
-            },
+              importLoaders: 1
+            }
           },
-          "sass-loader",
-        ],
+          "sass-loader"
+        ]
       },
-      { test: /\.gif|\.svg|\.png|\.jpg|\.jpeg$/, loader: "ignore-loader" },
-    ],
+      { test: /\.gif|\.svg|\.png|\.jpg|\.jpeg$/, loader: "ignore-loader" }
+    ]
   };
 
   if (ENABLE_LINTING) {
@@ -120,8 +132,8 @@ function plugins() {
       new HardSourceWebpackPlugin({
         info: {
           mode: ENABLE_STATS ? "test" : "none",
-          level: ENABLE_STATS ? "debug" : "error",
-        },
+          level: ENABLE_STATS ? "debug" : "error"
+        }
       })
     );
   }
@@ -129,11 +141,11 @@ function plugins() {
   if (copyFiles) {
     plugins.push(
       new CopyWebpackPlugin(
-        copyFiles.map(function (data) {
+        copyFiles.map(function(data) {
           return {
             to: data.to,
             context: servicePath,
-            from: path.join(servicePath, data.from),
+            from: path.join(servicePath, data.from)
           };
         })
       )
@@ -169,14 +181,14 @@ module.exports = ignoreWarmupPlugin({
   mode: isLocal ? "development" : "production",
   performance: {
     // Turn off size warnings for entry points
-    hints: false,
+    hints: false
   },
   resolve: {
     // Performance
     symlinks: false,
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
-    modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
+    modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
   },
   // Add loaders
   module: loaders(),
@@ -185,13 +197,13 @@ module.exports = ignoreWarmupPlugin({
     ? {
         splitChunks: false,
         removeEmptyChunks: false,
-        removeAvailableModules: false,
+        removeAvailableModules: false
       }
     : // Don't minimize in production
       // Large builds can run out of memory
       { minimize: false },
   plugins: plugins(),
   node: {
-    __dirname: false,
-  },
+    __dirname: false
+  }
 });
