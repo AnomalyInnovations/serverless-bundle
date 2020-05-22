@@ -13,6 +13,6 @@ module.exports = {
     forceInclude: null,
     ignorePackages: [],
     packagerOptions: {},
-    externals: null
+    externals: []
   }
 };

@@ -19,7 +19,6 @@ const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
-const externals = ["aws-sdk", "knex", "sharp"];
 
 function resolveEntriesPath(entries) {
   for (let key in entries) {
@@ -137,7 +136,7 @@ module.exports = ignoreWarmupPlugin({
   stats: ENABLE_STATS ? "normal" : "errors-only",
   devtool: ENABLE_SOURCE_MAPS ? "source-map" : false,
   // Exclude "aws-sdk" since it's a built-in package and some other packages
-  externals: !config.options.externals ?  externals : externals.concat(config.options.externals),
+  externals: ["aws-sdk", "knex", "sharp"].concat(config.options.externals),
   mode: isLocal ? "development" : "production",
   performance: {
     // Turn off size warnings for entry points

@@ -20,7 +20,7 @@ function applyWebpackOptions(custom, config) {
     packagerOptions: config.options.packagerOptions,
     webpackConfig: getWebpackConfigPath(config.servicePath),
     includeModules: {
-      forceExclude: ["aws-sdk"],
+      forceExclude: ["aws-sdk", "knex", "sharp"].concat(config.options.externals),
       forceInclude: config.options.forceInclude,
       // Generate relative path for the package.json
       // For cases where the services are nested and don't have their own package.json
