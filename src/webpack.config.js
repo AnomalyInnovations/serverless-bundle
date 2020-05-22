@@ -15,6 +15,7 @@ const nodeVersion = config.nodeVersion;
 const copyFiles = config.options.copyFiles;
 const ignorePackages = config.options.ignorePackages;
 const fixPackages = convertListToObject(config.options.fixPackages);
+const aliases = config.options.aliases;
 
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
@@ -143,6 +144,18 @@ function plugins() {
   return plugins;
 }
 
+function alias() {
+  let alias;
+  if (Array.isArray(aliases)) {
+    alias = aliases.reduce((obj, item) => {
+      const [key, value] = Object.entries(item)[0];
+      obj[key] = path.join(servicePath, value);
+      return obj;
+    }, {});
+  }
+  return alias;
+}
+
 module.exports = ignoreWarmupPlugin({
   entry: resolveEntriesPath(slsw.lib.entries),
   target: "node",
@@ -160,6 +173,9 @@ module.exports = ignoreWarmupPlugin({
   resolve: {
     // Performance
     symlinks: false,
+
+    alias: alias(),
+
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
     modules: [path.resolve(__dirname, "node_modules"), "node_modules"]

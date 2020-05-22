@@ -3,7 +3,8 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 
 const timeout = 10000;
-const errorString = "Error ------------------------------------------";
+const errorString = "Error ------";
+const errorRegex = /(Error|Exception) ---/;
 const eslintErrorString = "no-unused-vars";
 
 const packageCmd = ["package"];
@@ -12,34 +13,39 @@ const invokeCmd = ["invoke", "local", "-f", "hello"];
 beforeEach(clearNpmCache);
 afterAll(clearNpmCache);
 
+test("aliases", () => {
+  const results = runSlsCommand("aliases");
+  expect(results).not.toMatch(errorRegex);
+});
+
 test("base case", () => {
   const results = runSlsCommand("base");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("class properties", () => {
   const results = runSlsCommand("class-properties");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("exclude externals", () => {
   const results = runSlsCommand("externals");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("ignore packages", () => {
   const results = runSlsCommand("ignore-packages");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("nested lambda", () => {
   const results = runSlsCommand("nested-lambda");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("nested service", () => {
   const results = runSlsCommand("nested-service/services/main");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("nested services", () => {
@@ -47,7 +53,7 @@ test("nested services", () => {
     "nested-services/services/service1",
     packageCmd
   );
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("check eslint", () => {
@@ -57,37 +63,37 @@ test("check eslint", () => {
 
 test("override eslint", () => {
   const results = runSlsCommand("override-eslint");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("disable eslint", () => {
   const results = runSlsCommand("disable-eslint");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("test eslintignore", () => {
   const results = runSlsCommand("with-eslintignore");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("ignore warmup plugin", () => {
   const results = runSlsCommand("with-warmup", packageCmd);
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("node 12", () => {
   const results = runSlsCommand("with-node12");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("invalid runtime", () => {
   const results = runSlsCommand("invalid-runtime");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 test("copy files", () => {
   const results = runSlsCommand("copy-files");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
   expect(
     fs.existsSync("tests/copy-files/.webpack/service/public/test.txt")
   ).toBe(true);
@@ -95,7 +101,7 @@ test("copy files", () => {
 
 test("fixpackages formidable@1.x", () => {
   const results = runSlsCommand("fixpackages-formidable");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 function clearNodeModules(cwd) {
