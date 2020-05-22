@@ -218,7 +218,7 @@ And in `service1/package.json` use this `test` script:
 This tells serverless-bundle (in the root) to only run the tests inside the `service1/` directory. As opposed to the entire project.
 
 ### ForceExclude
-Some packages is not required to bundled, Because some of packages will be invoked in Lambda runtime environment through layers. 
+Some packages are not required to bundled, Because some of packages will be invoked in Lambda runtime environment through layers. 
 
 ```yml
 # serverless.yml
