@@ -87,7 +87,33 @@ function loaders() {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [babelLoader()]
-      }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          "isomorphic-style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          }
+        ]
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          "isomorphic-style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          },
+          "sass-loader"
+        ]
+      },
+      { test: /\.gif|\.svg|\.png|\.jpg|\.jpeg$/, loader: "ignore-loader" }
     ]
   };
 
