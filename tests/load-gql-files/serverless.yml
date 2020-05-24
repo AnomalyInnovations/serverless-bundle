@@ -1,7 +1,6 @@
 service: load-gql-files
 
 plugins:
-  - serverless-offline
   - '../../index'
 
 provider:
@@ -9,7 +8,7 @@ provider:
   runtime: nodejs10.x
 
 functions:
-  graphql:
+  hello:
     handler: src/handler.graphqlHandler
     events:
       - http:

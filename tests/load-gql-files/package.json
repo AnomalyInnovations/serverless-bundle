@@ -12,7 +12,5 @@
   "dependencies": {
     "apollo-server-lambda": "^2.10.1"
   },
-  "devDependencies": {
-    "serverless-offline": "^5.12.1"
-  }
+  "devDependencies": {}
 }

@@ -14,6 +14,7 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const isLocal = slsw.lib.webpack.isLocal;
 
+const aliases = config.options.aliases;
 const servicePath = config.servicePath;
 const nodeVersion = config.nodeVersion;
 const copyFiles = config.options.copyFiles;
@@ -109,7 +110,33 @@ function loaders() {
         test: /\.(graphql|gql)$/,
         exclude: /node_modules/,
         loader: "graphql-tag/loader"
-      }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          "isomorphic-style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          }
+        ]
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          "isomorphic-style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          },
+          "sass-loader"
+        ]
+      },
+      { test: /\.gif|\.svg|\.png|\.jpg|\.jpeg$/, loader: "ignore-loader" }
     ]
   };
 
@@ -206,6 +233,14 @@ function plugins() {
   return plugins;
 }
 
+function alias() {
+  return aliases.reduce((obj, item) => {
+    const [key, value] = Object.entries(item)[0];
+    obj[key] = path.join(servicePath, value);
+    return obj;
+  }, {});
+}
+
 module.exports = ignoreWarmupPlugin({
   entry: resolveEntriesPath(slsw.lib.entries),
   target: "node",
@@ -224,6 +259,7 @@ module.exports = ignoreWarmupPlugin({
     // Performance
     symlinks: false,
     extensions: [".wasm", ".mjs", ".js", ".json", ".ts", ".graphql", ".gql"],
+    alias: alias(),
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
     modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
