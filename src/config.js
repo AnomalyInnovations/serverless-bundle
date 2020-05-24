@@ -4,6 +4,7 @@ module.exports = {
   servicePath: "",
   nodeVersion: null,
   options: {
+    aliases: [],
     stats: false,
     caching: true,
     linting: true,

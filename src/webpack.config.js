@@ -10,12 +10,12 @@ const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
 
 const isLocal = slsw.lib.webpack.isLocal;
 
+const aliases = config.options.aliases;
 const servicePath = config.servicePath;
 const nodeVersion = config.nodeVersion;
 const copyFiles = config.options.copyFiles;
 const ignorePackages = config.options.ignorePackages;
 const fixPackages = convertListToObject(config.options.fixPackages);
-const aliases = config.options.aliases;
 
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
@@ -171,15 +171,11 @@ function plugins() {
 }
 
 function alias() {
-  let alias;
-  if (Array.isArray(aliases)) {
-    alias = aliases.reduce((obj, item) => {
-      const [key, value] = Object.entries(item)[0];
-      obj[key] = path.join(servicePath, value);
-      return obj;
-    }, {});
-  }
-  return alias;
+  return aliases.reduce((obj, item) => {
+    const [key, value] = Object.entries(item)[0];
+    obj[key] = path.join(servicePath, value);
+    return obj;
+  }, {});
 }
 
 module.exports = ignoreWarmupPlugin({
