@@ -67,22 +67,24 @@ You can configure the following through your `serverless.yml`.
 ```yaml
 custom:
   bundle:
-    sourcemaps: true          # Enable source maps
-    caching: true             # Enable Webpack caching
-    stats: false              # Don't print out any Webpack output
-    linting: true             # Enable linting as a part of the build process
-    forceInclude:             # Optional list of NPM packages that need to be included
-      - mysql                   # Only necessary if packages are included dynamically
-    ignorePackages:           # Ignore building any of the following packages
-      - hiredis                 # For ex, hiredis needs to be ignored if using redis
-    fixPackages:              # Include fixes for specific packages
-      - "formidable@1.x"        # For ex, formidable@1.x doesn't work by default with Webpack
-    copyFiles:                # Copy any additional files to the generated package
-      - from: 'public/*'        # Where the files are currently
-        to: './'                # Where in the package should they go
-    packager: npm             # Specify a packager, 'npm' or 'yarn'. Defaults to 'npm'.
-    packagerOptions:          # Run a custom script in the package process
-      scripts:                  # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
+    sourcemaps: true                # Enable source maps
+    caching: true                   # Enable Webpack caching
+    stats: false                    # Don't print out any Webpack output
+    linting: true                   # Enable linting as a part of the build process
+    forceInclude:                   # Optional list of NPM packages that need to be included
+      - mysql                         # Only necessary if packages are included dynamically
+    ignorePackages:                 # Ignore building any of the following packages
+      - hiredis                       # For ex, hiredis needs to be ignored if using redis
+    fixPackages:                    # Include fixes for specific packages
+      - "formidable@1.x"              # For ex, formidable@1.x doesn't work by default with Webpack
+    copyFiles:                      # Copy any additional files to the generated package
+      - from: 'public/*'              # Where the files are currently
+        to: './'                      # Where in the package should they go
+    aliases:                        # Create an alias to 'import' modules easily with a custom path
+      - Lib: custom-lib/src/lib       # For ex, replace the long 'custom-lib/src/lib' with 'Lib'
+    packager: npm                   # Specify a packager, 'npm' or 'yarn'. Defaults to 'npm'.
+    packagerOptions:                # Run a custom script in the package process
+      scripts:                        # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
         - echo hello > test
 ```
 
@@ -103,6 +105,29 @@ custom:
 - Packager scripts
 
   The `packagerOptions.scripts` option allows [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack#custom-scripts) to run a custom script in the packaging process. This is useful for installing any platform specific binaries. See below for the `sharp` package.
+
+- Aliases
+
+  Import paths can get very long when dealing with complicated directory structures in monorepo apps. The `aliases` option allows you to define a shorter version. So if you have an import that looks like:
+
+  ``` js
+  import Utility from '../../custom-lib/src/lib/utility';
+  ```
+
+  Adding the following. Where `src/utilities` is the path from the project root.
+
+  ``` yml
+  custom:
+    bundle:
+      aliases:
+        - "Lib": custom-lib/src/lib
+  ```
+
+  This would allow you to instead import using the following, from anywhere in your project.
+
+  ``` js
+  import Utility from 'Lib/utility';
+  ```
   
 - Usage with WebStorm
 
