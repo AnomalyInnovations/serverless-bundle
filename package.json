@@ -49,7 +49,6 @@
     "pkg-up": "^3.1.0",
     "regenerator-runtime": "^0.13.2",
     "sass-loader": "^8.0.2",
-    "serverless": "^1.71.3",
     "serverless-webpack": "^5.3.1",
     "source-map-support": "^0.4.18",
     "webpack": "^4.35.3"

@@ -244,6 +244,16 @@ And in `service1/package.json` use this `test` script:
 
 This tells serverless-bundle (in the root) to only run the tests inside the `service1/` directory. As opposed to the entire project.
 
+### CSS, SASS, and Image Files
+
+Serverless Bundle automatically supports importing css, scss, and image files.
+
+``` js
+import "./assets/style.css";
+import "./assets/style.scss";
+import "./assets/react.png";
+```
+
 ## Support
 
 - Open a [new issue](https://github.com/AnomalyInnovations/serverless-bundle/issues/new) if you've found a bug or have some suggestions.
