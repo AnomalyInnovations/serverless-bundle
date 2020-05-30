@@ -47,7 +47,8 @@ module.exports = (resolve, rootDir, isTestMode) => {
     "testResultsProcessor",
     "transform",
     "transformIgnorePatterns",
-    "watchPathIgnorePatterns"
+    "watchPathIgnorePatterns",
+    "preset"
   ];
   if (overrides) {
     supportedKeys.forEach(key => {
