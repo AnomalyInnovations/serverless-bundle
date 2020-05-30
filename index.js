@@ -20,7 +20,7 @@ function applyWebpackOptions(custom, config) {
     packagerOptions: config.options.packagerOptions,
     webpackConfig: getWebpackConfigPath(config.servicePath),
     includeModules: {
-      forceExclude: ["aws-sdk"],
+      forceExclude: config.options.externals,
       forceInclude: config.options.forceInclude,
       // Generate relative path for the package.json
       // For cases where the services are nested and don't have their own package.json
@@ -32,7 +32,16 @@ function applyWebpackOptions(custom, config) {
 
 function applyUserConfig(config, userConfig, servicePath, runtime) {
   config.servicePath = servicePath;
-  config.options = Object.assign(config.options, userConfig);
+
+  // Concat externals if provided
+  if (userConfig.externals) {
+    userConfig.externals = config.options.externals.concat(
+      userConfig.externals
+    );
+  }
+
+  Object.assign(config.options, userConfig);
+
   // Default to Node 10 if no runtime found
   config.nodeVersion =
     Number.parseInt((runtime || "").replace("nodejs", ""), 10) || 10;
@@ -53,7 +62,7 @@ class ServerlessPlugin extends ServerlessWebpack {
 
       applyUserConfig(
         config,
-        service.custom.bundle,
+        service.custom.bundle || {},
         servicePath,
         service.provider.runtime
       );

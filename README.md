@@ -75,6 +75,8 @@ custom:
       - mysql                         # Only necessary if packages are included dynamically
     ignorePackages:                 # Ignore building any of the following packages
       - hiredis                       # For ex, hiredis needs to be ignored if using redis
+    externals:                      # Use the external version of the following packages
+      - chrome-aws-lambda             # Don't bundle because it'll be provided through a Lambda Layer
     fixPackages:                    # Include fixes for specific packages
       - "formidable@1.x"              # For ex, formidable@1.x doesn't work by default with Webpack
     copyFiles:                      # Copy any additional files to the generated package
@@ -277,6 +279,18 @@ Serverless Bundle automatically supports importing css, scss, and image files.
 import "./assets/style.css";
 import "./assets/style.scss";
 import "./assets/react.png";
+```
+
+### Externals
+
+Some packages are not required to be bundled because they'll be invoked in the Lambda runtime environment through Lmabda Layers. In such cases use the `externals` option. This plugin defaults `aws-sdk` as an external since it's available directly in the Lambda runtime.
+
+```yml
+# serverless.yml
+custom:
+  bundle:
+    externals:
+      - chrome-aws-lambda
 ```
 
 ## Support
