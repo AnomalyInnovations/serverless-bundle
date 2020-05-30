@@ -14,6 +14,8 @@ module.exports = {
     sourcemaps: true,
     forceInclude: null,
     ignorePackages: [],
-    packagerOptions: {}
+    packagerOptions: {},
+    // Exclude "aws-sdk" since it's a built-in package and some other packages
+    externals: ["aws-sdk", "knex", "sharp"]
   }
 };
