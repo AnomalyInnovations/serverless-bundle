@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const slsw = require("serverless-webpack");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 const config = require("./config");
 const eslintConfig = require("./eslintrc.json");
@@ -210,9 +211,16 @@ module.exports = ignoreWarmupPlugin({
         removeEmptyChunks: false,
         removeAvailableModules: false
       }
-    : // Don't minimize in production
-      // Large builds can run out of memory
-      { minimize: false },
+    : {
+        minimize: true,
+        minimizer: [
+          new TerserPlugin({
+            cache: true,
+            parallel: true,
+            sourceMap: ENABLE_SOURCE_MAPS
+          })
+        ]
+      },
   plugins: plugins(),
   node: {
     __dirname: false
