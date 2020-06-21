@@ -15,7 +15,9 @@ module.exports = {
     forceInclude: null,
     ignorePackages: [],
     packagerOptions: {},
-    // Exclude "aws-sdk" since it's a built-in package and some other packages
-    externals: ["aws-sdk", "knex", "sharp"]
+    // Exclude aws-sdk since it's available in the Lambda runtime
+    forceExclude: ["aws-sdk"],
+    // Set non Webpack compatible packages as externals
+    externals: ["knex", "sharp"]
   }
 };

@@ -75,8 +75,10 @@ custom:
       - mysql                         # Only necessary if packages are included dynamically
     ignorePackages:                 # Ignore building any of the following packages
       - hiredis                       # For ex, hiredis needs to be ignored if using redis
-    externals:                      # Use the external version of the following packages
-      - chrome-aws-lambda             # Don't bundle because it'll be provided through a Lambda Layer
+    externals:                      # Set non Webpack compatible packages as externals
+      - isomorphic-webcrypto          # They'll be included in the node_modules/
+    forceExclude:                   # Don't include these in the package
+      - chrome-aws-lambda             # Because it'll be provided through a Lambda Layer
     fixPackages:                    # Include fixes for specific packages
       - "formidable@1.x"              # For ex, formidable@1.x doesn't work by default with Webpack
     copyFiles:                      # Copy any additional files to the generated package
@@ -281,17 +283,17 @@ import "./assets/style.scss";
 import "./assets/react.png";
 ```
 
-### Externals
+### Externals vs forceExclude
 
-Some packages are not required to be bundled because they'll be invoked in the Lambda runtime environment through Lmabda Layers. In such cases use the `externals` option. This plugin defaults `aws-sdk` as an external since it's available directly in the Lambda runtime.
+The two options (`externals` and `forceExclude`) look similar but have some subtle differences. Let's look at them in detail:
 
-```yml
-# serverless.yml
-custom:
-  bundle:
-    externals:
-      - chrome-aws-lambda
-```
+- `externals`
+
+  These are packages that need to be included in the Lambda package (the .zip file that's sent to AWS). But they are not compatible with Webpack. So they are marked as `externals` to tell Webpack not bundle them. By default, `knex` and `sharp` are set as externals. If you want to add to this default list, submit a PR.
+
+- `forceExclude`
+
+  These packages are available in the Lambda runtime. Either by default (in the case of `aws-sdk`) or through a Lambda layer that you might be using. So these are not included in the Lambda package. And they are also marked as `externals`. Meaning that packages that are in `forceExclude` are automatically adding to the `externals` list as well. By default, `aws-sdk` is listed in the `forceExclude`.
 
 ## Support
 

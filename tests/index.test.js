@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { spawnSync } = require("child_process");
 
-const timeout = 10000;
+const timeout = 30000;
 const errorString = "Error ------";
 const errorRegex = /(Error|Exception) ---/;
 const eslintErrorString = "no-unused-vars";
@@ -13,13 +13,13 @@ const invokeCmd = ["invoke", "local", "-f", "hello"];
 beforeEach(clearNpmCache);
 afterAll(clearNpmCache);
 
-test("aliases", () => {
-  const results = runSlsCommand("aliases");
+test("base case", () => {
+  const results = runSlsCommand("base");
   expect(results).not.toMatch(errorRegex);
 });
 
-test("base case", () => {
-  const results = runSlsCommand("base");
+test("aliases", () => {
+  const results = runSlsCommand("aliases");
   expect(results).not.toMatch(errorRegex);
 });
 
@@ -28,9 +28,17 @@ test("class properties", () => {
   expect(results).not.toMatch(errorRegex);
 });
 
-test("exclude externals", () => {
-  const results = runSlsCommand("externals");
+test("externals with forceInclude", () => {
+  const results = runSlsCommand("externals", packageCmd);
   expect(results).not.toMatch(errorRegex);
+  // Ensure that knex is packaged as an external by default
+  // And mysql is packaged because of forceInclude
+  expect(results).toMatch(/Packing external modules: knex@\^[\d\.]+, mysql/);
+});
+
+test("forceExclude", () => {
+  const results = runSlsCommand("force-exclude", packageCmd);
+  expect(results).toContain("Excluding external modules: is-sorted");
 });
 
 test("ignore packages", () => {
@@ -106,7 +114,7 @@ test("fixpackages formidable@1.x", () => {
 
 test("isomorphic loaders", () => {
   const results = runSlsCommand("isomorphic-loaders");
-  expect(results).not.toContain(errorString);
+  expect(results).not.toMatch(errorRegex);
 });
 
 function clearNodeModules(cwd) {
@@ -129,7 +137,7 @@ function doNpmInstall(cwd) {
 
     const { stdout, error } = spawnSync("npm", ["install"], {
       cwd,
-      timeout: 30000
+      timeout
     });
 
     if (error) {

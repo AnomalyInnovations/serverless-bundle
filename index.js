@@ -20,7 +20,7 @@ function applyWebpackOptions(custom, config) {
     packagerOptions: config.options.packagerOptions,
     webpackConfig: getWebpackConfigPath(config.servicePath),
     includeModules: {
-      forceExclude: config.options.externals,
+      forceExclude: config.options.forceExclude,
       forceInclude: config.options.forceInclude,
       // Generate relative path for the package.json
       // For cases where the services are nested and don't have their own package.json
@@ -33,6 +33,13 @@ function applyWebpackOptions(custom, config) {
 function applyUserConfig(config, userConfig, servicePath, runtime) {
   config.servicePath = servicePath;
 
+  // Concat forceExclude if provided
+  if (userConfig.forceExclude) {
+    userConfig.forceExclude = config.options.forceExclude.concat(
+      userConfig.forceExclude
+    );
+  }
+
   // Concat externals if provided
   if (userConfig.externals) {
     userConfig.externals = config.options.externals.concat(
@@ -41,6 +48,11 @@ function applyUserConfig(config, userConfig, servicePath, runtime) {
   }
 
   Object.assign(config.options, userConfig);
+
+  // Add forceExclude to externals because these shouldn't be Webpacked
+  config.options.externals = config.options.externals.concat(
+    config.options.forceExclude
+  );
 
   // Default to Node 10 if no runtime found
   config.nodeVersion =

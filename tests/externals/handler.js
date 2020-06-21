@@ -1,4 +1,3 @@
-import sharp from "sharp"; // eslint-disable-line no-unused-vars
 import * as Knex from "knex";
 
 function getConnection() {
