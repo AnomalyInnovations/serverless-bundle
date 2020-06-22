@@ -17,6 +17,11 @@ test("base case", () => {
   expect(results).not.toMatch(errorRegex);
 });
 
+test("typescript", () => {
+  const results = runSlsCommand("typescript");
+  expect(results).toContain("Imported successfully");
+});
+
 test("aliases", () => {
   const results = runSlsCommand("aliases");
   expect(results).not.toMatch(errorRegex);
@@ -27,7 +32,6 @@ test("Load gql files", () => {
   expect(results).not.toMatch(errorRegex);
 });
 
-/**
 test("class properties", () => {
   const results = runSlsCommand("class-properties");
   expect(results).not.toMatch(errorRegex);
@@ -121,7 +125,6 @@ test("isomorphic loaders", () => {
   const results = runSlsCommand("isomorphic-loaders");
   expect(results).not.toMatch(errorRegex);
 });
-**/
 
 function clearNodeModules(cwd) {
   const { stdout, error } = spawnSync("rm", ["-rf", "node_modules/"], {

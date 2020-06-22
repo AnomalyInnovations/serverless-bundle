@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@my-org/some-lib/*": ["custom-lib/src/some-lib/*"]
+    }
+  }
+}

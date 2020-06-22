@@ -1,16 +1,17 @@
+const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 const slsw = require("serverless-webpack");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ConcatTextPlugin = require("concat-text-webpack-plugin");
-const fs = require("fs");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const config = require("./config");
 const jsEslintConfig = require("./eslintrc.json");
 const tsEslintConfig = require("./ts.eslintrc.json");
 const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const isLocal = slsw.lib.webpack.isLocal;
 
@@ -28,6 +29,8 @@ const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
+
+const extensions = [".wasm", ".mjs", ".js", ".json", ".ts", ".graphql", ".gql"];
 
 function convertListToObject(list) {
   var object = {};
@@ -93,6 +96,7 @@ function tsLoader() {
     loader: "ts-loader",
     options: {
       transpileOnly: true,
+      configFile: tsConfigPath,
       experimentalWatchApi: true
     }
   };
@@ -165,9 +169,7 @@ function plugins() {
   const plugins = [];
 
   if (ENABLE_TYPESCRIPT) {
-    const forkTsCheckerWebpackOptions = {
-      tsconfig: path.resolve(servicePath, "./tsconfig.json")
-    };
+    const forkTsCheckerWebpackOptions = { tsconfig: tsConfigPath };
 
     if (ENABLE_LINTING) {
       forkTsCheckerWebpackOptions.eslint = true;
@@ -258,11 +260,17 @@ module.exports = ignoreWarmupPlugin({
   resolve: {
     // Performance
     symlinks: false,
-    extensions: [".wasm", ".mjs", ".js", ".json", ".ts", ".graphql", ".gql"],
+    extensions: extensions,
     alias: alias(),
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
-    modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
+    modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
+    plugins: [
+      new TsconfigPathsPlugin({
+        configFile: tsConfigPath,
+        extensions: extensions
+      })
+    ]
   },
   // Add loaders
   module: loaders(),
