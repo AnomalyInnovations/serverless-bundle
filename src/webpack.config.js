@@ -235,6 +235,21 @@ function plugins() {
   return plugins;
 }
 
+function resolvePlugins() {
+  const plugins = [];
+
+  if (ENABLE_TYPESCRIPT) {
+    plugins.push(
+      new TsconfigPathsPlugin({
+        configFile: tsConfigPath,
+        extensions: extensions
+      })
+    );
+  }
+
+  return plugins;
+}
+
 function alias() {
   return aliases.reduce((obj, item) => {
     const [key, value] = Object.entries(item)[0];
@@ -250,8 +265,7 @@ module.exports = ignoreWarmupPlugin({
   // Disable verbose logs
   stats: ENABLE_STATS ? "normal" : "errors-only",
   devtool: ENABLE_SOURCE_MAPS ? "source-map" : false,
-  // Exclude "aws-sdk" since it's a built-in package
-  externals: ["aws-sdk", "knex", "sharp"],
+  externals: config.options.externals,
   mode: isLocal ? "development" : "production",
   performance: {
     // Turn off size warnings for entry points
@@ -265,12 +279,7 @@ module.exports = ignoreWarmupPlugin({
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
     modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
-    plugins: [
-      new TsconfigPathsPlugin({
-        configFile: tsConfigPath,
-        extensions: extensions
-      })
-    ]
+    plugins: resolvePlugins()
   },
   // Add loaders
   module: loaders(),
