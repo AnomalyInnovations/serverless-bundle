@@ -117,6 +117,11 @@ test("isomorphic loaders", () => {
   expect(results).not.toMatch(errorRegex);
 });
 
+test("raw loader", () => {
+  const results = runSlsCommand("raw-loader");
+  expect(results).not.toMatch(errorRegex);
+});
+
 function clearNodeModules(cwd) {
   const { stdout, error } = spawnSync("rm", ["-rf", "node_modules/"], {
     cwd,

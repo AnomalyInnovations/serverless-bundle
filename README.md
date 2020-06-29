@@ -90,6 +90,9 @@ custom:
     packagerOptions:                # Run a custom script in the package process
       scripts:                        # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
         - echo hello > test
+    rawFileExtensions:              # An array of file extensions to import using the webpack raw-loader
+      - txt                         # Imports .txt files as a string
+
 ```
 
 ### Advanced Options
@@ -132,7 +135,7 @@ custom:
   ``` js
   import Utility from 'Lib/utility';
   ```
-  
+
 - Usage with WebStorm
 
   Here is some info on how to get this plugin to support running tests in WebStorm — https://github.com/AnomalyInnovations/serverless-bundle/issues/5#issuecomment-582237396
@@ -140,9 +143,9 @@ custom:
 - Alternative Jest Result Processor
 
   For CI services (like Atlassian Bamboo CI) that do not work with Jest test results, start by installing [jest-mocha-reporter](https://www.npmjs.com/package/jest-mocha-reporter).
-  
+
   To set the `testResultsProcessor` option, add `"testResultsProcessor": "jest-mocha-reporter"` to the Jest section in your `package.json`. You should see the default command line output when running `npm run test`, but you should also get a `test-report.json`.
-  
+
   To test the `reporters` option, add `"reporters": ["jest-mocha-reporter"]` instead. This should result in the same file as above but without the command line output.
 
 ### Package Specific Config
@@ -241,7 +244,7 @@ It's common in [Serverless monorepo](https://serverless-stack.com/chapters/organ
 
 ```
 package.json          // Here serverless-bundle is installed
-/service1 
+/service1
   |- package.json     // Can run npm test from here, referring to parent `package.json`
   |- handler.js
   |- handler.test.js

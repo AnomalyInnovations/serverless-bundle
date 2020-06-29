@@ -15,6 +15,7 @@ const servicePath = config.servicePath;
 const nodeVersion = config.nodeVersion;
 const copyFiles = config.options.copyFiles;
 const ignorePackages = config.options.ignorePackages;
+const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
 
 const ENABLE_STATS = config.options.stats;
@@ -120,6 +121,17 @@ function loaders() {
 
   if (ENABLE_LINTING) {
     loaders.rules[0].use.push(eslintLoader());
+  }
+
+  if (rawFileExtensions && rawFileExtensions.length) {
+    const rawFileRegex = `${rawFileExtensions
+      .map(rawFileExt => `\\.${rawFileExt}`)
+      .join("|")}$`;
+
+    loaders.rules.push({
+      test: new RegExp(rawFileRegex),
+      loader: "raw-loader"
+    });
   }
 
   return loaders;

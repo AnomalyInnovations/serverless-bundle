@@ -1,0 +1,18 @@
+service: my-service
+
+plugins:
+  - "../../index"
+
+custom:
+  bundle:
+    rawFileExtensions:
+      - txt
+      - pem
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+functions:
+  hello:
+    handler: handler.hello
