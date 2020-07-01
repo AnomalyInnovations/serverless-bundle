@@ -17,6 +17,7 @@ And all this works without having to install Webpack, Babel, ESLint, etc. or man
 -    "babel-eslint"
 -    "babel-loader"
 -    "eslint-loader"
+-    "graphql-tag/loader"
 -    "@babel/runtime"
 -    "@babel/preset-env"
 -    "serverless-webpack"
@@ -281,6 +282,14 @@ Serverless Bundle automatically supports importing css, scss, and image files.
 import "./assets/style.css";
 import "./assets/style.scss";
 import "./assets/react.png";
+```
+### gql, graphql Files
+
+Serverless Bundle automatically supports importing .gql, .graphql files.
+
+``` js
+import "./modules/users.gql";
+import "./modules/messages.graphql";
 ```
 
 ### Externals vs forceExclude

@@ -1,0 +1,5 @@
+type Users {
+    id:ID!
+    name:String
+    nickname:String
+}

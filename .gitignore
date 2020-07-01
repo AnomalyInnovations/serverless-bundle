@@ -64,3 +64,6 @@ typings/
 .serverless
 .webpack
 .cache-loader
+
+# JetBrains Settings
+.idea/

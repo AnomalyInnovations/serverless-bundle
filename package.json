@@ -41,6 +41,8 @@
     "eslint": "^5.16.0",
     "eslint-config-strongloop": "^2.1.0",
     "eslint-loader": "^2.2.1",
+    "graphql": "^15.2.0",
+    "graphql-tag": "^2.10.3",
     "hard-source-webpack-plugin": "^0.13.1",
     "ignore-loader": "^0.1.2",
     "isomorphic-style-loader": "^5.1.0",

@@ -117,6 +117,11 @@ test("isomorphic loaders", () => {
   expect(results).not.toMatch(errorRegex);
 });
 
+test("graphql loaders", () => {
+  const results = runSlsCommand("graphql-loaders");
+  expect(results).not.toMatch(errorRegex);
+});
+
 function clearNodeModules(cwd) {
   const { stdout, error } = spawnSync("rm", ["-rf", "node_modules/"], {
     cwd,
