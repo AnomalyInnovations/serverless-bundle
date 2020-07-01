@@ -1,0 +1,9 @@
+type Messages {
+    user:ID!
+    messages:[Message]
+}
+type Message {
+    id:ID!
+    timestamp:String
+    message:String
+}
