@@ -11,7 +11,7 @@ module.exports = {
     fixPackages: [],
     packager: "npm",
     copyFiles: null,
-    sourcemaps: true,
+    sourcemaps: false,
     forceInclude: null,
     ignorePackages: [],
     packagerOptions: {},
