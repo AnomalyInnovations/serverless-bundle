@@ -1,5 +1,6 @@
 import "./assets/text.txt";
 import "./assets/pem.pem";
+import "./assets/html.html";
 
 export const hello = async (event, context) => {
   return {

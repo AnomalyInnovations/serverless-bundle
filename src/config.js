@@ -19,6 +19,6 @@ module.exports = {
     forceExclude: ["aws-sdk"],
     // Set non Webpack compatible packages as externals
     externals: ["knex", "sharp"],
-    rawFileExtensions: []
+    rawFileExtensions: ["pem", "txt", "html"]
   }
 };
