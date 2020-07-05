@@ -55,6 +55,7 @@
     "webpack": "^4.35.3"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.3",
     "husky": "^3.0.8",
     "lint-staged": "^9.4.2",
     "prettier": "1.18.2"
