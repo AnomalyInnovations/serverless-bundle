@@ -90,8 +90,8 @@ custom:
     packagerOptions:                # Run a custom script in the package process
       scripts:                        # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
         - echo hello > test
-    rawFileExtensions:              # An array of file extensions to import using the webpack raw-loader. Defaults to ['pem', 'txt', 'html']
-      - csv                         # Imports .csv files as a string
+    rawFileExtensions:              # An array of file extensions to import using the Webpack raw-loader.
+      - csv                         # Defaults to ['pem', 'txt']
 
 ```
 
@@ -286,17 +286,23 @@ import "./assets/style.scss";
 import "./assets/react.png";
 ```
 
-### Support for pem, txt, and html files
+### Support for pem, txt, and other raw files
 
-Serverless Bundle automatically supports importing pem, txt, and html files as a string, using the webpack raw-loader.
+Serverless Bundle automatically supports importing `.pem` and `.txt`, using the [Webpack raw-loader](https://webpack.js.org/loaders/raw-loader/).
 
 ``` js
 import "./assets/key.pem";
 import "./assets/text.txt";
-import "./assets/email-template.html";
 ```
 
-If you need support for additional file extensions, you can use the rawFileExtensions config option.
+If you need load additional files using the raw-loader, you can use the `rawFileExtensions` config option.
+
+``` yml
+custom:
+  bundle:
+    rawFileExtensions:
+      - csv
+```
 
 ### Externals vs forceExclude
 

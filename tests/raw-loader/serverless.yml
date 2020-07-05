@@ -3,6 +3,11 @@ service: my-service
 plugins:
   - "../../index"
 
+custom:
+  bundle:
+    rawFileExtensions:
+      - csv
+
 provider:
   name: aws
   runtime: nodejs10.x
