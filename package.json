@@ -5,15 +5,18 @@
   "main": "index.js",
   "scripts": {
     "jest-clear-cache": "jest --clearCache",
-    "test": "jest --no-watchman tests/index.test.js",
-    "test-scripts": "./bin/scripts.js test --TEST_MODE tests/scripts/test.js"
+    "test": "jest --no-watchman"
   },
   "bin": {
     "serverless-bundle": "./bin/scripts.js"
   },
   "jest": {
     "setupFilesAfterEnv": [
-      "<rootDir>/tests/scripts/setupTests.js"
+      "<rootDir>/tests/helpers/setup-tests.js"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/scripts",
+      "<rootDir>/tests/scripts/tests"
     ]
   },
   "repository": {
@@ -55,6 +58,7 @@
     "webpack": "^4.35.3"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.3",
     "husky": "^3.0.8",
     "lint-staged": "^9.4.2",
     "prettier": "1.18.2"
