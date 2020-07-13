@@ -1,6 +1,6 @@
 {
   "name": "@onoranzefunebricloud/serverless-bundle",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "An extension of the serverless-webpack plugin that bundles your Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
