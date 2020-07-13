@@ -47,6 +47,13 @@ function applyUserConfig(config, userConfig, servicePath, runtime) {
     );
   }
 
+  // Concat externals if provided
+  if (userConfig.rawFileExtensions) {
+    userConfig.rawFileExtensions = config.options.rawFileExtensions.concat(
+      userConfig.rawFileExtensions
+    );
+  }
+
   Object.assign(config.options, userConfig);
 
   // Add forceExclude to externals because these shouldn't be Webpacked

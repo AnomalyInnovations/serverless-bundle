@@ -8,7 +8,7 @@ const fs = require("fs");
 const chalk = require("chalk");
 const paths = require("./paths");
 
-module.exports = (resolve, rootDir, isTestMode) => {
+module.exports = (resolve, rootDir) => {
   const config = {
     collectCoverageFrom: ["./**/*.{js,jsx,ts,tsx}"],
 
@@ -26,12 +26,10 @@ module.exports = (resolve, rootDir, isTestMode) => {
       require.resolve("regenerator-runtime/runtime")
     ],
 
-    testMatch: isTestMode
-      ? undefined
-      : [
-          "<rootDir>/**/__tests__/**/*.{js,jsx,ts,tsx}",
-          "<rootDir>/**/*.{spec,test}.{js,jsx,ts,tsx}"
-        ],
+    testMatch: [
+      "<rootDir>/**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    ],
     transform: {
       "^.+\\.(js|jsx)$": resolve("scripts/config/babelJestTransform.js")
     },
@@ -98,7 +96,7 @@ module.exports = (resolve, rootDir, isTestMode) => {
   }
   // Include dotenv env variables
   require("dotenv").config({
-    path: isTestMode ? "./tests/scripts/test.env" : "./.env"
+    path: "./.env"
   });
   return config;
 };
