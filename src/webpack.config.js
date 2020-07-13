@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 const slsw = require("serverless-webpack");
+const importFresh = require("import-fresh");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
@@ -9,6 +10,9 @@ const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const config = require("./config");
+// Load the default config for reference
+const defaultConfig = importFresh("./config");
+
 const jsEslintConfig = require("./eslintrc.json");
 const tsEslintConfig = require("./ts.eslintrc.json");
 const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
@@ -21,16 +25,24 @@ const nodeVersion = config.nodeVersion;
 const copyFiles = config.options.copyFiles;
 const concatText = config.options.concatText;
 const ignorePackages = config.options.ignorePackages;
-const tsConfigPath = path.resolve(servicePath, "./tsconfig.json");
 const fixPackages = convertListToObject(config.options.fixPackages);
+const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
 
-const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
+const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
 const extensions = [".wasm", ".mjs", ".js", ".json", ".ts", ".graphql", ".gql"];
+
+// If tsConfig is specified and not found, throw an error
+if (
+  !ENABLE_TYPESCRIPT &&
+  config.options.tsConfig !== defaultConfig.options.tsConfig
+) {
+  throw `ERROR: ${config.options.tsConfig} not found.`;
+}
 
 function convertListToObject(list) {
   var object = {};
