@@ -1,14 +1,16 @@
-const clearNpmCache = require("./clear-npm-cache");
 const npmInstall = require("./npm-install");
-const removeNodeModules = require("./remove-node-modules");
+const clearNpmCache = require("./clear-npm-cache");
 const runSlsCommand = require("./run-sls-command");
+const runJestCommand = require("./run-jest-command");
+const removeNodeModules = require("./remove-node-modules");
 
 const errorRegex = /(Error|Exception) ---/;
 
 module.exports = {
-  clearNpmCache,
   npmInstall,
-  removeNodeModules,
+  errorRegex,
+  clearNpmCache,
   runSlsCommand,
-  errorRegex
+  runJestCommand,
+  removeNodeModules
 };
