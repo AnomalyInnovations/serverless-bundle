@@ -314,7 +314,7 @@ The two options (`externals` and `forceExclude`) look similar but have some subt
 
 - `forceExclude`
 
-  These packages are available in the Lambda runtime. Either by default (in the case of `aws-sdk`) or through a Lambda layer that you might be using. So these are not included in the Lambda package. And they are also marked as `externals`. Meaning that packages that are in `forceExclude` are automatically adding to the `externals` list as well. By default, `aws-sdk` is listed in the `forceExclude`.
+  These packages are available in the Lambda runtime. Either by default (in the case of `aws-sdk`) or through a Lambda layer that you might be using. So these are not included in the Lambda package. And they are also marked as `externals`. Meaning that packages that are in `forceExclude` are automatically added to the `externals` list as well. By default, `aws-sdk` is listed in the `forceExclude`.
 
 ## Support
 
