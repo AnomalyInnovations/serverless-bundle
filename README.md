@@ -136,6 +136,16 @@ custom:
   import Utility from 'Lib/utility';
   ```
 
+  To use aliases in your tests you'll need to use Jest's [`moduleNameMapper`](https://jestjs.io/docs/en/configuration#modulenamemapper-objectstring-string--arraystring). Add the following your `package.json`:
+
+  ``` json
+  "jest": {
+    "moduleNameMapper": {
+      "Lib(.*)$": "<rootDir>/custom-lib/src/lib/$1"
+    }
+  }
+  ```
+
 - Usage with WebStorm
 
   Here is some info on how to get this plugin to support running tests in WebStorm — https://github.com/AnomalyInnovations/serverless-bundle/issues/5#issuecomment-582237396
@@ -340,7 +350,7 @@ $ npm test
 To test the `serverless-bundle test` command.
 
 ```bash
-$ npm run test-scripts
+$ npm run test scripts
 ```
 
 To install locally in another project.

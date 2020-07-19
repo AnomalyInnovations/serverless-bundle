@@ -6,9 +6,6 @@
   "scripts": {
     "test": "../../bin/scripts.js test --testPathIgnorePatterns=\"./scripts.test.js\""
   },
-  "dependencies": {
-    "jest": "^24.8.0"
-  },
   "jest": {
     "setupFilesAfterEnv": [
       "<rootDir>/setup-tests.js"
