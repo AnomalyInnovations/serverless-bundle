@@ -16,7 +16,8 @@
     ],
     "testPathIgnorePatterns": [
       "<rootDir>/scripts",
-      "<rootDir>/tests/scripts/tests"
+      "<rootDir>/tests/scripts/tests",
+      "<rootDir>/tests/aliases-jest/tests"
     ]
   },
   "repository": {
