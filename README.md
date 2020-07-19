@@ -340,8 +340,7 @@ $ npm test
 To test the `serverless-bundle test` command.
 
 ```bash
-$ cd tests/scripts
-$ npm run test
+$ npm run test scripts
 ```
 
 To install locally in another project.
