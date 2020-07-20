@@ -1,11 +1,11 @@
 # serverless-bundle [![Build Status](https://travis-ci.com/AnomalyInnovations/serverless-bundle.svg?branch=master)](https://travis-ci.com/AnomalyInnovations/serverless-bundle) [![npm](https://img.shields.io/npm/v/serverless-bundle.svg)](https://www.npmjs.com/package/serverless-bundle)
 
-An extension of the [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) plugin. This plugin bundles your Node.js Lambda functions with sensible defaults so you **don't have to maintain your own Webpack configs**.
+serverless-bundle is a [Serverless Framework](https://www.serverless.com) plugin that optimally packages your ES6 + TypeScript Node.js Lambda functions with sensible defaults so you **don't have to maintain your own Webpack configs**. It uses the [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) plugin internally.
 
-- TypeScript support
-- Caching for faster builds
-- Use ES6 `import/export`
-- Linting on builds via [ESLint](https://eslint.org)
+- Only one dependency
+- Supports ES6 and TypeScript
+- Generates optimized packages
+- Linting Lambda functions using [ESLint](https://eslint.org)
 - Supports transpiling unit tests with [babel-jest](https://github.com/facebook/jest/tree/master/packages/babel-jest)
 - Source map support for proper error messages
 
@@ -15,6 +15,7 @@ And all this works without having to install Webpack, Babel, ESLint, etc. or man
 -    "eslint"
 -    "webpack"
 -    "ts-loader"
+-    "typescript"
 -    "css-loader"
 -    "graphql-tag"
 -    "@babel/core"
@@ -68,7 +69,7 @@ Once installed and added to your `serverless.yml`, serverless-bundle will automa
 
 ## Options
 
-You can configure the following through your `serverless.yml`. Note that, these are all optional.
+You can configure the following through your `serverless.yml`. Note that, these are **all optional**.
 
 ```yaml
 custom:
