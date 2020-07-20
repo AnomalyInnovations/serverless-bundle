@@ -1,7 +1,7 @@
 {
   "name": "serverless-bundle",
   "version": "2.0.0-beta.3",
-  "description": "An extension of the serverless-webpack plugin that bundles your Node.js Lambda functions.",
+  "description": "An extension of the serverless-webpack plugin that bundles your ES6 + TypeScript Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
     "jest-clear-cache": "jest --clearCache",
