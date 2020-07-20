@@ -1,11 +1,20 @@
+const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 const slsw = require("serverless-webpack");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+const importFresh = require("import-fresh");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const ConcatTextPlugin = require("concat-text-webpack-plugin");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const config = require("./config");
-const eslintConfig = require("./eslintrc.json");
+// Load the default config for reference
+const defaultConfig = importFresh("./config");
+
+const jsEslintConfig = require("./eslintrc.json");
+const tsEslintConfig = require("./ts.eslintrc.json");
 const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
 
 const isLocal = slsw.lib.webpack.isLocal;
@@ -14,14 +23,27 @@ const aliases = config.options.aliases;
 const servicePath = config.servicePath;
 const nodeVersion = config.nodeVersion;
 const copyFiles = config.options.copyFiles;
+const concatText = config.options.concatText;
 const ignorePackages = config.options.ignorePackages;
 const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
+const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
 
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
+const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
+
+const extensions = [".wasm", ".mjs", ".js", ".json", ".ts", ".graphql", ".gql"];
+
+// If tsConfig is specified and not found, throw an error
+if (
+  !ENABLE_TYPESCRIPT &&
+  config.options.tsConfig !== defaultConfig.options.tsConfig
+) {
+  throw `ERROR: ${config.options.tsConfig} not found.`;
+}
 
 function convertListToObject(list) {
   var object = {};
@@ -77,7 +99,18 @@ function eslintLoader() {
   return {
     loader: "eslint-loader",
     options: {
-      baseConfig: eslintConfig
+      baseConfig: jsEslintConfig
+    }
+  };
+}
+
+function tsLoader() {
+  return {
+    loader: "ts-loader",
+    options: {
+      transpileOnly: true,
+      configFile: tsConfigPath,
+      experimentalWatchApi: true
     }
   };
 }
@@ -89,6 +122,11 @@ function loaders() {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [babelLoader()]
+      },
+      {
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        loader: "graphql-tag/loader"
       },
       {
         test: /\.css$/,
@@ -119,6 +157,20 @@ function loaders() {
     ]
   };
 
+  if (ENABLE_TYPESCRIPT) {
+    loaders.rules.push({
+      test: /\.ts$/,
+      use: [babelLoader(), tsLoader()],
+      exclude: [
+        [
+          path.resolve(servicePath, "node_modules"),
+          path.resolve(servicePath, ".serverless"),
+          path.resolve(servicePath, ".webpack")
+        ]
+      ]
+    });
+  }
+
   if (ENABLE_LINTING) {
     loaders.rules[0].use.push(eslintLoader());
   }
@@ -139,6 +191,19 @@ function loaders() {
 
 function plugins() {
   const plugins = [];
+
+  if (ENABLE_TYPESCRIPT) {
+    const forkTsCheckerWebpackOptions = { tsconfig: tsConfigPath };
+
+    if (ENABLE_LINTING) {
+      forkTsCheckerWebpackOptions.eslint = true;
+      forkTsCheckerWebpackOptions.eslintOptions = {
+        baseConfig: tsEslintConfig
+      };
+    }
+
+    plugins.push(new ForkTsCheckerWebpackPlugin(forkTsCheckerWebpackOptions));
+  }
 
   if (ENABLE_CACHING) {
     plugins.push(
@@ -165,6 +230,18 @@ function plugins() {
     );
   }
 
+  if (concatText) {
+    const concatTextConfig = {};
+
+    concatText.map(function(data) {
+      concatTextConfig.files = data.files || null;
+      concatTextConfig.name = data.name || null;
+      concatTextConfig.outputPath = data.outputPath || null;
+    });
+
+    plugins.push(new ConcatTextPlugin(concatTextConfig));
+  }
+
   // Ignore all locale files of moment.js
   plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
 
@@ -177,6 +254,21 @@ function plugins() {
 
   if (fixPackages["formidable@1.x"]) {
     plugins.push(new webpack.DefinePlugin({ "global.GENTLY": false }));
+  }
+
+  return plugins;
+}
+
+function resolvePlugins() {
+  const plugins = [];
+
+  if (ENABLE_TYPESCRIPT) {
+    plugins.push(
+      new TsconfigPathsPlugin({
+        configFile: tsConfigPath,
+        extensions: extensions
+      })
+    );
   }
 
   return plugins;
@@ -206,12 +298,12 @@ module.exports = ignoreWarmupPlugin({
   resolve: {
     // Performance
     symlinks: false,
-
+    extensions: extensions,
     alias: alias(),
-
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
-    modules: [path.resolve(__dirname, "node_modules"), "node_modules"]
+    modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
+    plugins: resolvePlugins()
   },
   // Add loaders
   module: loaders(),

@@ -1,0 +1,19 @@
+service: my-service
+
+plugins:
+  - '../../index'
+
+custom:
+  bundle:
+    concatText:
+      - files: 'public/*'
+        outputPath: './static'
+        name: 'test-concat.txt'
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+functions:
+  hello:
+    handler: handler.hello

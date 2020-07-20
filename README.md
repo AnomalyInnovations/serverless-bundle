@@ -1,10 +1,11 @@
 # serverless-bundle [![Build Status](https://travis-ci.com/AnomalyInnovations/serverless-bundle.svg?branch=master)](https://travis-ci.com/AnomalyInnovations/serverless-bundle) [![npm](https://img.shields.io/npm/v/serverless-bundle.svg)](https://www.npmjs.com/package/serverless-bundle)
 
-An extension of the [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) plugin. This plugin bundles your Node.js Lambda functions with sensible defaults so you **don't have to maintain your own Webpack configs**.
+serverless-bundle is a [Serverless Framework](https://www.serverless.com) plugin that optimally packages your ES6 + TypeScript Node.js Lambda functions with sensible defaults so you **don't have to maintain your own Webpack configs**. It uses the [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) plugin internally.
 
-- Linting via [ESLint](https://eslint.org)
-- Caching for faster builds
-- Use ES6 `import/export`
+- Only one dependency
+- Supports ES6 and TypeScript
+- Generates optimized packages
+- Linting Lambda functions using [ESLint](https://eslint.org)
 - Supports transpiling unit tests with [babel-jest](https://github.com/facebook/jest/tree/master/packages/babel-jest)
 - Source map support for proper error messages
 
@@ -13,6 +14,10 @@ And all this works without having to install Webpack, Babel, ESLint, etc. or man
 ```diff
 -    "eslint"
 -    "webpack"
+-    "ts-loader"
+-    "typescript"
+-    "css-loader"
+-    "graphql-tag"
 -    "@babel/core"
 -    "babel-eslint"
 -    "babel-loader"
@@ -23,6 +28,8 @@ And all this works without having to install Webpack, Babel, ESLint, etc. or man
 -    "source-map-support"
 -    "webpack-node-externals"
 -    "eslint-config-strongloop"
+-    "tsconfig-paths-webpack-plugin"
+-    "fork-ts-checker-webpack-plugin"
 -    "@babel/plugin-transform-runtime"
 -    "babel-plugin-source-map-support"
 
@@ -62,7 +69,7 @@ Once installed and added to your `serverless.yml`, serverless-bundle will automa
 
 ## Options
 
-You can configure the following through your `serverless.yml`.
+You can configure the following through your `serverless.yml`. Note that, these are **all optional**.
 
 ```yaml
 custom:
@@ -71,6 +78,7 @@ custom:
     caching: true                   # Enable Webpack caching
     stats: false                    # Don't print out any Webpack output
     linting: true                   # Enable linting as a part of the build process
+    tsConfig: "tsconfig.json"       # Path to your 'tsconfig.json', if it's not in the root
     forceInclude:                   # Optional list of NPM packages that need to be included
       - mysql                         # Only necessary if packages are included dynamically
     ignorePackages:                 # Ignore building any of the following packages
@@ -86,6 +94,10 @@ custom:
         to: './'                      # Where in the package should they go
     aliases:                        # Create an alias to 'import' modules easily with a custom path
       - Lib: custom-lib/src/lib       # For ex, replace the long 'custom-lib/src/lib' with 'Lib'
+    concatText:                     # Concatenate text files into one file on the generated package
+      - files: 'schema/*.txt'         # Where the files that need to be concatenated are currently located
+        outputPath: './'              # Where the concatenated file should go in the package
+        name: 'schema.txt'            # The name the the concatenated file should have
     packager: npm                   # Specify a packager, 'npm' or 'yarn'. Defaults to 'npm'.
     packagerOptions:                # Run a custom script in the package process
       scripts:                        # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
@@ -157,6 +169,18 @@ custom:
   To set the `testResultsProcessor` option, add `"testResultsProcessor": "jest-mocha-reporter"` to the Jest section in your `package.json`. You should see the default command line output when running `npm run test`, but you should also get a `test-report.json`.
 
   To test the `reporters` option, add `"reporters": ["jest-mocha-reporter"]` instead. This should result in the same file as above but without the command line output.
+
+### TypeScript
+
+If serverless-bundle detects a `tsconfig.json` in your service root, it'll enable TypeScript.
+
+You can also change where your _tsconfig_ is.
+
+``` yml
+custom:
+  bundle:
+    tsConfig: 'tsconfig.special.json'
+```
 
 ### Package Specific Config
 
@@ -341,7 +365,7 @@ $ cd serverless-bundle
 $ npm install
 ```
 
-Run the tests using.
+Run all the tests.
 
 ```bash
 $ npm test

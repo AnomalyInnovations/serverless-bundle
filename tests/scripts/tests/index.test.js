@@ -6,10 +6,6 @@
  */
 import asyncSum from "../asyncSum";
 
-function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 it("dotenv set", () => {
   expect(process.env.TEST_VALUE).toEqual("123");
 });

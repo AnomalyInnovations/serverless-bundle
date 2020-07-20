@@ -1,7 +1,4 @@
-import "./assets/text.txt";
-import "./assets/pem.pem";
-
-export const hello = async event => {
+export const hello = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
