@@ -147,6 +147,16 @@ custom:
   import Utility from 'Lib/utility';
   ```
 
+  To use aliases in your tests you'll need to use Jest's [`moduleNameMapper`](https://jestjs.io/docs/en/configuration#modulenamemapper-objectstring-string--arraystring). Add the following your `package.json`:
+
+  ``` json
+  "jest": {
+    "moduleNameMapper": {
+      "Lib(.*)$": "<rootDir>/custom-lib/src/lib/$1"
+    }
+  }
+  ```
+
 - Usage with WebStorm
 
   Here is some info on how to get this plugin to support running tests in WebStorm — https://github.com/AnomalyInnovations/serverless-bundle/issues/5#issuecomment-582237396
@@ -337,7 +347,7 @@ The two options (`externals` and `forceExclude`) look similar but have some subt
 
 - `forceExclude`
 
-  These packages are available in the Lambda runtime. Either by default (in the case of `aws-sdk`) or through a Lambda layer that you might be using. So these are not included in the Lambda package. And they are also marked as `externals`. Meaning that packages that are in `forceExclude` are automatically adding to the `externals` list as well. By default, `aws-sdk` is listed in the `forceExclude`.
+  These packages are available in the Lambda runtime. Either by default (in the case of `aws-sdk`) or through a Lambda layer that you might be using. So these are not included in the Lambda package. And they are also marked as `externals`. Meaning that packages that are in `forceExclude` are automatically added to the `externals` list as well. By default, `aws-sdk` is listed in the `forceExclude`.
 
 ## Support
 
@@ -360,10 +370,10 @@ Run all the tests.
 $ npm test
 ```
 
-Run a single test case.
+To test the `serverless-bundle test` command.
 
 ```bash
-$ npm test tests/base
+$ npm run test scripts
 ```
 
 To install locally in another project.

@@ -1,0 +1,17 @@
+{
+  "name": "aliases-jest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "../../bin/scripts.js test --testPathIgnorePatterns=\"./aliases-jest.test.js\""
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "libs(.*)$": "<rootDir>/libs/$1"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
