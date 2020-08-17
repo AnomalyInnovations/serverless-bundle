@@ -33,7 +33,10 @@ module.exports = (resolve, rootDir) => {
     transform: {
       "^.+\\.(js|jsx)$": resolve("scripts/config/babelJestTransform.js")
     },
-    transformIgnorePatterns: ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$"]
+    transformIgnorePatterns: [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$"
+    ],
+    testEnvironment: "node"
   };
   if (rootDir) {
     config.rootDir = rootDir;
