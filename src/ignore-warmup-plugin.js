@@ -7,12 +7,14 @@ module.exports = function(webpackConfig) {
   if (webpackConfig.entry["_warmup/index"]) {
     delete webpackConfig.entry["_warmup/index"];
     webpackConfig.plugins.push(
-      new CopyWebpackPlugin([
-        {
-          from: path.join(config.servicePath, "_warmup"),
-          to: "_warmup"
-        }
-      ])
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: path.join(config.servicePath, "_warmup"),
+            to: "_warmup"
+          }
+        ]
+      })
     );
   }
 

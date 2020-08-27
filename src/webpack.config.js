@@ -222,17 +222,17 @@ function plugins() {
   }
 
   if (copyFiles) {
-    plugins.push(
-      new CopyWebpackPlugin(
-        copyFiles.map(function(data) {
-          return {
-            to: data.to,
-            context: servicePath,
-            from: path.join(servicePath, data.from)
-          };
-        })
-      )
-    );
+    const copyFilesConfig = {
+      patterns: copyFiles.map(function(data) {
+        return {
+          to: data.to,
+          context: servicePath,
+          from: path.join(servicePath, data.from)
+        };
+      })
+    };
+
+    plugins.push(new CopyWebpackPlugin(copyFilesConfig));
   }
 
   if (concatText) {
