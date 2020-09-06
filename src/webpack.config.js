@@ -10,12 +10,16 @@ const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const config = require("./config");
-// Load the default config for reference
-const defaultConfig = importFresh("./config");
 
 const jsEslintConfig = require("./eslintrc.json");
 const tsEslintConfig = require("./ts.eslintrc.json");
 const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
+
+// Load the default config for reference
+// Note:  This import potentially clears our the dynamically loaded config. So any other
+//        imports of the config after this, load the default config as well. Make sure to
+//        use this after importing the config.
+const defaultConfig = importFresh("./config");
 
 const isLocal = slsw.lib.webpack.isLocal;
 
@@ -223,15 +227,15 @@ function plugins() {
 
   if (copyFiles) {
     plugins.push(
-      new CopyWebpackPlugin(
-        copyFiles.map(function(data) {
+      new CopyWebpackPlugin({
+        patterns: copyFiles.map(function(data) {
           return {
             to: data.to,
             context: servicePath,
             from: path.join(servicePath, data.from)
           };
         })
-      )
+      })
     );
   }
 
