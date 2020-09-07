@@ -1,6 +1,6 @@
 {
   "name": "serverless-bundle",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "An extension of the serverless-webpack plugin that bundles your ES6 + TypeScript Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
@@ -40,7 +40,7 @@
     "babel-plugin-source-map-support": "^2.1.1",
     "chalk": "^2.4.2",
     "concat-text-webpack-plugin": "^0.1.6",
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin": "^6.1.0",
     "core-js": "^3.1.4",
     "cross-spawn": "^6.0.5",
     "css-loader": "^3.5.2",
@@ -66,7 +66,7 @@
     "ts-loader": "^6.2.1",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "^4.0.2",
-    "webpack": "^4.35.3"
+    "webpack": "^4.44.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.3",
