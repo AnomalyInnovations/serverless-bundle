@@ -18,13 +18,6 @@ phases:
   build:
     commands:
       - npm install
-      - npm run lint
-      - npm test
+      - npm run test-scripts
       - npm run release
       - rm ~/.npmrc
-  post_build:
-    commands:
-      # Codecov upload reports
-      - curl -s https://codecov.io/bash -o codecov.sh
-      - chmod +x codecov.sh
-      - ./codecov.sh
