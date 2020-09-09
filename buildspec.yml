@@ -1,0 +1,30 @@
+version: 0.2
+
+env:
+  parameter-store:
+    NPM_TOKEN: "/ofc/NPM_TOKEN"
+    GITHUB_TOKEN: "/ofc/GITHUB_TOKEN"
+    CODECOV_TOKEN: "/ofc/CODECOV_TOKEN"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      - echo Installing codebuild-extras...
+      - curl -fsSL https://raw.githubusercontent.com/thii/aws-codebuild-extras/master/install >> extras.sh
+      - . ./extras.sh
+      - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+  build:
+    commands:
+      - npm install
+      - npm run lint
+      - npm test
+      - npm run release
+      - rm ~/.npmrc
+  post_build:
+    commands:
+      # Codecov upload reports
+      - curl -s https://codecov.io/bash -o codecov.sh
+      - chmod +x codecov.sh
+      - ./codecov.sh

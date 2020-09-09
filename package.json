@@ -4,6 +4,7 @@
   "description": "An extension of the serverless-webpack plugin that bundles your Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
+    "release": "semantic-release",
     "test": "jest --no-watchman tests/index.test.js",
     "test-scripts": "./bin/scripts.js test --TEST_MODE tests/scripts/test.js"
   },
@@ -50,9 +51,13 @@
     "webpack": "^4.44.1"
   },
   "devDependencies": {
+    "@onoranzefunebricloud/semantic-release-config": "^1.7.2",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
     "husky": "^3.1.0",
     "lint-staged": "^9.5.0",
-    "prettier": "1.18.2"
+    "prettier": "1.18.2",
+    "semantic-release": "^17.1.1"
   },
   "husky": {
     "hooks": {

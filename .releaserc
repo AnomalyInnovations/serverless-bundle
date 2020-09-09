@@ -1,0 +1,3 @@
+{
+  "extends": "@onoranzefunebricloud/semantic-release-config/public"
+}
