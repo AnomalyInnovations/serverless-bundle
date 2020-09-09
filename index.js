@@ -18,6 +18,7 @@ function applyWebpackOptions(custom, config) {
   custom.webpack = {
     packager: config.options.packager,
     packagerOptions: config.options.packagerOptions,
+    serializedCompile: config.options.serializedCompile,
     webpackConfig: getWebpackConfigPath(config.servicePath),
     includeModules: {
       forceExclude: config.options.forceExclude,
