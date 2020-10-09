@@ -84,7 +84,7 @@ custom:
     ignorePackages:                 # Ignore building any of the following packages
       - hiredis                       # For ex, hiredis needs to be ignored if using redis
     externals:                      # Set non Webpack compatible packages as externals
-      - isomorphic-webcrypto          # They'll be included in the node_modules/
+      - isomorphic-webcrypto          # They'll be included in the node_modules/, more below
     forceExclude:                   # Don't include these in the package
       - chrome-aws-lambda             # Because it'll be provided through a Lambda Layer
     fixPackages:                    # Include fixes for specific packages
@@ -338,13 +338,43 @@ custom:
       - csv
 ```
 
+### Externals
+
+The `externals` option takes a list of packages or `all`. By default this is set to `["knex", "sharp"]`.
+
+Packages listed in `externals` are ignored by Webpack. They are instead added in the `node_modules/` directory of the Lambda .zip file. These usually include npm packages that are not supported by Webpack.
+
+The `all` option allows you to list all the packages in YOUR `node_modules/` directory as externals. This might be useful in cases where they are just too many to list. Or you are using something like [EJS](https://ejs.co) that implicitly requires a long list of packages that are not supported by Webpack.
+
+Note that, adding a package to the `externals` list might make your Lambda .zip file larger. This is because the entire package directory is zipped. Instead of using Webpack to just include the code that is necessary. So it's advisable to avoid using the `all` option.
+
+If you think we should add to the default list of externals, open a PR.
+
+Example of specifying a list of packages:
+
+``` yml
+custom:
+  bundle:
+    externals:
+      - knex
+      - sharp
+```
+
+Example of using the `all` option:
+
+``` yml
+custom:
+  bundle:
+    externals: all
+```
+
 ### Externals vs forceExclude
 
 The two options (`externals` and `forceExclude`) look similar but have some subtle differences. Let's look at them in detail:
 
 - `externals`
 
-  These are packages that need to be included in the Lambda package (the .zip file that's sent to AWS). But they are not compatible with Webpack. So they are marked as `externals` to tell Webpack not bundle them. By default, `knex` and `sharp` are set as externals. If you want to add to this default list, submit a PR.
+  These are packages that need to be included in the Lambda package (the .zip file that's sent to AWS). But they are not compatible with Webpack. So they are marked as `externals` to tell Webpack not bundle them.
 
 - `forceExclude`
 

@@ -20,6 +20,8 @@ module.exports = {
     // Exclude aws-sdk since it's available in the Lambda runtime
     forceExclude: ["aws-sdk"],
     // Set non Webpack compatible packages as externals
+    // Or if we want to exclude all packages in the node_modules:
+    // externals: "all"
     externals: ["knex", "sharp"],
     // Set default file extensions to use the raw-loader with
     rawFileExtensions: ["pem", "txt"]
