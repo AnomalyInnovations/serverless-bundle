@@ -25,7 +25,13 @@ function applyWebpackOptions(custom, config) {
       // Generate relative path for the package.json
       // For cases where the services are nested and don't have their own package.json
       // Traverse up the tree to find the path to the nearest package.json
-      packagePath: path.relative(config.servicePath, pkgUp.sync())
+      //
+      // Certain plugins like serverless-plugin-typescript change the cwd, so when
+      // searching, reset the the cwd to the service path
+      packagePath: path.relative(
+        config.servicePath,
+        pkgUp.sync({ cwd: config.servicePath })
+      )
     }
   };
 }
