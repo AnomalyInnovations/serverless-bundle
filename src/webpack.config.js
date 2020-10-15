@@ -3,6 +3,7 @@ const path = require("path");
 const webpack = require("webpack");
 const slsw = require("serverless-webpack");
 const importFresh = require("import-fresh");
+const nodeExternals = require("webpack-node-externals");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
@@ -26,8 +27,10 @@ const isLocal = slsw.lib.webpack.isLocal;
 const aliases = config.options.aliases;
 const servicePath = config.servicePath;
 const nodeVersion = config.nodeVersion;
+const externals = config.options.externals;
 const copyFiles = config.options.copyFiles;
 const concatText = config.options.concatText;
+const forceExclude = config.options.forceExclude;
 const ignorePackages = config.options.ignorePackages;
 const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
@@ -38,6 +41,13 @@ const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
+
+// Handle the "all" option in externals
+// And add the forceExclude packages to it because they shouldn't be Webpacked
+const computedExternals = (externals === "all"
+  ? [nodeExternals()]
+  : externals
+).concat(forceExclude);
 
 const extensions = [".wasm", ".mjs", ".js", ".json", ".ts", ".graphql", ".gql"];
 
@@ -298,7 +308,7 @@ module.exports = ignoreWarmupPlugin({
   // Disable verbose logs
   stats: ENABLE_STATS ? "normal" : "errors-only",
   devtool: ENABLE_SOURCE_MAPS ? "source-map" : false,
-  externals: config.options.externals,
+  externals: computedExternals,
   mode: isLocal ? "development" : "production",
   performance: {
     // Turn off size warnings for entry points

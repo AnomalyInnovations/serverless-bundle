@@ -46,8 +46,8 @@ function applyUserConfig(config, userConfig, servicePath, runtime) {
     );
   }
 
-  // Concat externals if provided
-  if (userConfig.externals) {
+  // Concat externals if a list of packages are provided
+  if (userConfig.externals && Array.isArray(userConfig.externals)) {
     userConfig.externals = config.options.externals.concat(
       userConfig.externals
     );
@@ -61,11 +61,6 @@ function applyUserConfig(config, userConfig, servicePath, runtime) {
   }
 
   Object.assign(config.options, userConfig);
-
-  // Add forceExclude to externals because these shouldn't be Webpacked
-  config.options.externals = config.options.externals.concat(
-    config.options.forceExclude
-  );
 
   // Default to Node 10 if no runtime found
   config.nodeVersion =
