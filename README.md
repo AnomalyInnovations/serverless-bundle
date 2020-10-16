@@ -40,6 +40,22 @@ You can [read more about this over on Serverless Stack](https://serverless-stack
 
 ---
 
+## Table of Contents
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Options](#options)
+  - [Advanced Options](#advanced-options)
+  - [TypeScript](#typescript)
+  - [Package Specific Config](#package-specific-config)
+  - [Nested Services](#nested-services)
+  - [CSS, SASS, and Image Files](#css-sass-and-image-files)
+  - [Support for pem, txt, and other raw files](#support-for-pem-txt-and-other-raw-files)
+  - [Externals](#externals)
+  - [Externals vs forceExclude](#externals-vs-forceexclude)
+- [Support](#support)
+- [Running Locally](#running-locally)
+
+
 ## Getting Started
 
 Install the `serverless-bundle` plugin using:
@@ -62,6 +78,10 @@ To run your tests using the same Babel config used in the plugin add the followi
   "test": "serverless-bundle test"
 }
 ```
+
+We also have a couple of template repos to help you get started:
+- [Serverless Node.js Starter](https://github.com/AnomalyInnovations/serverless-nodejs-starter)
+- [Serverless TypeScript Starter](https://github.com/AnomalyInnovations/serverless-typescript-starter)
 
 ## Usage
 
