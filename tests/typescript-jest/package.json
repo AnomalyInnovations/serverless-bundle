@@ -1,0 +1,15 @@
+{
+  "name": "typescript-jest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "../../bin/scripts.js test --testPathIgnorePatterns=\"./typescript-jest.test.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.64"
+  }
+}
