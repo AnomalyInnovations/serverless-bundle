@@ -48,7 +48,7 @@ You can [read more about this over on Serverless Stack](https://serverless-stack
   - [TypeScript](#typescript)
   - [Package Specific Config](#package-specific-config)
   - [Nested Services](#nested-services)
-  - [CSS, SASS, and Image Files](#css-sass-and-image-files)
+  - [CSS and SASS Files](#css-and-sass-files)
   - [Support for pem, txt, and other raw files](#support-for-pem-txt-and-other-raw-files)
   - [Externals](#externals)
   - [Externals vs forceExclude](#externals-vs-forceexclude)
@@ -330,14 +330,13 @@ And in `service1/package.json` use this `test` script:
 
 This tells serverless-bundle (in the root) to only run the tests inside the `service1/` directory. As opposed to the entire project.
 
-### CSS, SASS, and Image Files
+### CSS and SASS Files
 
-Serverless Bundle automatically supports importing css, scss, and image files.
+Serverless Bundle automatically supports importing css and scss using the [isomorphic-style-loader](https://github.com/kriasoft/isomorphic-style-loader).
 
 ``` js
 import "./assets/style.css";
 import "./assets/style.scss";
-import "./assets/react.png";
 ```
 
 ### Support for pem, txt, and other raw files
