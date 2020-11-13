@@ -8,7 +8,7 @@ afterAll(async () => {
   await clearNpmCache(__dirname);
 });
 
-test("class-properties", async () => {
+test("optional-chaining", async () => {
   const result = await runSlsCommand(__dirname);
 
   expect(result).not.toMatch(errorRegex);
