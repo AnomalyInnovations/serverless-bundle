@@ -59,6 +59,23 @@ if (
   throw `ERROR: ${config.options.tsConfig} not found.`;
 }
 
+if (ENABLE_TYPESCRIPT && checkInvalidTsModule()) {
+  console.log("serverless-bundle: CommonJS, ES3, or ES5 are not supported");
+}
+
+function checkInvalidTsModule() {
+  const config = JSON.parse(fs.readFileSync(tsConfigPath, "utf8"));
+  const compilerOptions = config.compilerOptions || {};
+  const module = compilerOptions.module;
+  const target = compilerOptions.target;
+
+  return (
+    (module && module.toLowerCase() === "commonjs") ||
+    (target &&
+      (target.toLowerCase() === "es3" || target.toLowerCase() === "es5"))
+  );
+}
+
 function convertListToObject(list) {
   var object = {};
 
