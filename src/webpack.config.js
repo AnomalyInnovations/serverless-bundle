@@ -77,7 +77,6 @@ function checkInvalidTsModule() {
   const module = tsCompilerOptions.module;
   const target = tsCompilerOptions.target;
 
-  console.log(module, target);
   return (
     (module !== undefined && module === 1) || // commonjs
     (target !== undefined && (target === 0 || target === 1)) // es3 or es5
