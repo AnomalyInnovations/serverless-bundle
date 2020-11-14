@@ -148,6 +148,7 @@ function tsLoader() {
   return {
     loader: "ts-loader",
     options: {
+      projectReferences: true,
       transpileOnly: true,
       configFile: tsConfigPath,
       experimentalWatchApi: true
@@ -238,12 +239,17 @@ function plugins() {
   const plugins = [];
 
   if (ENABLE_TYPESCRIPT) {
-    const forkTsCheckerWebpackOptions = { tsconfig: tsConfigPath };
+    const forkTsCheckerWebpackOptions = {
+      typescript: {
+        configFile: tsConfigPath,
+        build: true
+      }
+    };
 
     if (ENABLE_LINTING) {
-      forkTsCheckerWebpackOptions.eslint = true;
-      forkTsCheckerWebpackOptions.eslintOptions = {
-        baseConfig: tsEslintConfig
+      forkTsCheckerWebpackOptions.eslint = {
+        files: path.join(servicePath, "**/*.ts"),
+        options: { baseConfig: tsEslintConfig }
       };
     }
 
