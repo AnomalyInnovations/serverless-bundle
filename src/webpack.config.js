@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const ts = require("typescript");
 const webpack = require("webpack");
 const slsw = require("serverless-webpack");
 const importFresh = require("import-fresh");
@@ -64,15 +65,22 @@ if (ENABLE_TYPESCRIPT && checkInvalidTsModule()) {
 }
 
 function checkInvalidTsModule() {
-  const config = JSON.parse(fs.readFileSync(tsConfigPath, "utf8"));
-  const compilerOptions = config.compilerOptions || {};
-  const module = compilerOptions.module;
-  const target = compilerOptions.target;
+  // Borrowed from
+  // https://github.com/formium/tsdx/blob/e84e8d654c8462b8db65a3d395e2a4ba79bf1bd2/src/createRollupConfig.ts#L49-L55
+  const tsConfigJSON = ts.readConfigFile(tsConfigPath, ts.sys.readFile).config;
+  const tsCompilerOptions = ts.parseJsonConfigFileContent(
+    tsConfigJSON,
+    ts.sys,
+    "./"
+  ).options;
 
+  const module = tsCompilerOptions.module;
+  const target = tsCompilerOptions.target;
+
+  console.log(module, target);
   return (
-    (module && module.toLowerCase() === "commonjs") ||
-    (target &&
-      (target.toLowerCase() === "es3" || target.toLowerCase() === "es5"))
+    (module !== undefined && module === 1) || // commonjs
+    (target !== undefined && (target === 0 || target === 1)) // es3 or es5
   );
 }
 

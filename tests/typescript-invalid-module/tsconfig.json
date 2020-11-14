@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
+    // should show warning for es3 or es5
     "target": "es3",
+    // should show warning module: commonjs
+    // "module": "commonjs",
     "moduleResolution": "node",
     "baseUrl": "."
   }
