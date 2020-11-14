@@ -202,6 +202,22 @@ custom:
     tsConfig: 'tsconfig.special.json'
 ```
 
+#### Module and Targets
+
+Setting the `module` to `commonjs` or `target` to `es3` or `es5` conflicts with the [babel-plugin-source-map-support plugin](https://www.npmjs.com/package/babel-plugin-source-map-support) that serverless-bundle uses for adding source maps. It'll cause imports in your code to error out with something like this:
+
+``` bash
+TypeError: fileName.functionName is not a function
+```
+
+So if serverless-bundle detects these in your `tsconfig.json`, it'll print the following warning.
+
+``` bash
+serverless-bundle: CommonJS, ES3, or ES5 are not supported
+```
+
+More on [this issue here](https://github.com/AnomalyInnovations/serverless-bundle/issues/124).
+
 ### Package Specific Config
 
 The packages below need some additional config to make them work.
