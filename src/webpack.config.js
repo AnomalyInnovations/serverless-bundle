@@ -37,6 +37,7 @@ const esbuildNodeVersion = "node" + nodeVersion;
 const forceExclude = config.options.forceExclude;
 const ignorePackages = config.options.ignorePackages;
 const rawFileExtensions = config.options.rawFileExtensions;
+const sourceType = config.options.sourceType;
 const fixPackages = convertListToObject(config.options.fixPackages);
 const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
 const minifyOptions = config.options.minifyOptions;
@@ -143,6 +144,7 @@ function babelLoader() {
       // Disable compresisng cache files to speed up caching
       cacheCompression: false,
       plugins: plugins.map(require.resolve),
+      sourceType,
       presets: [
         [
           require.resolve("@babel/preset-env"),
