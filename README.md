@@ -98,6 +98,7 @@ custom:
     caching: true                   # Enable Webpack caching
     stats: false                    # Don't print out any Webpack output
     linting: true                   # Enable linting as a part of the build process
+    forktschecker: false            # Enable / Disable ForkTsChecker plugin
     tsConfig: "tsconfig.json"       # Path to your 'tsconfig.json', if it's not in the root
     forceInclude:                   # Optional list of NPM packages that need to be included
       - mysql                         # Only necessary if packages are included dynamically
