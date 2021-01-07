@@ -98,6 +98,7 @@ custom:
     caching: true                   # Enable Webpack caching
     stats: false                    # Don't print out any Webpack output
     linting: true                   # Enable linting as a part of the build process
+    disableForkTsChecker: false     # Disable the ForkTsChecker plugin, more below
     tsConfig: "tsconfig.json"       # Path to your 'tsconfig.json', if it's not in the root
     forceInclude:                   # Optional list of NPM packages that need to be included
       - mysql                         # Only necessary if packages are included dynamically
@@ -214,6 +215,18 @@ So if serverless-bundle detects these in your `tsconfig.json`, it'll print the f
 
 ``` bash
 serverless-bundle: CommonJS, ES3, or ES5 are not supported
+```
+
+#### ForkTsCheckerWebpackPlugin
+
+By default serverless-bundle uses the [ForkTsCheckerWebpackPlugin](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin) to speed up builds by running type checking in a separate process. However, this combined with Serverless Framework's `package: individually: true` option means that to packages each Lambda function, a separate type checking process is started. Concurrently, starting many such processes can cause your build process to run out of memory.
+
+To disabled this, add the following to your config.
+
+``` yml
+custom:
+  bundle:
+    disableForkTsChecker: true
 ```
 
 More on [this issue here](https://github.com/AnomalyInnovations/serverless-bundle/issues/124).
