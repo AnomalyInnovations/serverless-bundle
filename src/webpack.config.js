@@ -41,6 +41,7 @@ const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
+const ENABLE_TSCHECKER = config.options.forktschecker;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
 // Handle the "all" option in externals
@@ -237,7 +238,7 @@ function loaders() {
 function plugins() {
   const plugins = [];
 
-  if (ENABLE_TYPESCRIPT) {
+  if (ENABLE_TYPESCRIPT && ENABLE_TSCHECKER) {
     const forkTsCheckerWebpackOptions = {
       typescript: {
         configFile: tsConfigPath,
