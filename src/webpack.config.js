@@ -51,7 +51,17 @@ const computedExternals = (externals === "all"
   : externals
 ).concat(forceExclude);
 
-const extensions = [".wasm", ".mjs", ".js", ".json", ".ts", ".graphql", ".gql"];
+const extensions = [
+  ".wasm",
+  ".mjs",
+  ".js",
+  ".jsx",
+  ".json",
+  ".ts",
+  ".tsx",
+  ".graphql",
+  ".gql"
+];
 
 // If tsConfig is specified and not found, throw an error
 if (
@@ -217,7 +227,7 @@ function loaders() {
 
   if (ENABLE_TYPESCRIPT) {
     const tsRule = {
-      test: /\.ts$/,
+      test: /\.(ts|tsx)$/,
       use: [babelLoader(), tsLoader()],
       exclude: [
         [
