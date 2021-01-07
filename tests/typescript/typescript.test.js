@@ -12,4 +12,5 @@ test("typescript", async () => {
   const result = await runSlsCommand(__dirname);
 
   expect(result).toContain("Imported successfully");
+  expect(result).toContain("Merhaba");
 });
