@@ -217,6 +217,8 @@ So if serverless-bundle detects these in your `tsconfig.json`, it'll print the f
 serverless-bundle: CommonJS, ES3, or ES5 are not supported
 ```
 
+More on [this issue here](https://github.com/AnomalyInnovations/serverless-bundle/issues/124).
+
 #### ForkTsCheckerWebpackPlugin
 
 By default serverless-bundle uses the [ForkTsCheckerWebpackPlugin](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin) to speed up builds by running type checking in a separate process. However, this combined with Serverless Framework's `package: individually: true` option means that to packages each Lambda function, a separate type checking process is started. Concurrently, starting many such processes can cause your build process to run out of memory.
@@ -228,8 +230,6 @@ custom:
   bundle:
     disableForkTsChecker: true
 ```
-
-More on [this issue here](https://github.com/AnomalyInnovations/serverless-bundle/issues/124).
 
 ### Package Specific Config
 
