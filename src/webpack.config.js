@@ -41,7 +41,7 @@ const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
-const ENABLE_TSCHECKER = config.options.forktschecker;
+const ENABLE_TSCHECKER = !config.options.disableForkTsChecker;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
 // Handle the "all" option in externals
@@ -135,11 +135,16 @@ function babelLoader() {
   };
 }
 
-function eslintLoader() {
+function eslintLoader(type) {
+  const configMap = {
+    js: jsEslintConfig,
+    ts: tsEslintConfig
+  };
+
   return {
     loader: "eslint-loader",
     options: {
-      baseConfig: jsEslintConfig
+      baseConfig: configMap[type]
     }
   };
 }
@@ -149,21 +154,28 @@ function tsLoader() {
     loader: "ts-loader",
     options: {
       projectReferences: true,
-      transpileOnly: true,
       configFile: tsConfigPath,
-      experimentalWatchApi: true
+      experimentalWatchApi: true,
+      // Don't check types if ForTsChecker is enabled
+      transpileOnly: ENABLE_TSCHECKER
     }
   };
 }
 
 function loaders() {
+  const jsRule = {
+    test: /\.js$/,
+    exclude: /node_modules/,
+    use: [babelLoader()]
+  };
+
+  if (ENABLE_LINTING) {
+    jsRule.use.push(eslintLoader("js"));
+  }
+
   const loaders = {
     rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: [babelLoader()]
-      },
+      jsRule,
       {
         test: /\.mjs$/,
         include: /node_modules/,
@@ -204,7 +216,7 @@ function loaders() {
   };
 
   if (ENABLE_TYPESCRIPT) {
-    loaders.rules.push({
+    const tsRule = {
       test: /\.ts$/,
       use: [babelLoader(), tsLoader()],
       exclude: [
@@ -214,11 +226,14 @@ function loaders() {
           path.resolve(servicePath, ".webpack")
         ]
       ]
-    });
-  }
+    };
 
-  if (ENABLE_LINTING) {
-    loaders.rules[0].use.push(eslintLoader());
+    // If the ForTsChecker is disabled, then let Eslint do the linting
+    if (!ENABLE_TSCHECKER) {
+      tsRule.use.push(eslintLoader("ts"));
+    }
+
+    loaders.rules.push(tsRule);
   }
 
   if (rawFileExtensions && rawFileExtensions.length) {
