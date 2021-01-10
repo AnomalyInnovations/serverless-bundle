@@ -242,7 +242,7 @@ The [knex.js](http://knexjs.org) module is automatically excluded from the bundl
 ``` yml
 custom:
   bundle:
-    forceInclude
+    forceInclude:
       - mysql
 ```
 
