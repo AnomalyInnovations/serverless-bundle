@@ -5,7 +5,7 @@
     "node": true,
     "jest": true
   },
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
@@ -14,5 +14,8 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "rules": {}
+  "rules": {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
+  }
 }
