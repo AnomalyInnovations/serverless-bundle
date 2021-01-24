@@ -63,6 +63,23 @@ const extensions = [
   ".gql"
 ];
 
+const imageInlineSizeLimit = parseInt(
+  process.env.IMAGE_INLINE_SIZE_LIMIT || "10000"
+);
+
+const hasJsxRuntime = (() => {
+  if (process.env.DISABLE_NEW_JSX_TRANSFORM === "true") {
+    return false;
+  }
+
+  try {
+    require.resolve("react/jsx-runtime");
+    return true;
+  } catch (e) {
+    return false;
+  }
+})();
+
 // If tsConfig is specified and not found, throw an error
 if (
   !ENABLE_TYPESCRIPT &&
@@ -132,6 +149,16 @@ function babelLoader() {
       cacheCompression: false,
       plugins: plugins.map(require.resolve),
       presets: [
+        // enable react support on server side
+        [
+          require.resolve("@babel/preset-react"),
+          {
+            runtime: hasJsxRuntime ? "automatic" : "classic",
+            targets: {
+              node: nodeVersion
+            }
+          }
+        ],
         [
           require.resolve("@babel/preset-env"),
           {
@@ -221,7 +248,31 @@ function loaders() {
           "sass-loader"
         ]
       },
-      { test: /\.gif|\.svg|\.png|\.jpg|\.jpeg$/, loader: "ignore-loader" }
+      {
+        test: /\.gif|\.png|\.jpg|\.jpeg$/,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: imageInlineSizeLimit,
+              name: "static/media/[name].[hash:8].[ext]"
+            }
+          }
+        ]
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          "@svgr/webpack",
+          {
+            loader: "url-loader",
+            options: {
+              limit: imageInlineSizeLimit,
+              name: "static/media/[name].[hash:8].[ext]"
+            }
+          }
+        ]
+      }
     ]
   };
 
