@@ -13,7 +13,7 @@ module.exports = {
     copyFiles: null,
     concatText: null,
     sourcemaps: true,
-    forceInclude: null,
+    forceInclude: [],
     ignorePackages: [],
     packagerOptions: {},
     tsConfig: "tsconfig.json",
