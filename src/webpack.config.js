@@ -234,7 +234,7 @@ function loaders() {
         [
           {
             test: path.resolve(servicePath, "node_modules"),
-            exclude: forceInclude.map(pkg => path.resolve(servicePath, path.join("node_modules", pkg)))
+            exclude: forceInclude.map(pkg => path.resolve(servicePath, "node_modules", pkg))
           },
           path.resolve(servicePath, ".serverless"),
           path.resolve(servicePath, ".webpack")
