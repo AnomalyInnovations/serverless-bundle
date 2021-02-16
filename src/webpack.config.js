@@ -32,7 +32,7 @@ const externals = config.options.externals;
 const copyFiles = config.options.copyFiles;
 const concatText = config.options.concatText;
 const forceExclude = config.options.forceExclude;
-const forceInclude = config.options.forceInclude;
+const forceBundle = config.options.forceBundle;
 const ignorePackages = config.options.ignorePackages;
 const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
@@ -234,7 +234,7 @@ function loaders() {
         [
           {
             test: path.resolve(servicePath, "node_modules"),
-            exclude: forceInclude.map(pkg => path.resolve(servicePath, "node_modules", pkg))
+            exclude: forceBundle.map(pkg => path.resolve(servicePath, "node_modules", pkg))
           },
           path.resolve(servicePath, ".serverless"),
           path.resolve(servicePath, ".webpack")

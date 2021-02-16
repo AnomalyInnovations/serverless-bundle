@@ -102,6 +102,8 @@ custom:
     tsConfig: "tsconfig.json"       # Path to your 'tsconfig.json', if it's not in the root
     forceInclude:                   # Optional list of NPM packages that need to be included
       - mysql                         # Only necessary if packages are included dynamically
+    forceBundle:                    # Optional list of node_modules packages that need to be bundled
+      - @common/package               # For ex, common package being developed locally
     ignorePackages:                 # Ignore building any of the following packages
       - hiredis                       # For ex, hiredis needs to be ignored if using redis
     externals:                      # Set non Webpack compatible packages as externals
