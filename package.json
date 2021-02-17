@@ -1,6 +1,6 @@
 {
   "name": "serverless-bundle",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "An extension of the serverless-webpack plugin that bundles your ES6 + TypeScript Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "test": "jest --no-watchman"
   },
   "bin": {
-    "serverless-bundle": "./bin/scripts.js"
+    "serverless-bundle": "bin/scripts.js"
   },
   "jest": {
     "setupFilesAfterEnv": [
