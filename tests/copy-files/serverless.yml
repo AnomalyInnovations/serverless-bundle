@@ -5,9 +5,12 @@ plugins:
 
 custom:
   bundle:
+    stats: true
     copyFiles:
       - to: './'
         from: 'public/*'
+      - to: './'
+        from: 'bin/*'
 
 provider:
   name: aws
