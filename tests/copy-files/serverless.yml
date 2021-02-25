@@ -1,16 +1,19 @@
 service: my-service
 
 plugins:
-  - '../../index'
+  - "../../index"
+
+package:
+  individually: true
 
 custom:
   bundle:
     stats: true
     copyFiles:
-      - to: './'
-        from: 'public/*'
-      - to: './'
-        from: 'bin/*'
+      - to: "./"
+        from: "public/*"
+      - to: "./"
+        from: "bin/*"
 
 provider:
   name: aws
@@ -19,3 +22,5 @@ provider:
 functions:
   hello:
     handler: handler.hello
+  world:
+    handler: world.hello

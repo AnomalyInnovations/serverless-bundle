@@ -9,15 +9,39 @@ afterAll(async () => {
   await clearNpmCache(__dirname);
 });
 
-test("copy files", async () => {
+test("copy files - hello", async () => {
   const result = await runSlsCommand(__dirname);
 
   expect(result).not.toMatch(errorRegex);
-  expect(existsSync("tests/copy-files/.webpack/service/public/test.txt")).toBe(
+  expect(existsSync("tests/copy-files/.webpack/hello/public/test.txt")).toBe(
     true
   );
+  expect(existsSync("tests/copy-files/.webpack/hello/bin/echo.sh")).toBe(true);
 
-  const fromStat = statSync("tests/copy-files/bin/echo.sh");
-  const toStat = statSync("tests/copy-files/.webpack/service/bin/echo.sh");
+  let fromStat = statSync("tests/copy-files/public/test.txt");
+  let toStat = statSync("tests/copy-files/.webpack/hello/public/test.txt");
+  expect(toStat.mode).toBe(fromStat.mode);
+
+  fromStat = statSync("tests/copy-files/bin/echo.sh");
+  toStat = statSync("tests/copy-files/.webpack/hello/bin/echo.sh");
+  expect(toStat.mode).toBe(fromStat.mode);
+});
+
+test("copy files - world", async () => {
+  const cmd = "invoke local -f world -l --data {}";
+  const result = await runSlsCommand(__dirname, cmd);
+
+  expect(result).not.toMatch(errorRegex);
+  expect(existsSync("tests/copy-files/.webpack/world/public/test.txt")).toBe(
+    true
+  );
+  expect(existsSync("tests/copy-files/.webpack/world/bin/echo.sh")).toBe(true);
+
+  let fromStat = statSync("tests/copy-files/public/test.txt");
+  let toStat = statSync("tests/copy-files/.webpack/world/public/test.txt");
+  expect(toStat.mode).toBe(fromStat.mode);
+
+  fromStat = statSync("tests/copy-files/bin/echo.sh");
+  toStat = statSync("tests/copy-files/.webpack/world/bin/echo.sh");
   expect(toStat.mode).toBe(fromStat.mode);
 });

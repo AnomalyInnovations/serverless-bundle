@@ -315,10 +315,23 @@ function plugins() {
       entries.forEach(function(entry) {
         // get source file stat
         const stat = fs.statSync(path.resolve(servicePath, entry));
-        buildFiles.push({
-          path: path.resolve(data.to, ".webpack/service", entry),
-          fileMode: (stat.mode & parseInt("777", 8)).toString(8)
-        });
+        const { serverless } = slsw.lib;
+        if (
+          serverless.service.package.individually &&
+          serverless.service.functions
+        ) {
+          for (let key in serverless.service.functions) {
+            buildFiles.push({
+              path: path.resolve(data.to, `.webpack/${key}`, entry),
+              fileMode: (stat.mode & parseInt("777", 8)).toString(8)
+            });
+          }
+        } else {
+          buildFiles.push({
+            path: path.resolve(data.to, ".webpack/service", entry),
+            fileMode: (stat.mode & parseInt("777", 8)).toString(8)
+          });
+        }
       });
     });
     plugins.push(new PermissionsOutputPlugin({ buildFiles }));
