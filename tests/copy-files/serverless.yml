@@ -1,0 +1,26 @@
+service: my-service
+
+plugins:
+  - "../../index"
+
+package:
+  individually: false
+
+custom:
+  bundle:
+    stats: true
+    copyFiles:
+      - to: "./"
+        from: "public/*"
+      - to: "./"
+        from: "bin/*"
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+functions:
+  hello:
+    handler: handler.hello
+  world:
+    handler: world.hello
