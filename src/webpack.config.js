@@ -122,7 +122,8 @@ function babelLoader() {
   const plugins = [
     "@babel/plugin-transform-runtime",
     "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-proposal-optional-chaining"
+    "@babel/plugin-proposal-optional-chaining",
+    "@babel/plugin-proposal-nullish-coalescing-operator"
   ];
 
   if (ENABLE_SOURCE_MAPS) {

@@ -31,6 +31,7 @@
   "dependencies": {
     "@babel/core": "^7.5.4",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.13",
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/plugin-transform-runtime": "^7.5.0",
     "@babel/preset-env": "^7.5.4",
@@ -65,7 +66,7 @@
     "raw-loader": "^4.0.1",
     "regenerator-runtime": "^0.13.2",
     "resolve": "^1.18.1",
-    "sass-loader": "^8.0.2",
+    "sass-loader": "^10.0.5",
     "serverless-webpack": "^5.3.1",
     "source-map-support": "^0.4.18",
     "ts-jest": "^26.4.1",
