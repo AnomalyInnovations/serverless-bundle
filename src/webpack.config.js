@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const ts = require("typescript");
 const webpack = require("webpack");
+const fastGlob = require("fast-glob");
 const slsw = require("serverless-webpack");
 const importFresh = require("import-fresh");
 const nodeExternals = require("webpack-node-externals");
@@ -9,6 +10,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+const PermissionsOutputPlugin = require("webpack-permissions-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const config = require("./config");
@@ -110,6 +112,10 @@ function resolveEntriesPath(entries) {
   }
 
   return entries;
+}
+
+function statModeToOctal(mode) {
+  return (mode & parseInt("777", 8)).toString(8);
 }
 
 function babelLoader() {
@@ -304,6 +310,35 @@ function plugins() {
         })
       })
     );
+
+    // Copy file permissions
+    const buildFiles = [];
+    copyFiles.forEach(function(data) {
+      const entries = fastGlob.sync([data.from]);
+      // loop through each file matched by fg
+      entries.forEach(function(entry) {
+        // get source file stat
+        const stat = fs.statSync(path.resolve(servicePath, entry));
+        const { serverless } = slsw.lib;
+        if (
+          serverless.service.package.individually &&
+          serverless.service.functions
+        ) {
+          for (let key in serverless.service.functions) {
+            buildFiles.push({
+              fileMode: statModeToOctal(stat.mode),
+              path: path.resolve(data.to, `.webpack/${key}`, entry)
+            });
+          }
+        } else {
+          buildFiles.push({
+            fileMode: statModeToOctal(stat.mode),
+            path: path.resolve(data.to, ".webpack/service", entry)
+          });
+        }
+      });
+    });
+    plugins.push(new PermissionsOutputPlugin({ buildFiles }));
   }
 
   if (concatText) {
