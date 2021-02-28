@@ -10,6 +10,8 @@ const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const PermissionsOutputPlugin = require("webpack-permissions-plugin");
+const fastGlob = require("fast-glob");
 
 const config = require("./config");
 
@@ -304,6 +306,35 @@ function plugins() {
         })
       })
     );
+
+    // Copy file permissions
+    const buildFiles = [];
+    copyFiles.forEach(function(data) {
+      const entries = fastGlob.sync([data.from]);
+      // loop through each file matched by fg
+      entries.forEach(function(entry) {
+        // get source file stat
+        const stat = fs.statSync(path.resolve(servicePath, entry));
+        const { serverless } = slsw.lib;
+        if (
+          serverless.service.package.individually &&
+          serverless.service.functions
+        ) {
+          for (let key in serverless.service.functions) {
+            buildFiles.push({
+              path: path.resolve(data.to, `.webpack/${key}`, entry),
+              fileMode: (stat.mode & parseInt("777", 8)).toString(8)
+            });
+          }
+        } else {
+          buildFiles.push({
+            path: path.resolve(data.to, ".webpack/service", entry),
+            fileMode: (stat.mode & parseInt("777", 8)).toString(8)
+          });
+        }
+      });
+    });
+    plugins.push(new PermissionsOutputPlugin({ buildFiles }));
   }
 
   if (concatText) {
