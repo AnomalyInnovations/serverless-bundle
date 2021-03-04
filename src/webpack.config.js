@@ -173,7 +173,8 @@ function esbuildLoader(loader) {
     loader: 'esbuild-loader',
     options: {
       target: 'node'+nodeVersion,
-      loader
+      loader,
+      tsconfigRaw: fs.readFileSync(tsConfigPath)
     }
   };
 }
