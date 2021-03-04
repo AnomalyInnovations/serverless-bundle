@@ -246,7 +246,7 @@ function loaders() {
     };
 
     // If the ForTsChecker is disabled, then let Eslint do the linting
-    if (!ENABLE_TSCHECKER) {
+    if (!ENABLE_TSCHECKER && ENABLE_LINTING) {
       tsRule.use.push(eslintLoader("ts"));
     }
 
