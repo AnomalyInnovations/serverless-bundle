@@ -11,6 +11,8 @@ const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const PermissionsOutputPlugin = require("webpack-permissions-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const { ESBuildPlugin } = require('esbuild-loader')
+
 
 const config = require("./config");
 
@@ -38,6 +40,7 @@ const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
 const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
 
+const ENABLE_ESBUILD = config.options.esbuild;
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
@@ -165,6 +168,16 @@ function eslintLoader(type) {
   };
 }
 
+function esbuildLoader(loader) {
+  return {
+    loader: 'esbuild-loader',
+    options: {
+      target: 'node'+nodeVersion,
+      loader
+    }
+  };
+}
+
 function tsLoader() {
   return {
     loader: "ts-loader",
@@ -182,9 +195,9 @@ function loaders() {
   const jsRule = {
     test: /\.js$/,
     exclude: /node_modules/,
-    use: [babelLoader()]
+    use: [ENABLE_ESBUILD ? esbuildLoader('jsx') : babelLoader()],
   };
-
+  
   if (ENABLE_LINTING) {
     jsRule.use.push(eslintLoader("js"));
   }
@@ -234,21 +247,21 @@ function loaders() {
     ]
   };
 
-  if (ENABLE_TYPESCRIPT) {
+  if (ENABLE_TYPESCRIPT) {  
     const tsRule = {
-      test: /\.(ts|tsx)$/,
-      use: [babelLoader(), tsLoader()],
+      test: (/\.(ts|tsx)$/),
+      use: [ENABLE_ESBUILD ? esbuildLoader('tsx') : tsLoader()],
       exclude: [
         [
           path.resolve(servicePath, "node_modules"),
           path.resolve(servicePath, ".serverless"),
-          path.resolve(servicePath, ".webpack")
+          path.resolve(servicePath, ".webpack"),
         ]
       ]
     };
 
     // If the ForTsChecker is disabled, then let Eslint do the linting
-    if (!ENABLE_TSCHECKER) {
+    if (!ENABLE_TSCHECKER && ENABLE_LINTING) {
       tsRule.use.push(eslintLoader("ts"));
     }
 
@@ -271,6 +284,10 @@ function loaders() {
 
 function plugins() {
   const plugins = [];
+
+  if (ENABLE_ESBUILD) {
+    plugins.push(new ESBuildPlugin())
+  }
 
   if (ENABLE_TYPESCRIPT && ENABLE_TSCHECKER) {
     const forkTsCheckerWebpackOptions = {
@@ -421,6 +438,7 @@ module.exports = ignoreWarmupPlugin({
       }
     : // Don't minimize in production
       // Large builds can run out of memory
+      // https://github.com/serverless-heaven/serverless-webpack/issues/651
       { minimize: false, concatenateModules: false },
   plugins: plugins(),
   node: {
