@@ -1,0 +1,12 @@
+service: my-service
+
+plugins:
+  - '../../index'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  hello:
+    handler: handler.hello
