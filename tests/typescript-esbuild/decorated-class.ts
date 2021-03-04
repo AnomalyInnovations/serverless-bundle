@@ -1,4 +1,5 @@
-function classDecorator<T extends { new (...args: any[]): {} }>(
+// eslint-disable-next-line no-unused-vars
+function classDecorator<T extends { new (...args: any[]): any }>(
   constructor: T
 ) {
   return class extends constructor {
@@ -7,8 +8,8 @@ function classDecorator<T extends { new (...args: any[]): {} }>(
   };
 }
 
-const myDecorator = (target: Object, propertyKey: string, descriptor: PropertyDescriptor) =>  {
-  console.log('decorator');
+const myDecorator = (target: any, propertyKey: string, descriptor: PropertyDescriptor) =>  {
+  console.log('decorator', descriptor);
 }
 
 @classDecorator
