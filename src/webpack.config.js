@@ -169,13 +169,18 @@ function eslintLoader(type) {
 }
 
 function esbuildLoader(loader) {
+  const options = {
+    target: 'node'+nodeVersion,
+    loader
+  };
+
+  if(ENABLE_TYPESCRIPT) {
+    options.tsconfigRaw = fs.readFileSync(tsConfigPath);
+  }
+
   return {
     loader: 'esbuild-loader',
-    options: {
-      target: 'node'+nodeVersion,
-      loader,
-      tsconfigRaw: fs.readFileSync(tsConfigPath)
-    }
+    options
   };
 }
 
