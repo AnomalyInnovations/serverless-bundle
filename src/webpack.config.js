@@ -9,7 +9,6 @@ const nodeExternals = require("webpack-node-externals");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const PermissionsOutputPlugin = require("webpack-permissions-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
@@ -196,7 +195,10 @@ function loaders() {
       {
         test: /\.mjs$/,
         include: /node_modules/,
-        type: "javascript/auto"
+        type: "javascript/auto",
+        resolve: {
+          fullySpecified: false
+        }
       },
       {
         test: /\.(graphql|gql)$/,
@@ -288,17 +290,6 @@ function plugins() {
     plugins.push(new ForkTsCheckerWebpackPlugin(forkTsCheckerWebpackOptions));
   }
 
-  if (ENABLE_CACHING) {
-    plugins.push(
-      new HardSourceWebpackPlugin({
-        info: {
-          mode: ENABLE_STATS ? "test" : "none",
-          level: ENABLE_STATS ? "debug" : "error"
-        }
-      })
-    );
-  }
-
   if (copyFiles) {
     plugins.push(
       new CopyWebpackPlugin({
@@ -360,7 +351,7 @@ function plugins() {
   // Ignore any packages specified in the `ignorePackages` option
   for (let i = 0, l = ignorePackages.length; i < l; i++) {
     plugins.push(
-      new webpack.IgnorePlugin(new RegExp("^" + ignorePackages[i] + "$"))
+      new webpack.IgnorePlugin({resourceRegExp: new RegExp("^" + ignorePackages[i] + "$")})
     );
   }
 
@@ -422,13 +413,15 @@ module.exports = ignoreWarmupPlugin({
   // PERFORMANCE ONLY FOR DEVELOPMENT
   optimization: isLocal
     ? {
+        // https://github.com/serverless-heaven/serverless-webpack/issues/651
+        concatenateModules: false, 
         splitChunks: false,
         removeEmptyChunks: false,
         removeAvailableModules: false
       }
     : // Don't minimize in production
       // Large builds can run out of memory
-      { minimize: false },
+      { minimize: false, concatenateModules: false },
   plugins: plugins(),
   node: {
     __dirname: false
