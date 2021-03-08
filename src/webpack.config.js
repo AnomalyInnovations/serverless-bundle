@@ -273,7 +273,7 @@ function plugins() {
         new ESLintPlugin({
           context: servicePath,
           baseConfig: tsEslintConfig,
-          extensions: "ts"
+          extensions: ["js", "ts"]
         })
       );
     } else {
