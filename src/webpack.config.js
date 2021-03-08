@@ -286,7 +286,7 @@ function plugins() {
     }
   }
 
-  if (ENABLE_LINTING) {
+  if (ENABLE_CACHING) {
     plugins.push(
       new HardSourceWebpackPlugin({
         info: {
