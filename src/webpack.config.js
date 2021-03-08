@@ -12,6 +12,7 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const PermissionsOutputPlugin = require("webpack-permissions-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const ESLintPlugin = require("eslint-webpack-plugin");
 
 const config = require("./config");
 
@@ -152,20 +153,6 @@ function babelLoader() {
   };
 }
 
-function eslintLoader(type) {
-  const configMap = {
-    js: jsEslintConfig,
-    ts: tsEslintConfig
-  };
-
-  return {
-    loader: "eslint-loader",
-    options: {
-      baseConfig: configMap[type]
-    }
-  };
-}
-
 function tsLoader() {
   return {
     loader: "ts-loader",
@@ -185,10 +172,6 @@ function loaders() {
     exclude: /node_modules/,
     use: [babelLoader()]
   };
-
-  if (ENABLE_LINTING) {
-    jsRule.use.push(eslintLoader("js"));
-  }
 
   const loaders = {
     rules: [
@@ -245,11 +228,6 @@ function loaders() {
       ]
     };
 
-    // If the ForTsChecker is disabled, then let Eslint do the linting
-    if (!ENABLE_TSCHECKER) {
-      tsRule.use.push(eslintLoader("ts"));
-    }
-
     loaders.rules.push(tsRule);
   }
 
@@ -288,7 +266,27 @@ function plugins() {
     plugins.push(new ForkTsCheckerWebpackPlugin(forkTsCheckerWebpackOptions));
   }
 
-  if (ENABLE_CACHING) {
+  if (ENABLE_LINTING) {
+    plugins.push(
+      new ESLintPlugin({
+        context: servicePath,
+        baseConfig: jsEslintConfig,
+        extensions: "js"
+      })
+    );
+
+    if (ENABLE_TYPESCRIPT) {
+      plugins.push(
+        new ESLintPlugin({
+          context: servicePath,
+          baseConfig: tsEslintConfig,
+          extensions: "ts"
+        })
+      );
+    }
+  }
+
+  if (ENABLE_LINTING) {
     plugins.push(
       new HardSourceWebpackPlugin({
         info: {
