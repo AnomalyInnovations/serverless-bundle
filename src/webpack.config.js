@@ -267,20 +267,21 @@ function plugins() {
   }
 
   if (ENABLE_LINTING) {
-    plugins.push(
-      new ESLintPlugin({
-        context: servicePath,
-        baseConfig: jsEslintConfig,
-        extensions: "js"
-      })
-    );
-
-    if (ENABLE_TYPESCRIPT) {
+    // If the ForTsChecker is disabled, then let Eslint do the linting
+    if (ENABLE_TYPESCRIPT && !ENABLE_TSCHECKER) {
       plugins.push(
         new ESLintPlugin({
           context: servicePath,
           baseConfig: tsEslintConfig,
           extensions: "ts"
+        })
+      );
+    } else {
+      plugins.push(
+        new ESLintPlugin({
+          context: servicePath,
+          baseConfig: jsEslintConfig,
+          extensions: "js"
         })
       );
     }
