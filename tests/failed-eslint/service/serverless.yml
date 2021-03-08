@@ -2,7 +2,10 @@ service: my-service
 
 plugins:
   - '../../../index'
-  
+
+custom:
+  bundle:
+    caching: false
 
 provider:
   name: aws
