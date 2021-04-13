@@ -19,6 +19,7 @@ function applyWebpackOptions(custom, config) {
     packager: config.options.packager,
     packagerOptions: config.options.packagerOptions,
     webpackConfig: getWebpackConfigPath(config.servicePath),
+    concurrency: config.options.concurrency,
     includeModules: {
       forceExclude: config.options.forceExclude,
       forceInclude: config.options.forceInclude,
