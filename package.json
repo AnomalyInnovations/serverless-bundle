@@ -1,6 +1,6 @@
 {
   "name": "serverless-bundle",
-  "version": "4.2.1",
+  "version": "5.0.0",
   "description": "An extension of the serverless-webpack plugin that bundles your ES6 + TypeScript Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
@@ -52,7 +52,7 @@
     "dotenv": "^8.2.0",
     "eslint": "^7.22.0",
     "eslint-config-strongloop": "^2.1.0",
-    "eslint-loader": "^4.0.2",
+    "eslint-webpack-plugin": "^2.5.2",
     "fast-glob": "^3.2.5",
     "fork-ts-checker-webpack-plugin": "^6.2.0",
     "graphql": "^15.5.0",
