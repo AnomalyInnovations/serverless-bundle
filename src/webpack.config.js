@@ -17,7 +17,6 @@ const config = require("./config");
 
 const jsEslintConfig = require("./eslintrc.json");
 const tsEslintConfig = require("./ts.eslintrc.json");
-const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
 
 // Load the default config for reference
 // Note:  This import potentially clears our the dynamically loaded config. So any other
@@ -403,7 +402,7 @@ function alias() {
   }, {});
 }
 
-module.exports = ignoreWarmupPlugin({
+module.exports = {
   entry: resolveEntriesPath(slsw.lib.entries),
   target: "node",
   context: __dirname,
@@ -442,4 +441,4 @@ module.exports = ignoreWarmupPlugin({
   node: {
     __dirname: false,
   },
-});
+};
