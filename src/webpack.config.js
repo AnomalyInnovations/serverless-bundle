@@ -431,16 +431,13 @@ module.exports = ignoreWarmupPlugin({
   // PERFORMANCE ONLY FOR DEVELOPMENT
   optimization: isLocal
     ? {
-        // https://github.com/serverless-heaven/serverless-webpack/issues/651
-        concatenateModules: false,
         splitChunks: false,
         removeEmptyChunks: false,
         removeAvailableModules: false,
       }
     : // Don't minimize in production
       // Large builds can run out of memory
-      // https://github.com/serverless-heaven/serverless-webpack/issues/651
-      { minimize: false, concatenateModules: false },
+      { minimize: false },
   plugins: plugins(),
   node: {
     __dirname: false,
