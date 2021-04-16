@@ -39,6 +39,7 @@ const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
 const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
 
+const ENABLE_ESBUILD = config.options.esbuild;
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
@@ -152,6 +153,22 @@ function babelLoader() {
   };
 }
 
+function esbuildLoader(loader) {
+  const options = {
+    target: 'node'+nodeVersion,
+    loader
+  };
+
+  if(ENABLE_TYPESCRIPT) {
+    options.tsconfigRaw = fs.readFileSync(tsConfigPath);
+  }
+
+  return {
+    loader: 'esbuild-loader',
+    options
+  };
+}
+
 function tsLoader() {
   return {
     loader: "ts-loader",
@@ -169,9 +186,9 @@ function loaders() {
   const jsRule = {
     test: /\.js$/,
     exclude: /node_modules/,
-    use: [babelLoader()],
+    use: [ENABLE_ESBUILD ? esbuildLoader('jsx') : babelLoader()],
   };
-
+  
   const loaders = {
     rules: [
       jsRule,
@@ -217,10 +234,10 @@ function loaders() {
     ],
   };
 
-  if (ENABLE_TYPESCRIPT) {
+  if (ENABLE_TYPESCRIPT) {  
     const tsRule = {
-      test: /\.(ts|tsx)$/,
-      use: [babelLoader(), tsLoader()],
+      test: (/\.(ts|tsx)$/),
+      use: [ENABLE_ESBUILD ? esbuildLoader('tsx') : tsLoader()],
       exclude: [
         [
           path.resolve(servicePath, "node_modules"),
@@ -422,6 +439,7 @@ module.exports = ignoreWarmupPlugin({
       }
     : // Don't minimize in production
       // Large builds can run out of memory
+      // https://github.com/serverless-heaven/serverless-webpack/issues/651
       { minimize: false, concatenateModules: false },
   plugins: plugins(),
   node: {

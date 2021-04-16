@@ -8,7 +8,7 @@ afterAll(async () => {
   await clearNpmCache(__dirname);
 });
 
-test("nested-service", async () => {
+test("esbuild", async () => {
   const result = await runSlsCommand(__dirname);
 
   expect(result).not.toMatch(errorRegex);

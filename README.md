@@ -96,6 +96,7 @@ custom:
   bundle:
     sourcemaps: true                # Enable source maps
     caching: true                   # Enable Webpack caching
+    concurrency: 5                  # Set desired concurrency, defaults to the number of available cores
     stats: false                    # Don't print out any Webpack output
     linting: true                   # Enable linting as a part of the build process
     disableForkTsChecker: false     # Disable the ForkTsChecker plugin, more below
