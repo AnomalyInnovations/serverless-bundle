@@ -1,5 +1,5 @@
 {
-  "name": "with-warmup",
+  "name": "typescript-esbuild",
   "version": "1.0.0",
   "description": "",
   "main": "handler.js",

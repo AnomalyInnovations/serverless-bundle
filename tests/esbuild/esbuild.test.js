@@ -8,8 +8,8 @@ afterAll(async () => {
   await clearNpmCache(__dirname);
 });
 
-test("ignore warmup plugin", async () => {
-  const result = await runSlsCommand(__dirname, "package");
+test("esbuild", async () => {
+  const result = await runSlsCommand(__dirname);
 
   expect(result).not.toMatch(errorRegex);
 });

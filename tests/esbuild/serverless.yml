@@ -1,12 +1,15 @@
 service: my-service
 
 plugins:
-  - '../../../../index'
-  
+  - '../../index'
+
+custom:
+  bundle:
+    esbuild: true
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs14.x
 
 functions:
   hello:
