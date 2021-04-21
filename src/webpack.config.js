@@ -154,17 +154,17 @@ function babelLoader() {
 
 function esbuildLoader(loader) {
   const options = {
-    target: 'node'+nodeVersion,
-    loader
+    target: "node" + nodeVersion,
+    loader,
   };
 
-  if(ENABLE_TYPESCRIPT) {
+  if (ENABLE_TYPESCRIPT) {
     options.tsconfigRaw = fs.readFileSync(tsConfigPath);
   }
 
   return {
-    loader: 'esbuild-loader',
-    options
+    loader: "esbuild-loader",
+    options,
   };
 }
 
@@ -185,9 +185,9 @@ function loaders() {
   const jsRule = {
     test: /\.js$/,
     exclude: /node_modules/,
-    use: [ENABLE_ESBUILD ? esbuildLoader('jsx') : babelLoader()],
+    use: [ENABLE_ESBUILD ? esbuildLoader("jsx") : babelLoader()],
   };
-  
+
   const loaders = {
     rules: [
       jsRule,
@@ -226,17 +226,22 @@ function loaders() {
               importLoaders: 1,
             },
           },
-          "sass-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              implementation: require("sass"),
+            },
+          },
         ],
       },
       { test: /\.gif|\.svg|\.png|\.jpg|\.jpeg$/, loader: "ignore-loader" },
     ],
   };
 
-  if (ENABLE_TYPESCRIPT) {  
+  if (ENABLE_TYPESCRIPT) {
     const tsRule = {
-      test: (/\.(ts|tsx)$/),
-      use: [ENABLE_ESBUILD ? esbuildLoader('tsx') : tsLoader()],
+      test: /\.(ts|tsx)$/,
+      use: [ENABLE_ESBUILD ? esbuildLoader("tsx") : tsLoader()],
       exclude: [
         [
           path.resolve(servicePath, "node_modules"),
