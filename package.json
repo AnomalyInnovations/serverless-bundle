@@ -82,7 +82,8 @@
     "husky": "^3.0.8",
     "lerna-changelog": "^1.0.1",
     "lint-staged": "^9.4.2",
-    "prettier": "1.18.2"
+    "prettier": "1.18.2",
+    "serverless": "^2.37.1"
   },
   "husky": {
     "hooks": {
