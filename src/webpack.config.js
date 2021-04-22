@@ -282,7 +282,7 @@ function plugins() {
     if (ENABLE_LINTING) {
       forkTsCheckerWebpackOptions.eslint = {
         files: path.join(servicePath, "**/*.ts"),
-        options: { baseConfig: tsEslintConfig },
+        options: { cwd: servicePath, baseConfig: tsEslintConfig },
       };
     }
 
