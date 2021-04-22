@@ -86,7 +86,7 @@
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "reflect-metadata": "^0.1.13",
-    "serverless": "^2.29.0"
+    "serverless": "^2.37.1"
   },
   "lint-staged": {
     "*.{js,css,json,md}": [
