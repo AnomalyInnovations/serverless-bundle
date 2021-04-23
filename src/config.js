@@ -6,9 +6,9 @@ module.exports = {
   options: {
     aliases: [],
     stats: false,
-    esbuild: false,
     caching: true,
     linting: true,
+    esbuild: false,
     fixPackages: [],
     packager: "npm",
     copyFiles: null,
@@ -18,14 +18,14 @@ module.exports = {
     ignorePackages: [],
     packagerOptions: {},
     tsConfig: "tsconfig.json",
-    disableForkTsChecker: false,
     // Exclude aws-sdk since it's available in the Lambda runtime
     forceExclude: ["aws-sdk"],
+    disableForkTsChecker: false,
     // Set non Webpack compatible packages as externals
     // Or if we want to exclude all packages in the node_modules:
     // externals: "all"
     externals: ["knex", "sharp"],
     // Set default file extensions to use the raw-loader with
-    rawFileExtensions: ["pem", "txt"]
-  }
+    rawFileExtensions: ["pem", "txt"],
+  },
 };

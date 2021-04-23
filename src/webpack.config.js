@@ -5,14 +5,14 @@ const webpack = require("webpack");
 const fastGlob = require("fast-glob");
 const slsw = require("serverless-webpack");
 const importFresh = require("import-fresh");
+const ESLintPlugin = require("eslint-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const PermissionsOutputPlugin = require("webpack-permissions-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const ESLintPlugin = require("eslint-webpack-plugin");
-const { ESBuildMinifyPlugin } = require("esbuild-loader");
 
 const config = require("./config");
 
@@ -33,6 +33,7 @@ const nodeVersion = config.nodeVersion;
 const externals = config.options.externals;
 const copyFiles = config.options.copyFiles;
 const concatText = config.options.concatText;
+const esbuildNodeVersion = "node" + nodeVersion;
 const forceExclude = config.options.forceExclude;
 const ignorePackages = config.options.ignorePackages;
 const rawFileExtensions = config.options.rawFileExtensions;
@@ -155,8 +156,8 @@ function babelLoader() {
 
 function esbuildLoader(loader) {
   const options = {
-    target: "node" + nodeVersion,
     loader,
+    target: esbuildNodeVersion,
   };
 
   if (ENABLE_TYPESCRIPT) {
@@ -443,7 +444,7 @@ module.exports = {
     : {
         minimizer: [
           new ESBuildMinifyPlugin({
-            target: "node" + nodeVersion,
+            target: esbuildNodeVersion,
           }),
         ],
       },
