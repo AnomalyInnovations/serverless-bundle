@@ -12,6 +12,7 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const PermissionsOutputPlugin = require("webpack-permissions-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
+const { ESBuildMinifyPlugin } = require("esbuild-loader");
 
 const config = require("./config");
 
@@ -439,9 +440,13 @@ module.exports = {
         removeEmptyChunks: false,
         removeAvailableModules: false,
       }
-    : // Don't minimize in production
-      // Large builds can run out of memory
-      { minimize: false },
+    : {
+        minimizer: [
+          new ESBuildMinifyPlugin({
+            target: "node" + nodeVersion,
+          }),
+        ],
+      },
   plugins: plugins(),
   node: {
     __dirname: false,
