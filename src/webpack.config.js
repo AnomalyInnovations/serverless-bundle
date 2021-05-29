@@ -12,6 +12,7 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const PermissionsOutputPlugin = require("webpack-permissions-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const config = require("./config");
 
@@ -40,6 +41,7 @@ const fixPackages = convertListToObject(config.options.fixPackages);
 const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
 
 const ENABLE_STATS = config.options.stats;
+const GENERATE_STATS_FILE = config.options.generateStatsFile;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
@@ -274,6 +276,15 @@ function loaders() {
 
 function plugins() {
   const plugins = [];
+
+  if (GENERATE_STATS_FILE) {
+    plugins.push(
+      new BundleAnalyzerPlugin({
+        analyzerMode: "disabled",
+        generateStatsFile: true
+      })
+    );
+  }
 
   if (ENABLE_TYPESCRIPT && ENABLE_TSCHECKER) {
     const forkTsCheckerWebpackOptions = {

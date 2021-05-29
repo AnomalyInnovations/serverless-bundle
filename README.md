@@ -52,6 +52,7 @@ You can [read more about this over on Serverless Stack](https://serverless-stack
   - [Support for pem, txt, and other raw files](#support-for-pem-txt-and-other-raw-files)
   - [Externals](#externals)
   - [Externals vs forceExclude](#externals-vs-forceexclude)
+  - [Generating a stats file](#generating-a-stats-file)
 - [Support](#support)
 - [Running Locally](#running-locally)
 
@@ -98,6 +99,7 @@ custom:
     caching: true                   # Enable Webpack caching
     stats: false                    # Don't print out any Webpack output
     linting: true                   # Enable linting as a part of the build process
+    generateStatsFile: false        # Creates a stats file that could be fed into bundle analyzing tools, more below
     disableForkTsChecker: false     # Disable the ForkTsChecker plugin, more below
     tsConfig: "tsconfig.json"       # Path to your 'tsconfig.json', if it's not in the root
     forceInclude:                   # Optional list of NPM packages that need to be included
@@ -427,6 +429,12 @@ The two options (`externals` and `forceExclude`) look similar but have some subt
 - `forceExclude`
 
   These packages are available in the Lambda runtime. Either by default (in the case of `aws-sdk`) or through a Lambda layer that you might be using. So these are not included in the Lambda package. And they are also marked as `externals`. Meaning that packages that are in `forceExclude` are automatically added to the `externals` list as well. By default, `aws-sdk` is listed in the `forceExclude`.
+
+### Generating a stats file
+
+Use the `generateStatsFile` option if you want to analyze your bundle size. This option, if set to `true`, will enable generation of a `stats.json` in the output directory, using the [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) plugin. 
+
+This file can then be fed into tools like [webpack-visualizer](http://chrisbateman.github.io/webpack-visualizer/), which could give us insights on which packages take up our bundle size. The webpack-bundle-analyzer plugin could also be used to analyze the `stats.json` that is generated, [see here](https://github.com/webpack-contrib/webpack-bundle-analyzer#usage-as-a-cli-utility).
 
 ## Support
 

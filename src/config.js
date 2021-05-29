@@ -6,6 +6,7 @@ module.exports = {
   options: {
     aliases: [],
     stats: false,
+    generateStatsFile: false,
     caching: true,
     linting: true,
     fixPackages: [],
