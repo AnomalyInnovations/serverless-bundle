@@ -38,6 +38,7 @@ const forceExclude = config.options.forceExclude;
 const ignorePackages = config.options.ignorePackages;
 const rawFileExtensions = config.options.rawFileExtensions;
 const sourceType = config.options.sourceType;
+const nodeDirname = config.options.nodeDirname;
 const fixPackages = convertListToObject(config.options.fixPackages);
 const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
 const minifyOptions = config.options.minifyOptions;
@@ -471,6 +472,6 @@ module.exports = {
   plugins: plugins(),
   experiments,
   node: {
-    __dirname: false,
+    __dirname: nodeDirname,
   },
 };
