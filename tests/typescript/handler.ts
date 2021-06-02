@@ -1,9 +1,11 @@
 import { hi } from "@my-org/some-lib/index";
 import { merhaba } from "./tsx/import";
 
+/* eslint-disable no-unused-vars */
 export const typescript4Inject = <A extends []>(
   fn: (str: string, ...args: A) => any
 ) => (...a: A) => fn("test", ...a);
+/* eslint-enable no-unused-vars */
 
 export const hello = async (event: any) => {
   return {
