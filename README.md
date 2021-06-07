@@ -467,4 +467,4 @@ This plugin would not be possible without the amazing [serverless-webpack](https
 
 ---
 
-This plugin is maintained by [Anomaly Innovations](https://anoma.ly); makers of [Seed](https://seed.run) and [Serverless Stack](https://serverless-stack.com).
+This plugin is maintained by [Serverless Stack](https://serverless-stack.com).
