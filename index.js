@@ -32,7 +32,8 @@ function applyWebpackOptions(custom, config) {
         config.servicePath,
         pkgUp.sync({ cwd: config.servicePath })
       )
-    }
+    },
+    excludeFiles: config.options.excludeFiles
   };
 }
 
