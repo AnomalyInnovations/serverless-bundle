@@ -429,11 +429,16 @@ module.exports = ignoreWarmupPlugin({
     ? {
         splitChunks: false,
         removeEmptyChunks: false,
-        removeAvailableModules: false
+        removeAvailableModules: false,
+        nodeEnv: false
       }
-    : // Don't minimize in production
-      // Large builds can run out of memory
-      { minimize: false },
+    : 
+      { 
+        // Don't minimize in production
+        // Large builds can run out of memory
+        minimize: false,
+        nodeEnv: false
+      },
   plugins: plugins(),
   node: {
     __dirname: false

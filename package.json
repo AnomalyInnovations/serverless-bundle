@@ -19,7 +19,8 @@
       "<rootDir>/scripts",
       "<rootDir>/tests/scripts/tests",
       "<rootDir>/tests/aliases-jest/tests",
-      "<rootDir>/tests/typescript-jest/tests"
+      "<rootDir>/tests/typescript-jest/tests",
+      "<rootDir>/tests/typescript-exclude-files/handler.spec.ts"
     ]
   },
   "repository": {
