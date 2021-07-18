@@ -466,6 +466,17 @@ To install locally in another project.
 $ npm install /path/to/serverless-bundle
 ```
 
+## Releases
+
+1. Label the PRs with `breaking`, `enhancement`, `bug`, `documentation`, or `internal`
+2. Merge the PRs
+3. Generate changelog `npm run changelog`
+4. Draft a new release with the changelog
+5. Up the version based on the PR labels `npm version <major|minor|patch>`
+6. Push the tag `git push origin <tag_name>`
+7. Publish to npm `npm publish`
+8. Update the tag in release and publish release notes
+
 ## Thanks
 
 This plugin would not be possible without the amazing [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack) plugin and the ideas and code from [Create React App](https://www.github.com/facebook/create-react-app).
