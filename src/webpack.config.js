@@ -432,9 +432,10 @@ module.exports = ignoreWarmupPlugin({
         removeAvailableModules: false,
         nodeEnv: false
       }
-    : // Don't minimize in production
-      // Large builds can run out of memory
+    : 
       { 
+        // Don't minimize in production
+        // Large builds can run out of memory
         minimize: false,
         nodeEnv: false
       },
