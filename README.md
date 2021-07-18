@@ -417,9 +417,9 @@ custom:
     externals: all
 ```
 
-### Externals vs forceExclude
+### Externals vs forceExclude vs excludeFiles
 
-The two options (`externals` and `forceExclude`) look similar but have some subtle differences. Let's look at them in detail:
+The three options (`externals`, `forceExclude`, and `excludeFiles`) look similar but have some subtle differences. Let's look at them in detail:
 
 - `externals`
 
@@ -428,6 +428,10 @@ The two options (`externals` and `forceExclude`) look similar but have some subt
 - `forceExclude`
 
   These packages are available in the Lambda runtime. Either by default (in the case of `aws-sdk`) or through a Lambda layer that you might be using. So these are not included in the Lambda package. And they are also marked as `externals`. Meaning that packages that are in `forceExclude` are automatically added to the `externals` list as well. By default, `aws-sdk` is listed in the `forceExclude`.
+
+- `excludeFiles`
+
+  These are a glob of files that can be excluded from the function resolution. This happens when you have multiple files that are in the same directory and Serverless Framework tries to use them as a function handler. For example, if you have a `index.js` and a `index.test.js` and your function is pointing to `index`, you'll get a warning saying, `WARNING: More than one matching handlers found for index. Using index.js`. To fix this, use `excludeFiles: **/*.test.js`.
 
 ## Support
 
