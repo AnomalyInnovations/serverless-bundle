@@ -64,7 +64,7 @@ module.exports = (resolve, rootDir) => {
     "transformIgnorePatterns",
     "watchPathIgnorePatterns",
     "moduleNameMapper",
-    "testSequencer"
+    "testSequencer",
   ];
   if (overrides) {
     supportedKeys.forEach(key => {
