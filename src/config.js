@@ -15,6 +15,7 @@ module.exports = {
     concatText: null,
     sourcemaps: true,
     forceInclude: null,
+    excludeFiles: null,
     ignorePackages: [],
     packagerOptions: {},
     tsConfig: "tsconfig.json",

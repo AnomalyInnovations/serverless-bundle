@@ -1,4 +1,4 @@
-# serverless-bundle [![Build Status](https://travis-ci.com/AnomalyInnovations/serverless-bundle.svg?branch=master)](https://travis-ci.com/AnomalyInnovations/serverless-bundle) [![npm](https://img.shields.io/npm/v/serverless-bundle.svg)](https://www.npmjs.com/package/serverless-bundle)
+# serverless-bundle [![Build Status](https://img.shields.io/github/workflow/status/AnomalyInnovations/serverless-bundle/CI)](https://github.com/AnomalyInnovations/serverless-bundle/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/serverless-bundle.svg)](https://www.npmjs.com/package/serverless-bundle)
 
 serverless-bundle is a [Serverless Framework](https://www.serverless.com) plugin that optimally packages your ES6 or TypeScript Node.js Lambda functions with sensible defaults so you **don't have to maintain your own Webpack configs**. It uses the [serverless-webpack](https://www.github.com/serverless-heaven/serverless-webpack) plugin internally.
 
@@ -109,6 +109,7 @@ custom:
       - isomorphic-webcrypto          # They'll be included in the node_modules/, more below
     forceExclude:                   # Don't include these in the package
       - chrome-aws-lambda             # Because it'll be provided through a Lambda Layer
+    excludeFiles: "**/*.test.ts"    # Exclude files from Webpack that match the glob
     fixPackages:                    # Include fixes for specific packages
       - "formidable@1.x"              # For ex, formidable@1.x doesn't work by default with Webpack
     copyFiles:                      # Copy any additional files to the generated package
@@ -417,9 +418,9 @@ custom:
     externals: all
 ```
 
-### Externals vs forceExclude
+### Externals vs forceExclude vs excludeFiles
 
-The two options (`externals` and `forceExclude`) look similar but have some subtle differences. Let's look at them in detail:
+The three options (`externals`, `forceExclude`, and `excludeFiles`) look similar but have some subtle differences. Let's look at them in detail:
 
 - `externals`
 
@@ -428,6 +429,10 @@ The two options (`externals` and `forceExclude`) look similar but have some subt
 - `forceExclude`
 
   These packages are available in the Lambda runtime. Either by default (in the case of `aws-sdk`) or through a Lambda layer that you might be using. So these are not included in the Lambda package. And they are also marked as `externals`. Meaning that packages that are in `forceExclude` are automatically added to the `externals` list as well. By default, `aws-sdk` is listed in the `forceExclude`.
+
+- `excludeFiles`
+
+  These are a glob of files that can be excluded from the function resolution. This happens when you have multiple files that are in the same directory and Serverless Framework tries to use them as a function handler. For example, if you have a `index.js` and a `index.test.js` and your function is pointing to `index`, you'll get a warning saying, `WARNING: More than one matching handlers found for index. Using index.js`. To fix this, use `excludeFiles: **/*.test.js`.
 
 ## Support
 
@@ -462,10 +467,21 @@ To install locally in another project.
 $ npm install /path/to/serverless-bundle
 ```
 
+## Releases
+
+1. Label the PRs with `breaking`, `enhancement`, `bug`, `documentation`, or `internal`
+2. Merge the PRs
+3. Generate changelog `npm run changelog`
+4. Draft a new release with the changelog
+5. Up the version based on the PR labels `npm version <major|minor|patch>`
+6. Push the tag `git push origin <tag_name>`
+7. Publish to npm `npm publish`
+8. Update the tag in release and publish release notes
+
 ## Thanks
 
 This plugin would not be possible without the amazing [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack) plugin and the ideas and code from [Create React App](https://www.github.com/facebook/create-react-app).
 
 ---
 
-This plugin is maintained by [Anomaly Innovations](https://anoma.ly); makers of [Seed](https://seed.run) and [Serverless Stack](https://serverless-stack.com).
+This plugin is maintained by [Serverless Stack](https://serverless-stack.com).

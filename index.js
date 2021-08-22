@@ -32,8 +32,9 @@ function applyWebpackOptions(custom, config) {
       packagePath: path.relative(
         config.servicePath,
         pkgUp.sync({ cwd: config.servicePath })
-      )
-    }
+      ),
+    },
+    excludeFiles: config.options.excludeFiles,
   };
 }
 
@@ -75,7 +76,7 @@ class ServerlessPlugin extends ServerlessWebpack {
     this.serverless = serverless;
     this.options = options;
 
-    this.hooks["before:webpack:validate:validate"] = function() {
+    this.hooks["before:webpack:validate:validate"] = function () {
       const service = this.serverless.service;
       const servicePath = this.serverless.config.servicePath;
 

@@ -50,9 +50,8 @@ const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
 // Handle the "all" option in externals
 // And add the forceExclude packages to it because they shouldn't be Webpacked
-const computedExternals = (externals === "all"
-  ? [nodeExternals()]
-  : externals
+const computedExternals = (
+  externals === "all" ? [nodeExternals()] : externals
 ).concat(forceExclude);
 
 const extensions = [
@@ -447,6 +446,7 @@ module.exports = {
             target: esbuildNodeVersion,
           }),
         ],
+        nodeEnv: false,
       },
   plugins: plugins(),
   node: {
