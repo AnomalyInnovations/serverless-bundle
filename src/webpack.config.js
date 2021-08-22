@@ -436,17 +436,18 @@ module.exports = {
   // PERFORMANCE ONLY FOR DEVELOPMENT
   optimization: isLocal
     ? {
+        nodeEnv: false,
         splitChunks: false,
         removeEmptyChunks: false,
         removeAvailableModules: false,
       }
     : {
+        nodeEnv: false,
         minimizer: [
           new ESBuildMinifyPlugin({
             target: esbuildNodeVersion,
           }),
         ],
-        nodeEnv: false,
       },
   plugins: plugins(),
   node: {

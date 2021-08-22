@@ -1,5 +1,5 @@
 {
-  "name": "typescript-config-path",
+  "name": "typescript-exclude-files",
   "version": "1.0.0",
   "description": "",
   "main": "handler.js",
