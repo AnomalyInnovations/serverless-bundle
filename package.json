@@ -89,6 +89,9 @@
     "reflect-metadata": "^0.1.13",
     "serverless": "^2.37.1"
   },
+  "peerDependencies": {
+    "serverless": "1 || 2"
+  },
   "lint-staged": {
     "*.{js,css,json,md}": [
       "prettier --write",
