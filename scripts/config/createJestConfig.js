@@ -43,17 +43,22 @@ module.exports = (resolve, rootDir) => {
   }
   const overrides = Object.assign({}, require(paths.appPackageJson).jest);
   const supportedKeys = [
+    "clearMocks",
     "collectCoverageFrom",
+    "coveragePathIgnorePatterns",
     "coverageReporters",
     "coverageThreshold",
+    "displayName",
     "extraGlobals",
     "globalSetup",
     "globalTeardown",
     "reporters",
     "resetMocks",
     "resetModules",
+    "restoreMocks",
     "setupFilesAfterEnv",
     "snapshotSerializers",
+    "testMatch",
     "testResultsProcessor",
     "transform",
     "transformIgnorePatterns",
