@@ -17,9 +17,9 @@ function applyWebpackOptions(custom, config) {
 
   custom.webpack = {
     packager: config.options.packager,
+    concurrency: config.options.concurrency,
     packagerOptions: config.options.packagerOptions,
     webpackConfig: getWebpackConfigPath(config.servicePath),
-    concurrency: config.options.concurrency,
     includeModules: {
       forceExclude: config.options.forceExclude,
       forceInclude: config.options.forceInclude,
