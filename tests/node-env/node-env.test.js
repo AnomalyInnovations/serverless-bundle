@@ -1,4 +1,4 @@
-const { runSlsCommand, clearNpmCache, errorRegex } = require("../helpers");
+const { runSlsCommand, clearNpmCache } = require("../helpers");
 
 beforeEach(async () => {
   await clearNpmCache(__dirname);

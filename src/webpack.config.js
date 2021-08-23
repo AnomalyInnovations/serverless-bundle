@@ -5,11 +5,12 @@ const webpack = require("webpack");
 const fastGlob = require("fast-glob");
 const slsw = require("serverless-webpack");
 const importFresh = require("import-fresh");
+const ESLintPlugin = require("eslint-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const PermissionsOutputPlugin = require("webpack-permissions-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
@@ -17,7 +18,6 @@ const config = require("./config");
 
 const jsEslintConfig = require("./eslintrc.json");
 const tsEslintConfig = require("./ts.eslintrc.json");
-const ignoreWarmupPlugin = require("./ignore-warmup-plugin");
 
 // Load the default config for reference
 // Note:  This import potentially clears our the dynamically loaded config. So any other
@@ -33,12 +33,14 @@ const nodeVersion = config.nodeVersion;
 const externals = config.options.externals;
 const copyFiles = config.options.copyFiles;
 const concatText = config.options.concatText;
+const esbuildNodeVersion = "node" + nodeVersion;
 const forceExclude = config.options.forceExclude;
 const ignorePackages = config.options.ignorePackages;
 const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
 const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
 
+const ENABLE_ESBUILD = config.options.esbuild;
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
@@ -48,9 +50,8 @@ const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
 // Handle the "all" option in externals
 // And add the forceExclude packages to it because they shouldn't be Webpacked
-const computedExternals = (externals === "all"
-  ? [nodeExternals()]
-  : externals
+const computedExternals = (
+  externals === "all" ? [nodeExternals()] : externals
 ).concat(forceExclude);
 
 const extensions = [
@@ -62,7 +63,7 @@ const extensions = [
   ".ts",
   ".tsx",
   ".graphql",
-  ".gql"
+  ".gql",
 ];
 
 // If tsConfig is specified and not found, throw an error
@@ -123,7 +124,7 @@ function babelLoader() {
     "@babel/plugin-transform-runtime",
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-proposal-optional-chaining",
-    "@babel/plugin-proposal-nullish-coalescing-operator"
+    "@babel/plugin-proposal-nullish-coalescing-operator",
   ];
 
   if (ENABLE_SOURCE_MAPS) {
@@ -143,26 +144,28 @@ function babelLoader() {
           require.resolve("@babel/preset-env"),
           {
             targets: {
-              node: nodeVersion
-            }
-          }
-        ]
-      ]
-    }
+              node: nodeVersion,
+            },
+          },
+        ],
+      ],
+    },
   };
 }
 
-function eslintLoader(type) {
-  const configMap = {
-    js: jsEslintConfig,
-    ts: tsEslintConfig
+function esbuildLoader(loader) {
+  const options = {
+    loader,
+    target: esbuildNodeVersion,
   };
 
+  if (ENABLE_TYPESCRIPT) {
+    options.tsconfigRaw = fs.readFileSync(tsConfigPath);
+  }
+
   return {
-    loader: "eslint-loader",
-    options: {
-      baseConfig: configMap[type]
-    }
+    loader: "esbuild-loader",
+    options,
   };
 }
 
@@ -174,8 +177,8 @@ function tsLoader() {
       configFile: tsConfigPath,
       experimentalWatchApi: true,
       // Don't check types if ForTsChecker is enabled
-      transpileOnly: ENABLE_TSCHECKER
-    }
+      transpileOnly: ENABLE_TSCHECKER,
+    },
   };
 }
 
@@ -183,12 +186,8 @@ function loaders() {
   const jsRule = {
     test: /\.js$/,
     exclude: /node_modules/,
-    use: [babelLoader()]
+    use: [ENABLE_ESBUILD ? esbuildLoader("jsx") : babelLoader()],
   };
-
-  if (ENABLE_LINTING) {
-    jsRule.use.push(eslintLoader("js"));
-  }
 
   const loaders = {
     rules: [
@@ -196,12 +195,15 @@ function loaders() {
       {
         test: /\.mjs$/,
         include: /node_modules/,
-        type: "javascript/auto"
+        type: "javascript/auto",
+        resolve: {
+          fullySpecified: false,
+        },
       },
       {
         test: /\.(graphql|gql)$/,
         exclude: /node_modules/,
-        loader: "graphql-tag/loader"
+        loader: "graphql-tag/loader",
       },
       {
         test: /\.css$/,
@@ -210,10 +212,10 @@ function loaders() {
           {
             loader: "css-loader",
             options: {
-              importLoaders: 1
-            }
-          }
-        ]
+              importLoaders: 1,
+            },
+          },
+        ],
       },
       {
         test: /\.s[ac]ss$/i,
@@ -222,50 +224,45 @@ function loaders() {
           {
             loader: "css-loader",
             options: {
-              importLoaders: 1
-            }
+              importLoaders: 1,
+            },
           },
           {
             loader: "sass-loader",
             options: {
-              implementation: require("sass")
-            }
-          }
-        ]
+              implementation: require("sass"),
+            },
+          },
+        ],
       },
-      { test: /\.gif|\.svg|\.png|\.jpg|\.jpeg$/, loader: "ignore-loader" }
-    ]
+      { test: /\.gif|\.svg|\.png|\.jpg|\.jpeg$/, loader: "ignore-loader" },
+    ],
   };
 
   if (ENABLE_TYPESCRIPT) {
     const tsRule = {
       test: /\.(ts|tsx)$/,
-      use: [babelLoader(), tsLoader()],
+      use: [ENABLE_ESBUILD ? esbuildLoader("tsx") : tsLoader()],
       exclude: [
         [
           path.resolve(servicePath, "node_modules"),
           path.resolve(servicePath, ".serverless"),
-          path.resolve(servicePath, ".webpack")
-        ]
-      ]
+          path.resolve(servicePath, ".webpack"),
+        ],
+      ],
     };
-
-    // If the ForTsChecker is disabled, then let Eslint do the linting
-    if (!ENABLE_TSCHECKER && ENABLE_LINTING) {
-      tsRule.use.push(eslintLoader("ts"));
-    }
 
     loaders.rules.push(tsRule);
   }
 
   if (rawFileExtensions && rawFileExtensions.length) {
     const rawFileRegex = `${rawFileExtensions
-      .map(rawFileExt => `\\.${rawFileExt}`)
+      .map((rawFileExt) => `\\.${rawFileExt}`)
       .join("|")}$`;
 
     loaders.rules.push({
       test: new RegExp(rawFileRegex),
-      loader: "raw-loader"
+      loader: "raw-loader",
     });
   }
 
@@ -279,50 +276,60 @@ function plugins() {
     const forkTsCheckerWebpackOptions = {
       typescript: {
         configFile: tsConfigPath,
-        build: true
-      }
+        build: true,
+      },
     };
 
     if (ENABLE_LINTING) {
       forkTsCheckerWebpackOptions.eslint = {
         files: path.join(servicePath, "**/*.ts"),
-        options: { cwd: servicePath, baseConfig: tsEslintConfig }
+        options: { cwd: servicePath, baseConfig: tsEslintConfig },
       };
     }
 
     plugins.push(new ForkTsCheckerWebpackPlugin(forkTsCheckerWebpackOptions));
   }
 
-  if (ENABLE_CACHING) {
+  if (ENABLE_LINTING) {
     plugins.push(
-      new HardSourceWebpackPlugin({
-        info: {
-          mode: ENABLE_STATS ? "test" : "none",
-          level: ENABLE_STATS ? "debug" : "error"
-        }
+      new ESLintPlugin({
+        context: servicePath,
+        baseConfig: jsEslintConfig,
+        extensions: "js",
       })
     );
+
+    // If the ForkTsChecker is disabled, then let Eslint do the linting
+    if (ENABLE_TYPESCRIPT && !ENABLE_TSCHECKER) {
+      plugins.push(
+        new ESLintPlugin({
+          context: servicePath,
+          baseConfig: tsEslintConfig,
+          extensions: ["ts"],
+        })
+      );
+    }
   }
 
   if (copyFiles) {
     plugins.push(
       new CopyWebpackPlugin({
-        patterns: copyFiles.map(function(data) {
+        patterns: copyFiles.map(function (data) {
           return {
             to: data.to,
             context: servicePath,
-            from: path.join(servicePath, data.from)
+            from: path.join(servicePath, data.from),
           };
-        })
+        }),
       })
     );
 
     // Copy file permissions
     const buildFiles = [];
-    copyFiles.forEach(function(data) {
+    copyFiles.forEach(function (data) {
       const entries = fastGlob.sync([data.from]);
       // loop through each file matched by fg
-      entries.forEach(function(entry) {
+      entries.forEach(function (entry) {
         // get source file stat
         const stat = fs.statSync(path.resolve(servicePath, entry));
         const { serverless } = slsw.lib;
@@ -333,13 +340,13 @@ function plugins() {
           for (let key in serverless.service.functions) {
             buildFiles.push({
               fileMode: statModeToOctal(stat.mode),
-              path: path.resolve(data.to, `.webpack/${key}`, entry)
+              path: path.resolve(data.to, `.webpack/${key}`, entry),
             });
           }
         } else {
           buildFiles.push({
             fileMode: statModeToOctal(stat.mode),
-            path: path.resolve(data.to, ".webpack/service", entry)
+            path: path.resolve(data.to, ".webpack/service", entry),
           });
         }
       });
@@ -350,7 +357,7 @@ function plugins() {
   if (concatText) {
     const concatTextConfig = {};
 
-    concatText.map(function(data) {
+    concatText.map(function (data) {
       concatTextConfig.files = data.files || null;
       concatTextConfig.name = data.name || null;
       concatTextConfig.outputPath = data.outputPath || null;
@@ -365,7 +372,9 @@ function plugins() {
   // Ignore any packages specified in the `ignorePackages` option
   for (let i = 0, l = ignorePackages.length; i < l; i++) {
     plugins.push(
-      new webpack.IgnorePlugin(new RegExp("^" + ignorePackages[i] + "$"))
+      new webpack.IgnorePlugin({
+        resourceRegExp: new RegExp("^" + ignorePackages[i] + "$"),
+      })
     );
   }
 
@@ -383,7 +392,7 @@ function resolvePlugins() {
     plugins.push(
       new TsconfigPathsPlugin({
         configFile: tsConfigPath,
-        extensions: extensions
+        extensions: extensions,
       })
     );
   }
@@ -399,7 +408,7 @@ function alias() {
   }, {});
 }
 
-module.exports = ignoreWarmupPlugin({
+module.exports = {
   entry: resolveEntriesPath(slsw.lib.entries),
   target: "node",
   context: __dirname,
@@ -410,7 +419,7 @@ module.exports = ignoreWarmupPlugin({
   mode: isLocal ? "development" : "production",
   performance: {
     // Turn off size warnings for entry points
-    hints: false
+    hints: false,
   },
   resolve: {
     // Performance
@@ -420,27 +429,28 @@ module.exports = ignoreWarmupPlugin({
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
     modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
-    plugins: resolvePlugins()
+    plugins: resolvePlugins(),
   },
   // Add loaders
   module: loaders(),
   // PERFORMANCE ONLY FOR DEVELOPMENT
   optimization: isLocal
     ? {
+        nodeEnv: false,
         splitChunks: false,
         removeEmptyChunks: false,
         removeAvailableModules: false,
-        nodeEnv: false
       }
-    : 
-      { 
-        // Don't minimize in production
-        // Large builds can run out of memory
-        minimize: false,
-        nodeEnv: false
+    : {
+        nodeEnv: false,
+        minimizer: [
+          new ESBuildMinifyPlugin({
+            target: esbuildNodeVersion,
+          }),
+        ],
       },
   plugins: plugins(),
   node: {
-    __dirname: false
-  }
-});
+    __dirname: false,
+  },
+};

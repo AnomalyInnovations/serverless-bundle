@@ -19,6 +19,7 @@ function applyWebpackOptions(custom, config) {
     packager: config.options.packager,
     packagerOptions: config.options.packagerOptions,
     webpackConfig: getWebpackConfigPath(config.servicePath),
+    concurrency: config.options.concurrency,
     includeModules: {
       forceExclude: config.options.forceExclude,
       forceInclude: config.options.forceInclude,
@@ -31,9 +32,9 @@ function applyWebpackOptions(custom, config) {
       packagePath: path.relative(
         config.servicePath,
         pkgUp.sync({ cwd: config.servicePath })
-      )
+      ),
     },
-    excludeFiles: config.options.excludeFiles
+    excludeFiles: config.options.excludeFiles,
   };
 }
 
@@ -63,9 +64,9 @@ function applyUserConfig(config, userConfig, servicePath, runtime) {
 
   Object.assign(config.options, userConfig);
 
-  // Default to Node 10 if no runtime found
+  // Default to Node 12 if no runtime found
   config.nodeVersion =
-    Number.parseInt((runtime || "").replace("nodejs", ""), 10) || 10;
+    Number.parseInt((runtime || "").replace("nodejs", ""), 10) || 12;
 }
 
 class ServerlessPlugin extends ServerlessWebpack {
@@ -75,7 +76,7 @@ class ServerlessPlugin extends ServerlessWebpack {
     this.serverless = serverless;
     this.options = options;
 
-    this.hooks["before:webpack:validate:validate"] = function() {
+    this.hooks["before:webpack:validate:validate"] = function () {
       const service = this.serverless.service;
       const servicePath = this.serverless.config.servicePath;
 

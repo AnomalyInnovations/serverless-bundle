@@ -1,5 +1,5 @@
 {
-  "name": "main",
+  "name": "esbuild",
   "version": "1.0.0",
   "description": "",
   "main": "handler.js",
@@ -8,5 +8,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild-loader": "^2.9.2",
+    "reflect-metadata": "^0.1.13"
+  },
+  "dependencies": {}
 }

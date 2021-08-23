@@ -5,11 +5,14 @@ plugins:
 
 custom:
   bundle:
+    linting: false
+    stats: true
     disableForkTsChecker: true
+    esbuild: true
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
 
 functions:
   hello:
