@@ -42,6 +42,10 @@ You can [read more about this over on Serverless Stack](https://serverless-stack
 
 ---
 
+💥 The `serverless-bundle` team recently launched the [Serverless Stack Framework (SST)](https://github.com/serverless-stack/serverless-stack). SST makes it easy to build serverless apps by letting you [test your Lambda functions live](https://docs.serverless-stack.com/live-lambda-development). It's based on the many of ideas behind `serverless-bundle`.
+
+---
+
 ## Table of Contents
 - [Getting Started](#getting-started)
 - [Usage](#usage)
