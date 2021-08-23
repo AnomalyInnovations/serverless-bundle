@@ -8,8 +8,9 @@ serverless-bundle is a [Serverless Framework](https://www.serverless.com) plugin
 - Linting Lambda functions using [ESLint](https://eslint.org)
 - Supports transpiling unit tests with [babel-jest](https://github.com/facebook/jest/tree/master/packages/babel-jest)
 - Source map support for proper error messages
+- Support [esbuild](https://esbuild.github.io) and [esbuild-loader](https://github.com/privatenumber/esbuild-loader) for faster builds
 
-And all this works without having to install Webpack, Babel, ESLint, etc. or manage any of their configs. Simply add serverless-bundle to your app and you are done!
+And all this works without having to install Webpack, Babel, ESLint, esbuild, etc. or manage any of their configs. Simply add serverless-bundle to your app and you are done!
 
 ```diff
 -    "eslint"
@@ -22,6 +23,7 @@ And all this works without having to install Webpack, Babel, ESLint, etc. or man
 -    "babel-eslint"
 -    "babel-loader"
 -    "eslint-loader"
+-    "esbuild-loader"
 -    "@babel/runtime"
 -    "@babel/preset-env"
 -    "serverless-webpack"
@@ -99,6 +101,7 @@ custom:
     concurrency: 5                  # Set desired concurrency, defaults to the number of available cores
     stats: false                    # Don't print out any Webpack output
     linting: true                   # Enable linting as a part of the build process
+    esbuild: false                  # Use esbuild-loader instead of babel or ts for faster builds
     disableForkTsChecker: false     # Disable the ForkTsChecker plugin, more below
     tsConfig: "tsconfig.json"       # Path to your 'tsconfig.json', if it's not in the root
     forceInclude:                   # Optional list of NPM packages that need to be included
