@@ -1,6 +1,6 @@
 {
   "name": "serverless-bundle",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "An extension of the serverless-webpack plugin that bundles your ES6 + TypeScript Node.js Lambda functions.",
   "main": "index.js",
   "scripts": {
