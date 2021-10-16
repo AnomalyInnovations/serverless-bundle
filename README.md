@@ -188,6 +188,19 @@ custom:
   }
   ```
 
+- Excluding modules from bundling
+
+  In some cases it might be neccessary to exclude certain modules from bundling with Webpack. This can be achieved by setting the module alias to `false`:
+
+  ``` yml
+  custom:
+    bundle:
+      aliases:
+        - "module-name": false
+  ```
+
+  The `aliases` option is explained in detail in the [Webpack documentation](https://webpack.js.org/configuration/resolve/#resolvealias).
+
 - Usage with WebStorm
 
   Here is some info on how to get this plugin to support running tests in WebStorm — https://github.com/AnomalyInnovations/serverless-bundle/issues/5#issuecomment-582237396
