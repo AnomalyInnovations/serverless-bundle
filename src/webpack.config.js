@@ -10,6 +10,7 @@ const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const config = require("./config");
 
@@ -37,6 +38,7 @@ const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
 const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
 
+const GENERATE_STATS_FILES = config.options.generateStatsFiles;
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
@@ -262,6 +264,18 @@ function loaders() {
 
 function plugins() {
   const plugins = [];
+
+  if (GENERATE_STATS_FILES) {
+    plugins.push(
+      new BundleAnalyzerPlugin({
+        analyzerMode: "static",
+        reportFilename: "bundle_stats.html",
+        openAnalyzer: false,
+        statsFilename: "bundle_stats.json",
+        generateStatsFile: true
+      })
+    );
+  }
 
   if (ENABLE_TYPESCRIPT && ENABLE_TSCHECKER) {
     const forkTsCheckerWebpackOptions = {

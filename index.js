@@ -32,7 +32,9 @@ function applyWebpackOptions(custom, config) {
         config.servicePath,
         pkgUp.sync({ cwd: config.servicePath })
       )
-    }
+    },
+    excludeRegex: /bundle_stats\.(html|json)$/,
+    keepOutputDirectory: config.options.generateStatsFiles
   };
 }
 
