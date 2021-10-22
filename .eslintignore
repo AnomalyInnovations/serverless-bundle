@@ -1,0 +1,3 @@
+# Ignore user's code that'll be transpiled
+tests/nullish-coalescing/**
+tests/failed-eslint/**
