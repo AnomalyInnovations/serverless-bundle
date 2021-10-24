@@ -243,6 +243,10 @@ function loaders() {
         ],
       },
       { test: /\.gif|\.svg|\.png|\.jpg|\.jpeg$/, loader: "ignore-loader" },
+      {
+        test: /\.node$/,
+        loader: "node-loader",
+      },
     ],
   };
 
