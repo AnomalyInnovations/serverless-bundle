@@ -1,0 +1,17 @@
+service: my-service
+
+plugins:
+  - "../../index"
+
+custom:
+  bundle:
+    aliases:
+      - "is-sorted": false
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+functions:
+  hello:
+    handler: handler.hello
