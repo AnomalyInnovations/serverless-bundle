@@ -408,7 +408,11 @@ function resolvePlugins() {
 function alias() {
   return aliases.reduce((obj, item) => {
     const [key, value] = Object.entries(item)[0];
-    obj[key] = path.join(servicePath, value);
+    if (typeof value === "string") {
+      obj[key] = path.join(servicePath, value);
+    } else {
+      obj[key] = value;
+    }
     return obj;
   }, {});
 }
