@@ -2,8 +2,6 @@ const { existsSync } = require("fs");
 const path = require("path");
 const { runSlsCommand, clearNpmCache, errorRegex } = require("../helpers");
 
-jest.setTimeout(10000);
-
 beforeEach(async () => {
   await clearNpmCache(__dirname);
 });
