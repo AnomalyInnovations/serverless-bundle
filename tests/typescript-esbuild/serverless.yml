@@ -1,0 +1,19 @@
+service: my-service
+
+plugins:
+  - '../../index'
+
+custom:
+  bundle:
+    linting: false
+    stats: true
+    disableForkTsChecker: true
+    esbuild: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  hello:
+    handler: handler.hello
