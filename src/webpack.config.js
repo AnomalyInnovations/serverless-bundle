@@ -277,11 +277,11 @@ function plugins() {
   if (GENERATE_STATS_FILES) {
     plugins.push(
       new BundleAnalyzerPlugin({
-        analyzerMode: "static",
-        reportFilename: "bundle_stats.html",
         openAnalyzer: false,
+        analyzerMode: "static",
+        generateStatsFile: true,
         statsFilename: "bundle_stats.json",
-        generateStatsFile: true
+        reportFilename: "bundle_stats.html",
       })
     );
   }
