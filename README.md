@@ -58,6 +58,7 @@ You can [read more about this over on Serverless Stack](https://serverless-stack
   - [Support for pem, txt, and other raw files](#support-for-pem-txt-and-other-raw-files)
   - [Externals](#externals)
   - [Externals vs forceExclude](#externals-vs-forceexclude)
+  - [Generating a stats file](#generating-stats-files)
 - [Support](#support)
 - [Running Locally](#running-locally)
 
@@ -105,6 +106,7 @@ custom:
     concurrency: 5                  # Set desired concurrency, defaults to the number of available cores
     stats: false                    # Don't print out any Webpack output
     linting: true                   # Enable linting as a part of the build process
+    generateStatsFiles: false       # Creates stats files that could be used for bundle analyzing, more below
     esbuild: false                  # Use esbuild-loader instead of babel or ts for faster builds
     disableForkTsChecker: false     # Disable the ForkTsChecker plugin, more below
     tsConfig: "tsconfig.json"       # Path to your 'tsconfig.json', if it's not in the root
@@ -453,6 +455,12 @@ The three options (`externals`, `forceExclude`, and `excludeFiles`) look similar
 - `excludeFiles`
 
   These are a glob of files that can be excluded from the function resolution. This happens when you have multiple files that are in the same directory and Serverless Framework tries to use them as a function handler. For example, if you have a `index.js` and a `index.test.js` and your function is pointing to `index`, you'll get a warning saying, `WARNING: More than one matching handlers found for index. Using index.js`. To fix this, use `excludeFiles: **/*.test.js`.
+
+### Generating stats files
+
+Use the `generateStatsFiles` option if you want to analyze your bundle size. This option, if set to `true`, will
+enable the generation of a `bundle_stats.json` and a `bundle_stats.html` in the output directory, using the
+[webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) plugin.
 
 ## Support
 
