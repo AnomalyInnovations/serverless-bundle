@@ -10,10 +10,10 @@ const nodeExternals = require("webpack-node-externals");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const ConcatTextPlugin = require("concat-text-webpack-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const PermissionsOutputPlugin = require("webpack-permissions-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const config = require("./config");
 
@@ -41,13 +41,13 @@ const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
 const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
 
-const GENERATE_STATS_FILES = config.options.generateStatsFiles;
 const ENABLE_ESBUILD = config.options.esbuild;
 const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
 const ENABLE_TSCHECKER = !config.options.disableForkTsChecker;
+const GENERATE_STATS_FILES = config.options.generateStatsFiles;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
 // Handle the "all" option in externals
