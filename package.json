@@ -90,7 +90,7 @@
     "serverless": "^2.37.1"
   },
   "peerDependencies": {
-    "serverless": "1 || 2"
+    "serverless": "1 || 2 || 3"
   },
   "lint-staged": {
     "*.{js,css,json,md}": [
