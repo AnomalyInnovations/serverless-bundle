@@ -10,6 +10,7 @@ const nodeExternals = require("webpack-node-externals");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { ESBuildMinifyPlugin } = require("esbuild-loader");
 const ConcatTextPlugin = require("concat-text-webpack-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const PermissionsOutputPlugin = require("webpack-permissions-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
@@ -46,6 +47,7 @@ const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
 const ENABLE_TSCHECKER = !config.options.disableForkTsChecker;
+const GENERATE_STATS_FILES = config.options.generateStatsFiles;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
 // Handle the "all" option in externals
@@ -271,6 +273,18 @@ function loaders() {
 
 function plugins() {
   const plugins = [];
+
+  if (GENERATE_STATS_FILES) {
+    plugins.push(
+      new BundleAnalyzerPlugin({
+        openAnalyzer: false,
+        analyzerMode: "static",
+        generateStatsFile: true,
+        statsFilename: "bundle_stats.json",
+        reportFilename: "bundle_stats.html",
+      })
+    );
+  }
 
   if (ENABLE_TYPESCRIPT && ENABLE_TSCHECKER) {
     const forkTsCheckerWebpackOptions = {
