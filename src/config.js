@@ -26,6 +26,8 @@ module.exports = {
     // Set non Webpack compatible packages as externals
     // Or if we want to exclude all packages in the node_modules:
     // externals: "all"
+    // Or if we want to exclude all packages in the root node_modules and the cwd node_modules (monorepo):
+    // externals: "all-monorepo"
     externals: ["knex", "sharp"],
     // Set default file extensions to use the raw-loader with
     rawFileExtensions: ["pem", "txt"],
