@@ -412,11 +412,13 @@ custom:
 
 ### Externals
 
-The `externals` option takes a list of packages or `all`. By default this is set to `["knex", "sharp"]`.
+The `externals` option takes a list of packages, `all`, or `all-monorepo`. By default this is set to `["knex", "sharp"]`.
 
 Packages listed in `externals` are ignored by Webpack. They are instead added in the `node_modules/` directory of the Lambda .zip file. These usually include npm packages that are not supported by Webpack.
 
 The `all` option allows you to list all the packages in YOUR `node_modules/` directory as externals. This might be useful in cases where they are just too many to list. Or you are using something like [EJS](https://ejs.co) that implicitly requires a long list of packages that are not supported by Webpack.
+
+The `all-monorepo` is useful when using Yarn workspaces (monorepo). It does the same as the `all` option, but also lists all the packages in the root node_modules directory (`../../node_modules/`) as externals.
 
 Note that, adding a package to the `externals` list might make your Lambda .zip file larger. This is because the entire package directory is zipped. Instead of using Webpack to just include the code that is necessary. So it's advisable to avoid using the `all` option.
 
