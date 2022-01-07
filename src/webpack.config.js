@@ -50,11 +50,22 @@ const ENABLE_TSCHECKER = !config.options.disableForkTsChecker;
 const GENERATE_STATS_FILES = config.options.generateStatsFiles;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
-// Handle the "all" option in externals
+// Handle "all" and "all-monorepo" option in externals
+function computedExternals() {
+  switch(externals) {
+    case "all":
+      return [nodeExternals()];
+
+    case "all-monorepo":
+      return [nodeExternals({ additionalModuleDirs: [path.resolve(process.cwd(), "../../node_modules")] })];
+
+    default:
+      return externals;
+  }
+}
+
 // And add the forceExclude packages to it because they shouldn't be Webpacked
-const computedExternals = (
-  externals === "all" ? [nodeExternals()] : externals
-).concat(forceExclude);
+const computedExternals = computedExternals().concat(forceExclude);
 
 const extensions = [
   ".wasm",
