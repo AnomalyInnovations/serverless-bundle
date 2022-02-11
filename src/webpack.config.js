@@ -54,10 +54,8 @@ const ENABLE_CACHING = isLocal ? config.options.caching : false;
 // And add the forceExclude packages to it because they shouldn't be Webpacked
 const computedExternals = (
   externals === "all"
-    ? [nodeExternals()]
-    : externals === "all-monorepo"
-      ? [nodeExternals({ additionalModuleDirs: [path.resolve(process.cwd(), "../../node_modules")] })]
-      : externals
+    ? [nodeExternals({ additionalModuleDirs: [path.resolve(process.cwd(), "../../node_modules")] })]
+    : externals
 ).concat(forceExclude);
 
 const extensions = [
