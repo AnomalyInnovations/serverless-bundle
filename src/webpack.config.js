@@ -50,7 +50,7 @@ const ENABLE_TSCHECKER = !config.options.disableForkTsChecker;
 const GENERATE_STATS_FILES = config.options.generateStatsFiles;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
-// Handle "all" and "all-monorepo" option in externals
+// Handle the "all" option in externals
 // And add the forceExclude packages to it because they shouldn't be Webpacked
 const computedExternals = (
   externals === "all"
