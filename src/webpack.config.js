@@ -76,19 +76,21 @@ if (
   throw `ERROR: ${config.options.tsConfig} not found.`;
 }
 
+const parsedTsConfig = parseTsConfig();
+
 if (ENABLE_TYPESCRIPT && checkInvalidTsModule()) {
   console.log("serverless-bundle: CommonJS, ES3, or ES5 are not supported");
 }
 
-function checkInvalidTsModule() {
+function parseTsConfig() {
   // Borrowed from
   // https://github.com/formium/tsdx/blob/e84e8d654c8462b8db65a3d395e2a4ba79bf1bd2/src/createRollupConfig.ts#L49-L55
   const tsConfigJSON = ts.readConfigFile(tsConfigPath, ts.sys.readFile).config;
-  const tsCompilerOptions = ts.parseJsonConfigFileContent(
-    tsConfigJSON,
-    ts.sys,
-    "./"
-  ).options;
+  return ts.parseJsonConfigFileContent(tsConfigJSON, ts.sys, "./");
+}
+
+function checkInvalidTsModule() {
+  const tsCompilerOptions = parsedTsConfig.options;
 
   const module = tsCompilerOptions.module;
   const target = tsCompilerOptions.target;
@@ -295,6 +297,9 @@ function plugins() {
     };
 
     if (ENABLE_LINTING) {
+      if (parsedTsConfig.exclude) {
+        tsEslintConfig.ignorePatterns = parsedTsConfig.exclude
+      }
       forkTsCheckerWebpackOptions.eslint = {
         files: path.join(servicePath, "**/*.ts"),
         options: { cwd: servicePath, baseConfig: tsEslintConfig },
