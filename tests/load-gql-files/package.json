@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server-lambda": "^2.10.1"
+    "apollo-server-lambda": "^2.14.2"
   },
   "devDependencies": {}
 }
