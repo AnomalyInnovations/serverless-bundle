@@ -40,6 +40,7 @@ const ignorePackages = config.options.ignorePackages;
 const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
 const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
+const minifyOptions = config.options.minifyOptions;
 
 const ENABLE_ESBUILD = config.options.esbuild;
 const ENABLE_STATS = config.options.stats;
@@ -474,6 +475,7 @@ module.exports = {
         minimizer: [
           new ESBuildMinifyPlugin({
             target: esbuildNodeVersion,
+            ...minifyOptions,
           }),
         ],
       },
