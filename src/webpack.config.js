@@ -191,6 +191,9 @@ function loaders() {
     test: /\.js$/,
     exclude: /node_modules/,
     use: [ENABLE_ESBUILD ? esbuildLoader("jsx") : babelLoader()],
+    resolve: {
+      fullySpecified: false,
+    },
   };
 
   const loaders = {
@@ -298,7 +301,7 @@ function plugins() {
 
     if (ENABLE_LINTING) {
       if (parsedTsConfig.exclude) {
-        tsEslintConfig.ignorePatterns = parsedTsConfig.exclude
+        tsEslintConfig.ignorePatterns = parsedTsConfig.exclude;
       }
       forkTsCheckerWebpackOptions.eslint = {
         files: path.join(servicePath, "**/*.ts"),
