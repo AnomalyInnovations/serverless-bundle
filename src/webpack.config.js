@@ -40,6 +40,7 @@ const ignorePackages = config.options.ignorePackages;
 const rawFileExtensions = config.options.rawFileExtensions;
 const fixPackages = convertListToObject(config.options.fixPackages);
 const tsConfigPath = path.resolve(servicePath, config.options.tsConfig);
+const minifyOptions = config.options.minifyOptions;
 
 const ENABLE_ESBUILD = config.options.esbuild;
 const ENABLE_STATS = config.options.stats;
@@ -191,6 +192,9 @@ function loaders() {
     test: /\.js$/,
     exclude: /node_modules/,
     use: [ENABLE_ESBUILD ? esbuildLoader("jsx") : babelLoader()],
+    resolve: {
+      fullySpecified: false,
+    },
   };
 
   const loaders = {
@@ -298,7 +302,7 @@ function plugins() {
 
     if (ENABLE_LINTING) {
       if (parsedTsConfig.exclude) {
-        tsEslintConfig.ignorePatterns = parsedTsConfig.exclude
+        tsEslintConfig.ignorePatterns = parsedTsConfig.exclude;
       }
       forkTsCheckerWebpackOptions.eslint = {
         files: path.join(servicePath, "**/*.ts"),
@@ -474,6 +478,7 @@ module.exports = {
         minimizer: [
           new ESBuildMinifyPlugin({
             target: esbuildNodeVersion,
+            ...minifyOptions,
           }),
         ],
       },
