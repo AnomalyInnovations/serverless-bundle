@@ -69,7 +69,7 @@
     "resolve": "^1.22.0",
     "sass": "^1.49.7",
     "sass-loader": "^11.1.1",
-    "serverless-webpack": "https://github.com/carlswann/serverless-webpack.git#7a5bc0a424de65bc0d4c583cfa3c72d65bd2dead",
+    "serverless-webpack": "https://github.com/carlswann/serverless-webpack.git#bc740109acd32e174e714b90d6a2f0ed5f5a0085",
     "source-map-support": "^0.5.21",
     "ts-jest": "^26.5.6",
     "ts-loader": "^8.3.0",
