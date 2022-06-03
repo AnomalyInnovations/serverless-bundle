@@ -46,7 +46,8 @@ const ENABLE_STATS = config.options.stats;
 const ENABLE_LINTING = config.options.linting;
 const ENABLE_SOURCE_MAPS = config.options.sourcemaps;
 const ENABLE_TYPESCRIPT = fs.existsSync(tsConfigPath);
-const ENABLE_TSCHECKER = !config.options.disableForkTsChecker;
+const ENABLE_TS_CHECKER = !config.options.transpileOnly
+const ENABLE_FORK_TS_CHECKER = ENABLE_TS_CHECKER && !config.options.disableForkTsChecker;
 const GENERATE_STATS_FILES = config.options.generateStatsFiles;
 const ENABLE_CACHING = isLocal ? config.options.caching : false;
 
@@ -180,8 +181,7 @@ function tsLoader() {
       projectReferences: true,
       configFile: tsConfigPath,
       experimentalWatchApi: true,
-      // Don't check types if ForTsChecker is enabled
-      transpileOnly: ENABLE_TSCHECKER,
+      transpileOnly: !ENABLE_TS_CHECKER || ENABLE_FORK_TS_CHECKER,
     },
   };
 }
@@ -288,7 +288,7 @@ function plugins() {
     );
   }
 
-  if (ENABLE_TYPESCRIPT && ENABLE_TSCHECKER) {
+  if (ENABLE_TYPESCRIPT && ENABLE_FORK_TS_CHECKER) {
     const forkTsCheckerWebpackOptions = {
       typescript: {
         configFile: tsConfigPath,
@@ -319,7 +319,7 @@ function plugins() {
     );
 
     // If the ForkTsChecker is disabled, then let Eslint do the linting
-    if (ENABLE_TYPESCRIPT && !ENABLE_TSCHECKER) {
+    if (ENABLE_TYPESCRIPT && !ENABLE_FORK_TS_CHECKER) {
       plugins.push(
         new ESLintPlugin({
           context: servicePath,

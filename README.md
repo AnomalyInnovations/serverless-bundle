@@ -108,6 +108,7 @@ custom:
     linting: true                   # Enable linting as a part of the build process
     generateStatsFiles: false       # Creates stats files that could be used for bundle analyzing, more below
     esbuild: false                  # Use esbuild-loader instead of babel or ts for faster builds
+    transpileOnly: false            # Disable TypeScript type-checking
     disableForkTsChecker: false     # Disable the ForkTsChecker plugin, more below
     tsConfig: "tsconfig.json"       # Path to your 'tsconfig.json', if it's not in the root
     forceInclude:                   # Optional list of NPM packages that need to be included
