@@ -6,15 +6,17 @@ const execPromise = promisify(exec);
 const TIMEOUT = 30000;
 const INVOKE_CMD = "invoke local -f hello -l --data {}";
 
-async function runSlsCommand(cwd, cmd = INVOKE_CMD) {
+async function runSlsCommand(cwd, cmd = INVOKE_CMD, includeStderr = false) {
   await npmInstall(cwd);
 
-  const { stdout } = await execPromise(`serverless ${cmd}`, {
+  const { stdout, stderr } = await execPromise(`serverless ${cmd}`, {
     cwd,
-    TIMEOUT
+    TIMEOUT,
   });
 
-  return stdout.toString("utf8");
+  return includeStderr
+    ? stdout.toString("utf8") + stderr.toString("utf8")
+    : stdout.toString("utf8");
 }
 
 module.exports = runSlsCommand;

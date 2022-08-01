@@ -299,7 +299,7 @@ function plugins() {
 
     if (ENABLE_LINTING) {
       if (parsedTsConfig.exclude) {
-        tsEslintConfig.ignorePatterns = parsedTsConfig.exclude
+        tsEslintConfig.ignorePatterns = parsedTsConfig.exclude;
       }
       forkTsCheckerWebpackOptions.eslint = {
         files: path.join(servicePath, "**/*.ts"),
@@ -413,7 +413,7 @@ function plugins() {
 function resolvePlugins() {
   const plugins = [];
 
-  if (ENABLE_TYPESCRIPT) {
+  if (ENABLE_TYPESCRIPT && (parsedTsConfig.options || {}).baseUrl) {
     plugins.push(
       new TsconfigPathsPlugin({
         configFile: tsConfigPath,
