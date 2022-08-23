@@ -34,6 +34,7 @@ const nodeVersion = config.nodeVersion;
 const externals = config.options.externals;
 const copyFiles = config.options.copyFiles;
 const concatText = config.options.concatText;
+const experiments = config.options.experiments;
 const esbuildNodeVersion = "node" + nodeVersion;
 const forceExclude = config.options.forceExclude;
 const ignorePackages = config.options.ignorePackages;
@@ -480,6 +481,7 @@ module.exports = {
         ],
       },
   plugins: plugins(),
+  experiments,
   node: {
     __dirname: false,
   },

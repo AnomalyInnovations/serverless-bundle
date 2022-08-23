@@ -136,6 +136,7 @@ custom:
         - echo hello > test
     rawFileExtensions:              # An array of file extensions to import using the Webpack raw-loader.
       - csv                         # Defaults to ['pem', 'txt']
+    experiments:                    # Give the ability to activate and try out experimental features of Webpack
 
 ```
 
