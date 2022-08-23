@@ -300,7 +300,7 @@ function plugins() {
 
     if (ENABLE_LINTING) {
       if (parsedTsConfig.exclude) {
-        tsEslintConfig.ignorePatterns = parsedTsConfig.exclude
+        tsEslintConfig.ignorePatterns = parsedTsConfig.exclude;
       }
       forkTsCheckerWebpackOptions.eslint = {
         files: path.join(servicePath, "**/*.ts"),
