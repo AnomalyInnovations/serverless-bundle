@@ -38,11 +38,11 @@ And all this works without having to install Webpack, Babel, ESLint, esbuild, et
 +    "serverless-bundle"
 ```
 
-You can [read more about this over on Serverless Stack](https://serverless-stack.com/chapters/package-lambdas-with-serverless-bundle.html).
+You can [read more about this over on the SST Guide](https://sst.dev/chapters/package-lambdas-with-serverless-bundle.html).
 
 ---
 
-💥 The `serverless-bundle` team recently launched the [Serverless Stack Framework (SST)](https://github.com/serverless-stack/serverless-stack). SST makes it easy to build serverless apps by letting you [test your Lambda functions live](https://docs.serverless-stack.com/live-lambda-development). It's based on the many of ideas behind `serverless-bundle`.
+💥 The `serverless-bundle` team recently launched the [SST](https://github.com/serverless-stack/sst). SST makes it easy to build serverless apps by letting you [test your Lambda functions live](https://docs.sst.dev/live-lambda-development). It's based on the many of ideas behind `serverless-bundle`.
 
 ---
 
@@ -515,4 +515,4 @@ This plugin would not be possible without the amazing [serverless-webpack](https
 
 ---
 
-This plugin is maintained by [Serverless Stack](https://serverless-stack.com).
+This plugin is maintained by [SST](https://sst.dev).
