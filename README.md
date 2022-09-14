@@ -137,7 +137,7 @@ custom:
     rawFileExtensions:              # An array of file extensions to import using the Webpack raw-loader.
       - csv                         # Defaults to ['pem', 'txt']
     minifyOptions:                  # Options for ESBuildMinifyPlugin (https://esbuild.github.io/api/#simple-options)
-      - keepNames: true             # Disable symbol name mangling during minification
+      keepNames: true               # Disable symbol name mangling during minification
     experiments:                    # Give the ability to activate and try out experimental features of Webpack
 
 ```
