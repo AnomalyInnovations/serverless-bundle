@@ -68,6 +68,7 @@
     "resolve": "^1.22.0",
     "sass": "^1.49.7",
     "sass-loader": "^11.1.1",
+    "node-loader": "^2.0.0",
     "serverless-webpack": "^5.6.1",
     "source-map-support": "^0.5.21",
     "ts-jest": "^26.5.6",
