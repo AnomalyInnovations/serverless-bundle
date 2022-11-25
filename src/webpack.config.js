@@ -9,7 +9,6 @@ const ESLintPlugin = require("eslint-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { ESBuildMinifyPlugin } = require("esbuild-loader");
-const ConcatTextPlugin = require("concat-text-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const PermissionsOutputPlugin = require("webpack-permissions-plugin");
@@ -33,7 +32,6 @@ const servicePath = config.servicePath;
 const nodeVersion = config.nodeVersion;
 const externals = config.options.externals;
 const copyFiles = config.options.copyFiles;
-const concatText = config.options.concatText;
 const experiments = config.options.experiments;
 const esbuildNodeVersion = "node" + nodeVersion;
 const forceExclude = config.options.forceExclude;
@@ -373,18 +371,6 @@ function plugins() {
       });
     });
     plugins.push(new PermissionsOutputPlugin({ buildFiles }));
-  }
-
-  if (concatText) {
-    const concatTextConfig = {};
-
-    concatText.map(function (data) {
-      concatTextConfig.files = data.files || null;
-      concatTextConfig.name = data.name || null;
-      concatTextConfig.outputPath = data.outputPath || null;
-    });
-
-    plugins.push(new ConcatTextPlugin(concatTextConfig));
   }
 
   // Ignore all locale files of moment.js

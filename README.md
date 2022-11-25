@@ -126,10 +126,6 @@ custom:
         to: './'                      # Where in the package should they go
     aliases:                        # Create an alias to 'import' modules easily with a custom path
       - Lib: custom-lib/src/lib       # For ex, replace the long 'custom-lib/src/lib' with 'Lib'
-    concatText:                     # Concatenate text files into one file on the generated package
-      - files: 'schema/*.txt'         # Where the files that need to be concatenated are currently located
-        outputPath: './'              # Where the concatenated file should go in the package
-        name: 'schema.txt'            # The name the the concatenated file should have
     packager: npm                   # Specify a packager, 'npm' or 'yarn'. Defaults to 'npm'.
     packagerOptions:                # Run a custom script in the package process
       scripts:                        # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
