@@ -455,6 +455,10 @@ module.exports = {
     // Performance
     symlinks: false,
     extensions: extensions,
+    extensionAlias: {
+      ".js": [".ts", ".js"],
+      ".mjs": [".mts", ".mjs"]
+    },
     alias: alias(),
     // First start by looking for modules in the plugin's node_modules
     // before looking inside the project's node_modules.
