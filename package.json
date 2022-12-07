@@ -51,7 +51,7 @@
     "css-loader": "^5.2.7",
     "dotenv": "^8.6.0",
     "esbuild-loader": "^2.18.0",
-    "eslint": "^8.29.0",
+    "eslint": "7.32.0",
     "eslint-config-strongloop": "^2.1.0",
     "eslint-webpack-plugin": "^2.6.0",
     "fast-glob": "^3.2.11",
