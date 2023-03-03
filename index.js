@@ -37,6 +37,7 @@ function applyWebpackOptions(custom, config) {
     excludeFiles: config.options.excludeFiles,
     excludeRegex: /bundle_stats\.(html|json)$/,
     keepOutputDirectory: config.options.generateStatsFiles,
+    noBuild: config.options.noBuild,
   };
 }
 
