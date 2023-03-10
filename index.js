@@ -43,6 +43,15 @@ function applyWebpackOptions(custom, config) {
 function applyUserConfig(config, userConfig, servicePath, runtime) {
   config.servicePath = servicePath;
 
+  // Default to Node 12 if no runtime found
+  config.nodeVersion =
+    Number.parseInt((runtime || "").replace("nodejs", ""), 10) || 12;
+
+  // AWS Node 18 no longer supports aws-sdk v2 so now must be included in output
+  if (config.nodeVersion >= 18) {
+    config.options.forceExclude = [];
+  }
+
   // Concat forceExclude if provided
   if (userConfig.forceExclude) {
     userConfig.forceExclude = config.options.forceExclude.concat(
@@ -65,10 +74,6 @@ function applyUserConfig(config, userConfig, servicePath, runtime) {
   }
 
   Object.assign(config.options, userConfig);
-
-  // Default to Node 12 if no runtime found
-  config.nodeVersion =
-    Number.parseInt((runtime || "").replace("nodejs", ""), 10) || 12;
 }
 
 class ServerlessPlugin extends ServerlessWebpack {
