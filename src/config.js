@@ -20,7 +20,7 @@ module.exports = {
     packagerOptions: {},
     generateStatsFiles: false,
     tsConfig: "tsconfig.json",
-    // Exclude aws-sdk since it's available in the Lambda runtime
+    // Exclude aws-sdk since it's available in the Lambda runtime (for <= nodejs16.x)
     forceExclude: ["aws-sdk"],
     disableForkTsChecker: false,
     // Set non Webpack compatible packages as externals
