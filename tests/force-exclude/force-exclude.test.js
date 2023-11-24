@@ -36,7 +36,7 @@ test("force-exclude package (node18)", async () => {
   expect(result).not.toMatch(errorRegex);
 
   /*
-    Ensure that is-sorted and aws-sdk is excluded
+    Ensure that is-sorted is excluded
   */
   expect(result).toMatch(/Excluding external modules: is-sorted@\^[\d\\.]+\n/);
 });
