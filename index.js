@@ -47,16 +47,16 @@ function applyUserConfig(config, userConfig, servicePath, runtime) {
   const runtimeVersion =
     Number.parseInt((runtime || "").replace("nodejs", ""), 10) || 12;
 
-  // Exclude aws-sdk from default if runtime >= 18
-  const forceExclude = config.options.forceExclude.filter(
-    (item) => !(runtimeVersion >= 18 && item === "aws-sdk")
-  );
+  // Force exclude aws-sdk for versions below Node 18
+  if (runtimeVersion < 18) {
+    config.options.forceExclude.push("aws-sdk");
+  }
 
   // Concat forceExclude if provided
   if (userConfig.forceExclude) {
-    userConfig.forceExclude = forceExclude.concat(userConfig.forceExclude);
-  } else {
-    userConfig.forceExclude = forceExclude;
+    userConfig.forceExclude = config.options.forceExclude.concat(
+      userConfig.forceExclude
+    );
   }
 
   // Concat externals if a list of packages are provided
