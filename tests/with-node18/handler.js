@@ -15,6 +15,7 @@ class User {
 const user = new User();
 
 export const hello = async (event) => {
+  require("aws-sdk");
   user.increment();
   return {
     statusCode: 200,

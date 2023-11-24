@@ -8,7 +8,7 @@ afterAll(async () => {
   await clearNpmCache(__dirname);
 });
 
-test("node 14", async () => {
+test("node 18", async () => {
   const result = await runSlsCommand(__dirname);
 
   expect(result).not.toMatch(errorRegex);
