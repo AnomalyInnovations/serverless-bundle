@@ -50,7 +50,7 @@ function applyUserConfig(config, userConfig, servicePath, runtime) {
   // Concat forceExclude if provided
   if (userConfig.forceExclude) {
     userConfig.forceExclude = config.options.forceExclude
-      .filter((item) => runtimeVersion < 18 || item !== "aws-sdk")
+      .filter((item) => !(runtimeVersion >= 18 && item === "aws-sdk"))
       .concat(userConfig.forceExclude);
   }
 
