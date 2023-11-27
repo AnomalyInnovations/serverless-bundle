@@ -28,7 +28,7 @@ function applyWebpackOptions(custom, config) {
       // Traverse up the tree to find the path to the nearest package.json
       //
       // Certain plugins like serverless-plugin-typescript change the cwd, so when
-      // searching, reset the the cwd to the service path
+      // searching, reset the cwd to the service path
       packagePath: path.relative(
         config.servicePath,
         pkgUp.sync({ cwd: config.servicePath })
@@ -57,7 +57,7 @@ function applyUserConfig(config, userConfig, servicePath, runtime) {
     );
   }
 
-  // Concat externals if provided
+  // Concat rawFileExtensions if provided
   if (userConfig.rawFileExtensions) {
     userConfig.rawFileExtensions = config.options.rawFileExtensions.concat(
       userConfig.rawFileExtensions
