@@ -31,7 +31,6 @@ const aliases = config.options.aliases;
 const servicePath = config.servicePath;
 const nodeVersion = config.nodeVersion;
 const externals = config.options.externals;
-const nodeModulesRelativeDir = config.options.nodeModulesRelativeDir;
 const copyFiles = config.options.copyFiles;
 const experiments = config.options.experiments;
 const esbuildNodeVersion = "node" + nodeVersion;
@@ -433,7 +432,6 @@ module.exports = {
   stats: ENABLE_STATS ? "normal" : "errors-only",
   devtool: ENABLE_SOURCE_MAPS ? "source-map" : false,
   externals: computedExternals,
-  nodeModulesRelativeDir,
   mode: isLocal ? "development" : "production",
   performance: {
     // Turn off size warnings for entry points

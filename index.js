@@ -23,6 +23,10 @@ function applyWebpackOptions(custom, config) {
     includeModules: {
       forceExclude: config.options.forceExclude,
       forceInclude: config.options.forceInclude,
+      nodeModulesRelativeDir:
+        config.options.nodeModulesRelativeDir != null
+          ? config.options.nodeModulesRelativeDir
+          : "./",
       // Generate relative path for the package.json
       // For cases where the services are nested and don't have their own package.json
       // Traverse up the tree to find the path to the nearest package.json
