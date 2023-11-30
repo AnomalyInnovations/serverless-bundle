@@ -130,6 +130,8 @@ custom:
     packagerOptions:                # Run a custom script in the package process
       scripts:                        # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
         - echo hello > test
+    nodeModulesRelativeDir: '../'   # Useful for monorepos if you have your node_modules in the root directory
+                                      # https://github.com/serverless-heaven/serverless-webpack#node-modules--externals 
     rawFileExtensions:              # An array of file extensions to import using the Webpack raw-loader.
       - csv                         # Defaults to ['pem', 'txt']
     minifyOptions:                  # Options for ESBuildMinifyPlugin (https://esbuild.github.io/api/#simple-options)
