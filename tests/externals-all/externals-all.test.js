@@ -16,5 +16,5 @@ test("externals all option", async () => {
   /*
     Ensure that array-first is packaged as a part of the "all" externals option
   */
-  expect(result).toMatch(/Packing external modules: array-first@\^[\d\\.]+/);
+  expect(result).toMatch(/Packing external modules: source-map-support, array-first@\^[\d\\.]+/);
 });
