@@ -19,6 +19,7 @@ module.exports = {
     ignorePackages: [],
     packagerOptions: {},
     generateStatsFiles: false,
+    noBuild: false,
     tsConfig: "tsconfig.json",
     forceExclude: [],
     disableForkTsChecker: false,
