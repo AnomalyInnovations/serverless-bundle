@@ -30,5 +30,7 @@ module.exports = {
     rawFileExtensions: ["pem", "txt"],
     minifyOptions: {},
     experiments: {},
+    sourceType: "module", // "script" | "module" | "unambiguous"
+    nodeDirname: false
   },
 };
