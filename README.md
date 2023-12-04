@@ -130,6 +130,8 @@ custom:
     packagerOptions:                # Run a custom script in the package process
       scripts:                        # https://github.com/serverless-heaven/serverless-webpack#custom-scripts
         - echo hello > test
+    nodeModulesRelativeDir: '../'   # Useful for monorepos if you have your node_modules in the root directory
+                                      # https://github.com/serverless-heaven/serverless-webpack#node-modules--externals 
     rawFileExtensions:              # An array of file extensions to import using the Webpack raw-loader.
       - csv                         # Defaults to ['pem', 'txt']
     minifyOptions:                  # Options for ESBuildMinifyPlugin (https://esbuild.github.io/api/#simple-options)
@@ -449,7 +451,7 @@ The three options (`externals`, `forceExclude`, and `excludeFiles`) look similar
 
 - `forceExclude`
 
-  These packages are available in the Lambda runtime. Either by default (in the case of `aws-sdk`) or through a Lambda layer that you might be using. So these are not included in the Lambda package. And they are also marked as `externals`. Meaning that packages that are in `forceExclude` are automatically added to the `externals` list as well. By default, `aws-sdk` is listed in the `forceExclude`.
+  These packages are available in the Lambda runtime. Either by default (in the case of `aws-sdk`) or through a Lambda layer that you might be using. So these are not included in the Lambda package. And they are also marked as `externals`. Meaning that packages that are in `forceExclude` are automatically added to the `externals` list as well. By default, `aws-sdk` is listed in the `forceExclude` when `runtime` is lower than `nodejs18.x`.
 
 - `excludeFiles`
 
