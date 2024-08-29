@@ -16,19 +16,19 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node-version: [10.x, 12.x, 14.x, 15.x]
+        node-version: [14.x, 16.x, 18.x, 20.x]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install dependencies
       run: npm install
     - name: Install Serverless
-      run: npm install -g serverless
+      run: npm install -g serverless@3.39.0
     - name: Test
       run: npm run test
