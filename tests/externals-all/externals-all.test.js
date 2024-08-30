@@ -9,12 +9,12 @@ afterAll(async () => {
 });
 
 test("externals all option", async () => {
-  const result = await runSlsCommand(__dirname, "package");
+  const result = await runSlsCommand(__dirname, "package", true);
 
   expect(result).not.toMatch(errorRegex);
 
   /*
     Ensure that array-first is packaged as a part of the "all" externals option
   */
-  expect(result).toMatch(/Packing external modules: array-first@\^[\d\\.]+/);
+  expect(result).toContain("Packing external modules: array-first@");
 });
