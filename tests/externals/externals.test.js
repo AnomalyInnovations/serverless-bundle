@@ -9,7 +9,7 @@ afterAll(async () => {
 });
 
 test("externals with forceInclude", async () => {
-  const result = await runSlsCommand(__dirname, "package");
+  const result = await runSlsCommand(__dirname, "package", true);
 
   expect(result).not.toMatch(errorRegex);
 
@@ -17,5 +17,5 @@ test("externals with forceInclude", async () => {
     Ensure that knex is packaged as an external by default
     And mysql is packaged because of forceInclude
   */
-  expect(result).toMatch(/Packing external modules: knex@\^[\d\\.]+, mysql/);
+  expect(result).toContain("Packing external modules: knex@^3.1.0, mysql");
 });

@@ -1,15 +1,11 @@
 service: my-service
 
 plugins:
-  - '../../../index'
-
-custom:
-  bundle:
-    caching: false
+  - '../../index'
 
 provider:
   name: aws
-  runtime: nodejs20.x
+  runtime: nodejs16.x
 
 functions:
   hello:

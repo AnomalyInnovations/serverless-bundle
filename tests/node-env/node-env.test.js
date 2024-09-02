@@ -9,14 +9,14 @@ afterAll(async () => {
 });
 
 test("node-env - production", async () => {
-  const cmd = "invoke local -f hello -l --data {} --env NODE_ENV=production";
+  const cmd = "invoke local -f hello --data {} --env NODE_ENV=production";
   const result = await runSlsCommand(__dirname, cmd);
 
   expect(result).toContain("NODE_ENV=production");
 });
 
 test("node-env - development", async () => {
-  const cmd = "invoke local -f hello -l --data {} --env NODE_ENV=development";
+  const cmd = "invoke local -f hello --data {} --env NODE_ENV=development";
   const result = await runSlsCommand(__dirname, cmd);
 
   expect(result).toContain("NODE_ENV=development");

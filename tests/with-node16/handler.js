@@ -1,18 +1,20 @@
 class User {
-	#counter = 0;
+  constructor() {
+    this.counter = 0;
+  }
 
-	increment() {
-		this.#counter++;
-	}
+  increment() {
+    this.counter++;
+  }
 
-	get count() {
-		return this.#counter;
-	}
+  get count() {
+    return this.counter;
+  }
 }
 
 const user = new User();
 
-export const hello = async (event, context) => {
+export const hello = async (event) => {
   user.increment();
   return {
     statusCode: 200,

@@ -29,7 +29,7 @@ test("copy files - hello", async () => {
 });
 
 test("copy files - world", async () => {
-  const cmd = "invoke local -f world -l --data {}";
+  const cmd = "invoke local -f world --data {}";
   const result = await runSlsCommand(__dirname, cmd);
 
   expect(result).not.toMatch(errorRegex);
