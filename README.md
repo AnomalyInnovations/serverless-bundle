@@ -118,6 +118,7 @@ custom:
       - isomorphic-webcrypto          # They'll be included in the node_modules/, more below
     forceExclude:                   # Don't include these in the package
       - chrome-aws-lambda             # Because it'll be provided through a Lambda Layer
+      - '@aws-sdk/client-dynamodb'    # Defaults to 'aws-sdk'. For aws-sdk-js-v3 you need to list all packages
     excludeFiles: "**/*.test.ts"    # Exclude files from Webpack that match the glob
     fixPackages:                    # Include fixes for specific packages
       - "formidable@1.x"              # For ex, formidable@1.x doesn't work by default with Webpack
